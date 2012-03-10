@@ -1,0 +1,71 @@
+Imperative programming concepts - 2 weeks
+  Main
+  Types
+    Primitive
+    Aggregate
+    Structured
+      Recursive data structures
+    References
+      void* and casting
+  Branching and looping
+    Counter looping
+    Conditional looping
+  Functions
+    Call by value
+    Call by reference (and sharing)
+  Modules
+    Limited extraction
+    Documentation
+:: Note: no strings
+Object-oriented programming concepts - 2 weeks
+  Objects are first and foremost structures
+  Private object space and public interface
+  Polymorphism
+    Subtyping
+    Parametric polymorphism
+      with subtyping and limited quantification
+  Reflection?
+  Design patterns
+    Decorator
+    Singleton
+    Factory
+    Iterator
+      Iterator looping
+    Observer
+    Strategy
+  API design
+    Interface documentation
+      null
+      running time and memory estimates
+    Programming by contract
+      Invariants
+    Exceptions & handling
+Basic data structures - 1 week
+  Lists
+    Stacks
+    Queues
+    Deques
+  Heaps
+  BST
+  Hash tables
+Working with users and peripherals - 1 week
+  IO
+  Graphical user interface
+
+
+Exercises:
+  Big O approximations
+  Basic data structure construction
+    Heaps, stacks, etc.
+    Points, shapes, real-world stuff, etc.
+    In both pure imperative and OO way
+  Basic algorithms
+
+
+Goals:
+  Away from java (initially).
+  More focus on simple imperative programming (initially).
+  Focus on correctness, complexity and program composition.
+  Create tools for students and instructors such as an online assignment
+  system, akin to https://www.interviewstreet.com/challenges/.
+
