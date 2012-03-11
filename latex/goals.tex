@@ -1,0 +1,410 @@
+\section{Formål}
+
+I følgende foreslag omtales et sprog ``X'', der endnu ikke er bestemt men i
+sidste ende ønskes til at være enten C\# eller Java; altså et rent
+objekt-orienteret sprog, der i skrivende stund aktivt bruges ude i
+erhvervslivet. X kan betragtes som både det nuværende sprog på kurset (Java),
+og det sprog der vil hovedsageligt benyttes i det ny foreslaget OOPD kursus
+(ikke nødvendigvis Java).
+
+Fortsat fokus på et sprog der aktivt bruges i erhvervslivet giver os mulighed
+for at uddanne studerende til at bruge professionelle værktøjer og efter
+professionelle retningslinjer, men har også den ulempe at være præget af
+professionel inkompetence\footnote{I form af f.eks. kringlet funktionalitet der
+overlever grundet fortsatte ønsker om bagudkompatibilitet, m.v.}. Det er i
+mellemtiden ikke formålet med dette forslag at behjælpe disse ulemper, men
+derimod at fremlægge et pædagogisk fremgangsmåde til en introduktion af
+studerende til imperativt og derefter objekt-orienteret programmering.
+Udgangspunktet er altså, at et sprog som ``X'', alene ikke kan anvendes
+effektivt til netop dette formål.
+
+\section{Foreslaget i et nøddeskal}
+
+Brug Google Go i de første par uger af kurset og brug den resterende tid på X.
+Eksamensopgaven må hermed bestå af $1/3$ Go, og $2/3$ X opgaver. Formålet er
+altså at bruge Go som et pædagogisk værktøj, ligesom Dr. Java\cite{dr-java} og
+BlueJ\cite{bluej} har været brugt i forrige iterationer af kurset. Der
+argumenteres for i dette forslag at Go er et bedre udgangspunkt, givet de
+forventninger vi har til de studerende i hhv. starten og slutningen af kurset.
+Der argumenteres dernæst for at der kan forekomme en blød overgang fra Go til X
+ca. ved slutningen af den første 3. del af kurset.
+
+%\subsection{Hvorfor ikke fortsætte med java?}
+
+%Bruget af Java i OOPD kurset på datalogi har en række ulemper.
+
+%\begin{itemize}
+
+%\item På trods af sine stærke rødder som moren af OO-sprog med automatisk
+%hukkomelsesoprydning, er Java i dag faldet bagud med udviklingen og er ved at
+%blive overtaget af uforventede rivaler såsom C++11 og C\#. Dette gælder ikke
+%nødvendigvis popularitet, men derimod udtrykskraft.
+
+%\item Java har en stor bibliotek der som udgangspunkt er overfladisk for de
+%studerende at lære om. Vi mener at det ville være mere nyttigt fra et
+%undervisningssynspunkt for de studerende at få et indblik i hvordan man laver
+%en lignende slags biblioteker selv hellere end at lære at bruge Java's
+%bibliotekker.
+
+%\item Der er en stor indlæringskurve i Java således at klasser, statiske
+%metoder, stringe, og arrays må forklares \emph{inden} man forklarer for-løkker.
+%Dette har man forsøgt at mitigere for både på DIKU og på andre universiteter
+%ved at bruge en grafisk eller kommanodlinje fortolker.
+
+%\item Det kan ses som et træk for at følge industrien, men formålet er tvært
+%det modsatte. Vi vil gerne forholde kurset på et niveau der ikke gør de
+%studerende til Java mestre, men hellere individer med indblik i impirisk
+%programmering med objekt-orienterede aspekter. Formålet er altså at forholde
+%kursusmaterialet på et så sproguspecifik nivau som muligt, samtidigt med at de
+%studerende får lov til at øve sine kodeevner.
+
+%\end{itemize}
+
+\section{Hvorfor starte med Go}
+
+Et af de mest iøjnefaldende grunde til at starte med Go er hvordan et
+HelloWorld program ser ud i Go:
+
+\begin{lstlisting}
+package main
+
+import "fmt"
+
+func main() {
+  fmt.Println("Hello World!")
+}
+\end{lstlisting}
+
+Antaget at programmet for oven er gemt som \mono{HelloWorld.go}, kører man
+programmet således:
+
+\begin{verbatim}
+> 6g HelloWorld.go
+> 6l HelloWorld.6
+> ./6.out
+Hello World!
+\end{verbatim}
+
+Her er \mono{6g} en oversætter, og \mono{6l} er en sammenhæfter. De umiddelbare
+fordele ved sådan en start er følgende:
+
+\begin{itemize}
+
+\item Det er ikke nødvendigt at introducere en fortolker for at snakke om basal
+programkonstruktion da det basale program nemlig er så basal.
+
+\item Det er ikke nødvendigt at introducere klasser, static, stringe
+eller arrays for at snakke om et HelloWorld program.
+
+\item Et koncept som en oversætter bliver iøjnefaldende.
+
+\end{itemize}
+
+Det er bemærkelsesværdigt at vi mener at en introduktion af en
+fortolker\footnote{Grafisk eller kommandolinjebaseret, i som BlueJ eller Dr.
+Java.} er ligefrem skadeligt for forståelsen af programmeringsparadigmet i X,
+der nemlig er oversætterbaseret. Vi har f.eks. i 2010 oplevet studerende der
+ikke vidste hvad en main funktion var ved slutningen af kurset.
+
+Dog kan det siges at være en ulempe at man både skal oversætte og sammenhæfte
+sit program før man får lov at køre det. Dette kan der dog evt. korrigeres for
+ved at bruge et ekstra værktøj som f.eks.
+\mono{godag}\footnote{\url{http://code.google.com/p/godag/}.}, der er en simpel
+udgave af noget til Go som det velkendte værktøj \mono{ant} er for Java.
+
+Det er dernæst oplagt at konstruere make filer (såfremt \mono{godag} ikke
+benyttes). Vi mener at konstruktion af filer der eksplicit angiver rækkefølgen
+og afhængigheder blandt kildekodefiler er tiden værd, da efter vores erfarring
+er dette er noget man ofte støder ind i uanset om man programmerer Go, Java,
+C\#, C++, el.lign.
+
+Der er et par andre, lige så iøjnefaldende grunde som HelloWorld programmet.  I
+Go benyttes der C-lignende strukturer. Objekter i Go er dermed, først og
+fremmest, strukturer, altså sammensætninger af primitive typer. Selvom Go's
+strukturer minder meget C's strukturer så er de dog meget nemmere at have at
+gøre med end i dem i C. F.eks. er følgende en sruktur for et punkt i
+to-dimensionelt rum:
+
+\begin{lstlisting}
+type Point struct {
+	x, y int
+}
+\end{lstlisting}
+
+Der er altså ikke eksplicitte klasser i Go, og Go er egentlig som udgangspunkt
+modul-baseret (hvilket er bl.a. grunden til at main funktionen ikke skal ind i
+en klasse som vi kender det fra bl.a. X). Felter (og instansmetoder) har i Go
+enten privat eller offentlig synlighed, alt afhængigt af om navnet er i stort
+eller småt.
+
+Det andet grund er så at Go har pegere, men ikke pegeraritmetik, altså
+referencer, blandet med en god spildopsamler\footnote{Den er ``god'' pga. noget
+der nævnes om lidt.}. Her er et eksempel på brug af det ovennævnte struktur:
+
+\begin{lstlisting}
+func Origo() *Point {
+	return &Point{0,0}
+}
+\end{lstlisting}
+
+Så \mono{*} og \mono{\&} bruges som sædvanligt i C, men en reference kan
+returneres uden at plads er blevet eksplicit allokeret til strukturen. Der er
+altså en spildopsamler der kommer ind og rydder op for de kære studerende, når
+``instancen'' ikke længere er i brug. Syntaksen \mono{\&Point{0,0}}, ligner
+struktur-konstruktionssyntaks fra C, og i Go svarer til \mono{new Point()},
+desværre er der dog ingen måde at specificere konstruktor funktionalitet.
+
+Fordelen er således at de mest enkelte strukturer kan introduceres nemt og
+hurtigt og en pæn linje kan tegnes mellem reference og værdityper, eftersom
+referencer angives eksplicit. Alt dette kan gøres uden at begrave de studerende
+i hukkomelsesstyring som ellers ville have været tilfældet havde det nu været
+C/C++ vi beskæftigede os med.
+
+En sidste fordel der er værd at nævne er hvor pædagogisk velplaceret syntaksen
+er for at deklarere instansmetoder. Først og fremmest er der naturligvis
+mulighed for at smide en reference som en argument til en funktion.
+Objekt-orienteret programming, især i form af punktum-syntaks kan hermed introduceres
+som et værktøj til at spare en eksplicit angivelse af et reference argument.
+
+En instansmetode defineres således:
+
+\begin{lstlisting}
+func (*Point point) AddX(value int) int {
+	point.x += value
+}
+\end{lstlisting}
+
+Og kaldes således:
+
+\begin{lstlisting}
+p = Orego()
+p.AddX(5)
+\end{lstlisting}
+
+Der er hermed nemt at tegne en linje mellem statiske og instansmetoder. Dernæst
+har instansmetoder, ligesom strukturens felter kan have enten privat eller
+offentlig synlighed alt afhængigt om navnet starter med stort eller småt.
+
+\section{Hvorfor ikke fortsætte med Go}
+
+Ud over det basale empiriske programmering brydder Go mange af de aspekter der
+ellers har været undervist, og bør undervises i et kursus med navnet
+``objekt-orienteret programmering og design''. Specifikt har Go hverken
+indbygget understøttelse af type-hierarkier og parametrisk polimorfi. Det
+første er noget Go's udviklere står imod og det andet har ikke fundet sin vej
+ind i sproget endnu\cite{go-faq}. Det ville uden tvivl være nødvendigt at
+overveje at skifte helt til Go når, og hvis sproget får parametrisk polimorfi.
+
+Derudover er der umiddelbart følgende mangler:
+
+\begin{itemize}
+
+\item Ingen syntaktisk sukker for struktur konstruktører.
+
+\item Ingen metode overlasning.
+
+\item Ingen dynamic dispatch.
+
+\item Interfaces fungerer på en grundlæggende anderledes måde.
+
+\end{itemize}
+
+\section{Overgang til X} 
+
+Følgende koncepter kan som anvist for oven introduceres vha. Go på en
+evolutionær\footnote{I som at alt hvad der foregår i en kodefil kan forklares
+med det samme, dvs. at der ikke er nogen overflødelige tegn og ord involveret.}
+måde:
+
+\begin{enumerate}
+
+\item main funktionen
+
+\item oversætter
+
+\item modul afhængighedsstyring
+
+\item statiske metoder
+
+\item strukturer / objekter
+
+\item primitive datatyper inkl. stringe
+
+\item privat / offentlig synlighed af instansvariable og metoder
+
+\item arrays (under spørgsmål\footnote{Der er nogle syntaktiske vanskeligheder
+omkring arrays i Go, der er endnu ikke fundet en god intuitiv afgrænsning så de
+``minder om'' arrays som vi ser i X.})
+
+\item if, for løkker
+
+\item konstanter
+
+\item simple datastrukturer
+
+\end{enumerate}
+
+Ved slutningen af denne periode med Go, kan de studerende forventes at kunne
+skrive f.eks. en hægtet liste samt dynamisk array strukturer uden besvær.
+
+Med disse værktøjer i værktøjsskuffen kan Java introduceres på praktisk talt
+3-5 slides. I følgende sektioner, lad kodesekvenserne være placeret i to
+kolonner for hhv. Go og Java i hver slide.
+
+\subsection{En klasse i Go vs. en klasse i Java}
+
+\begin{lstlisting}
+type Point struct {
+  x, y int
+  Z int
+}
+
+func (point *Point) Move(x, y int) {
+  point.x += x
+  point.y += y
+  point.Z = point.x * point.y
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Point
+{
+  private int x, y;
+  public int Z;
+
+  public Move(int x, int y)
+  {
+    this.x += x;
+    this.y += y;
+    Z = this.x * this.y;
+  } 
+}
+\end{lstlisting}
+
+\begin{itemize}
+
+\item Klassespecifikation vs. metodespecifikation.
+
+\item \mono{point} vs. \mono{this}. 
+
+\item \mono{Z} kan tilgås, så \mono{this} kan være gratis.
+
+\end{itemize}
+
+\newpage
+
+\subsection{En main funktion i Go vs. en main funktion i Java}
+
+\begin{lstlisting}
+package main
+
+func main()
+{
+  // ...
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Main
+{
+  public static void main(String[] arguments)
+  {
+    // ...
+  }
+}
+\end{lstlisting}
+
+\begin{itemize}
+
+\item \mono{main} skal være i en klasse.
+
+\item \mono{main} skal have en denne signatur med argument array'et angivet.
+
+\end{itemize}
+
+\newpage
+
+\subsection{Initializering i Go vs. Java}
+
+\begin{lstlisting}
+type Point struct {
+  x, y int
+}
+
+func main()
+{
+  point = new(Point) // sets all values to 0.
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Point
+{
+  private int x, y;
+}
+
+public class Main
+{
+  public static void main(String[] arguments)
+  {
+    Point point = new Point(); // sets all values to 0.
+  }
+}
+\end{lstlisting}
+
+\begin{itemize}
+
+\item automatisk tilføjelse af en konstruktør. 
+
+\end{itemize}
+
+\newpage
+
+\subsection{Initializering i Go vs. Java \# 2}
+
+\begin{lstlisting}
+type Point struct {
+  x, y int
+}
+
+func main()
+{
+  point = &Point{3,5}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Point
+{
+  private int x, y;
+
+  public Point(int x, int y) // "constructor"
+  {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+public class Main
+{
+  public static void main(String[] arguments)
+  {
+    Point point = new Point(3,5);
+  }
+}
+\end{lstlisting}
+
+\begin{itemize}
+
+\item mulighed for at specificere konstruktører.
+
+\item udelukkelse af tomme konstruktører ved tilstedeværelse af parametriserede
+konstruktører.
+
+\item evt. at en tom konstruktør (uden kode) vil igen tillade os at bygge
+objektet således at alle værdier sættes til 0. Der kan evt. beskrives
+fremgangsmåden for en klasses initializering fuldt ud, hvorved der evt. kan
+nævnes hvorfor man ikke skal intializere sine variabler i toppen af klassen.
+
+\end{itemize}
+

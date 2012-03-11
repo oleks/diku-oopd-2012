@@ -1,0 +1,293 @@
+\ProvidesPackage{oleks}
+
+\newcommand\dofancy{false}
+\DeclareOption{fancy}{\renewcommand\dofancy{true}}
+\ProcessOptions\relax
+
+\RequirePackage{graphicx}
+\RequirePackage{xparse}
+\RequirePackage{xstring}
+\RequirePackage{ifthen}
+\RequirePackage{xkeyval}
+
+%colors
+
+%\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[table, x11names, rgb]{xcolor}
+\definecolor{shade}{RGB}{245,245,245}
+
+% langauge
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[english]{babel}
+
+% font
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage{mathpazo}
+
+% math
+
+\RequirePackage{amssymb}
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+
+\everymath{\displaystyle}
+
+% code
+
+\RequirePackage{clrscode3e}
+\RequirePackage{verbatim}
+\RequirePackage{listings}
+\lstset
+{
+	tabsize=2,
+	numbers=left,
+	breaklines=true,
+	backgroundcolor=\color{shade},
+	framexleftmargin=0.05in,
+	basicstyle=\ttfamily\small,
+	numberstyle=\tiny,
+	keywordstyle=\color{blue},
+	stringstyle=\color{red},
+	commentstyle=\color{green},
+  keywords={input},
+  mathescape=true,
+  captionpos=b,
+  escapeinside={(*@}{@*)}
+}
+
+
+% links
+
+\RequirePackage{url}
+\RequirePackage[pdftex,colorlinks=true]{hyperref}
+\hypersetup
+{
+	bookmarksnumbered,
+	linkcolor=black,
+	anchorcolor=RoyalBlue,
+	citecolor=RoyalBlue,
+	urlcolor=blue,
+	pdfstartview={FitV},
+	pdfdisplaydoctitle
+}
+
+% setup
+
+\newcommand{\subject}{[subject not setup]}
+\newcommand{\setSubject}[1]
+{
+	\renewcommand{\subject}{#1}
+}
+
+\newcommand{\location}{[location not setup]}
+\newcommand{\setLocation}[1]
+{
+	\renewcommand{\location}{#1}
+}
+
+
+\newcommand{\assignment}{\empty}
+\newcommand{\setAssignment}[1]
+{
+	\renewcommand{\assignment}{#1}\title{#1}\hypersetup{pdftitle=#1}
+}
+\setAssignment{[assignment not setup]}
+
+\newcommand{\staticDate}{\empty}
+\newcommand{\setStaticDate}[1]
+{
+	\renewcommand{\staticDate}{#1}\date{#1}
+}
+\setStaticDate{[date not setup]}
+
+\define@key{setup}{assignment}{\setAssignment{#1}}
+\define@key{setup}{date}{\setStaticDate{#1}}
+\define@key{setup}{subject}{\setSubject{#1}}
+\define@key{setup}{location}{\setLocation{#1}}
+\NewDocumentCommand\setup{m}{\setkeys{setup}{#1}}
+
+% author
+
+\newcommand{\shortAuthor}{\empty}
+\newcommand{\setShortAuthor}[1]
+{
+	\renewcommand{\shortAuthor}{#1}
+}
+
+\newcommand{\longAuthor}{\empty}
+\newcommand{\setLongAuthor}[1]
+{
+	\renewcommand{\longAuthor}{#1}
+	\author{#1}
+	\hypersetup{pdfauthor=#1}
+	\setShortAuthor{#1}
+}
+\setLongAuthor{[author not setup]}
+
+\newcommand{\authorAddendum}{\empty}
+\newcommand{\setAuthorAddendum}[1]
+{
+	\renewcommand{\authorAddendum}{#1}
+}
+
+\define@key{setupAuthor}{short}{\setShortAuthor{#1}}
+\define@key{setupAuthor}{addendum}{\setAuthorAddendum{#1}}
+\NewDocumentCommand\setupAuthor{O{}m}
+{
+	\setLongAuthor{#2}
+	\setkeys{setupAuthor}{#1}
+}
+
+% fancy
+
+\ifthenelse{\equal{\dofancy}{true}}{
+
+%\RequirePackage{fullpage}
+\RequirePackage{fancyhdr}
+\RequirePackage{lastpage}
+
+\pagestyle{fancy}
+\lhead{\footnotesize\shortAuthor\\\authorAddendum}
+\chead{\footnotesize\subject\\\assignment}
+\rhead{\footnotesize\location\\\staticDate}
+\cfoot{\thepage/\pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0in}
+\renewcommand{\headsep}{40pt}
+\setlength{\headheight}{20pt}
+\addtolength{\textheight}{-20pt}
+
+\fancypagestyle{first}
+{
+	\fancyhf{}
+	\cfoot{\thepage/\pageref*{LastPage}}
+}
+}{}
+
+% figures
+
+\NewDocumentCommand\includeFigure{O{1}mmO{htbp!}}
+{
+	\begin{figure}[#4]
+	\centering
+	\IfDecimal{#1}
+	{	
+		\includegraphics[scale=#1]{figures/#2}
+	}
+	{
+		\includegraphics[#1]{figures/#2}
+	}
+	\caption[]{#3}
+	\label{figure:#2}
+	\end{figure}
+}
+
+% captions
+
+\RequirePackage[hang,small,bf]{caption}
+
+% references
+
+\NewDocumentCommand\refer{m}{%
+\ref{#1} (\pageref{#1})%
+}
+
+\NewDocumentCommand\referToCorollary{m}{%
+Corollary \ref{corollary:#1} (\pageref{corollary:#1})%
+}
+
+\NewDocumentCommand\referToLemma{m}{%
+Lemma \ref{lemma:#1} (\pageref{lemma:#1})%
+}
+
+\NewDocumentCommand\referToTheorem{m}{%
+Theorem \ref{theorem:#1} (\pageref{theorem:#1})%
+}
+
+\NewDocumentCommand\referToDefinition{m}{%
+Definition \ref{definition:#1} (\pageref{definition:#1})%
+}
+
+\NewDocumentCommand\referToAppendix{m}{%
+Appendix \ref{appendix:#1} (\pageref{appendix:#1})%
+}
+
+\NewDocumentCommand\referToSection{m}{%
+\textsection\ \ref{section:#1} (\pageref{section:#1})%
+}
+
+\NewDocumentCommand\referToFigure{m}{%
+Figure \ref{figure:#1} (\pageref{figure:#1})%
+}
+
+\NewDocumentCommand\referToListing{m}{%
+Listing \ref{listing:#1} (\pageref{listing:#1})%
+}
+
+\NewDocumentCommand\referToTable{m}{%
+Table \ref{table:#1} (\pageref{table:#1})%
+}
+
+% sections
+
+\NewDocumentCommand\startSectionAux{O{\empty}O{section}mm}
+{
+	\lowercase{
+		\ifthenelse{\equal{#1}{\empty}}
+		{\def\templabel{#3}}
+		{\def\templabel{#1}}
+	}
+
+	\StrSubstitute{\templabel}{ }{-}[\templabel]
+	\StrSubstitute{\templabel}{,}{}[\templabel]
+	\StrSubstitute{\templabel}{'}{}[\templabel]
+
+	\csname#4\endcsname{#3}\label{#2:\templabel}
+}
+
+\NewDocumentCommand\startSection{O{1}mO{\empty}}
+{
+	\ifthenelse{\equal{#1}{2}}
+	{\startSectionAux[#3]{#2}{subsection}}
+	{\ifthenelse{\equal{#1}{3}}
+	{\startSectionAux[#3]{#2}{subsubsection}}
+	{\startSectionAux[#3]{#2}{section}}
+	}
+}
+
+% tables
+
+\NewDocumentCommand\makeTable{O{htbp!}mmmmm}
+{
+	\begin{table}[#1]
+	\centering
+	\rowcolors{2}{shade}{white}
+	\begin{tabular}{#4}
+	\hline
+	#5\\
+	\hline
+	#6\\
+  \hline
+	\end{tabular}
+	\caption[]{#3}
+	\label{table:#2}
+	\end{table}
+}
+
+% other shorthands
+
+\NewDocumentCommand\mono{m}{{\ttfamily#1}}
+
+%\RenewDocumentCommand\maketitle{}
+%{
+%  \begin{minipage}{\textwidth}
+%  \begin{center}
+%  \LARGE\assignment\\\ \\
+%  \large\longAuthor\\
+%  \normalsize\authorAddendum\\\ \\
+%  \normalsize\staticDate
+%	\end{center}
+%  \end{minipage}
+%  \ifthenelse{\equal{\dofancy}{true}}{\thispagestyle{first}}{}
+%}
