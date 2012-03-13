@@ -1,0 +1,14 @@
+
+Text:
+
+Introduce stacks, show an interface (in this case an object fulfills the
+interface if it implements the certain list of methods), show an
+implementation, talk about time and space complexity.
+
+Introduce queues (and deques), show an interface, discuss implementation
+techniques, leave actual implementation up to the reader, where submission is
+graded automatically to include: valid interface implementation (as in
+unit-test tested), perhaps well-named, containing annotation of time and space
+complexity. Half grade (or so) is passing the automatic check, half grade is
+given by instructor, checking the validity of the time and space complexity
+estimates, coding and commenting style in general.
