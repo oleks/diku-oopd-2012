@@ -1,5 +1,11 @@
+Scientific method:
+  Compare to previous years wrt. completion and drop out rates.
+
 
 Text:
+
+Introduce the von Neumann machine (one of the main differences between
+functional and procedural programming).
 
 Introduce stacks, show an interface (in this case an object fulfills the
 interface if it implements the certain list of methods), show an
@@ -12,3 +18,57 @@ unit-test tested), perhaps well-named, containing annotation of time and space
 complexity. Half grade (or so) is passing the automatic check, half grade is
 given by instructor, checking the validity of the time and space complexity
 estimates, coding and commenting style in general.
+
+Stack reference vs. array implementations. Arry implementations can be
+introduced after the dynamic array has been introduced.
+
+Complexity of dynamic arrays easy enough for them? After DIMS, that should be
+the case.
+
+Same-type/different-type? Start out with same type -- argument for it saying
+that while in principle, different objects can be stored in the same stack (and
+the space complexity therefore initially unknown), but that isn't particularly
+practical as you would more often than not take elements off of a stack in an
+itterative fashion, and if you have different types of objects it will be hell
+for you to figure out what to do with each object. The story is different if
+you want to do something that is conceptually the same for different kinds of
+objects. We refer to this as objects exhibiting the same sort of abstract
+behaviour, but in actuallity the behaviour is the same. We will return to this
+a bit later, we start by saying that all the elements in a stack have the same
+type.
+
+nice idea for recurring assignment theme: operating systems
+  week 1: login, whoami, passwd
+    with just one user, user is "created" on login
+    emphasis on program state
+    perhaps more emphasis on devision into structures
+    state machine?
+
+it's hard to make emphasis on object state without object sets.. in that
+context, it's always just as easy to declare all elements with individual
+variables and a naming convention. yeah, so this idea for week 1 is no good
+(keeping a conversation with the user is a good idea though).
+
+Week 1
+  main
+  code lines
+  functions (and recursion)
+  comments
+  if-then-else-case
+  primitive types and basic structures
+  standard in/out/erroir (string formatting?)
+  assignment: simple program that talks to the user
+Week 2
+  for-while loops (and arrays)
+  recursive structures (includes asymptotics and simple API design)
+    stacks
+    queues
+    deques
+  asymptotics with recursion
+  interfaces
+  -- rewriting stack operations for each type
+  assignment: stack-based calculator
+Week 3
+  shift to java
+    simple transition
+    actual advantages -- inheritance, constructors, generics

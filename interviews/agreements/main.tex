@@ -1,0 +1,44 @@
+\documentclass[a4paper,subeqn,9pt]{article}
+
+\usepackage{paralist}
+\usepackage{enumitem}
+\usepackage{expdlist}
+\usepackage{subfigure}
+
+\usepackage{oleks}
+\usepackage[final]{pdfpages}
+
+\setup{location={Institute of Datalogy, University of Copenhagen},subject={Dis2}}
+\setupAuthor[addendum=\ ]{Oleksandr Shturmov}
+
+\setup{date={January $10^{th}$, 2012},assignment={Formulas}}
+
+\newcommand{\textt}[1]{\ensuremath{\text{\mono{#1}}}}
+\newcommand{\mathmono}[1]{\ensuremath{\text{\mono{#1}}}}
+\newcommand{\nonterm}[1]{\ensuremath{\text{\mono{<#1>}}}}
+\newcommand{\term}[1]{\ensuremath{\text{\mono{`#1'}}}}
+\newcommand{\any}[0]{\ensuremath{\left\langle\bigtriangleup\right\rangle}}
+
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil{#1}\right\rceil}}
+\newcommand{\floor}[1]{\ensuremath{\left\lfloor{#1}\right\rfloor}}
+\newcommand{\set}[1]{\ensuremath{\left\{{#1}\right\}}}
+\newcommand{\st}[1]{\ensuremath{\left|{#1}\right.}}
+\newcommand{\seq}[1]{\ensuremath{\left[{#1}\right]}}
+\newcommand{\card}[1]{\ensuremath{\left|{#1}\right|}}
+\newcommand{\parens}[1]{\ensuremath{\left({#1}\right)}}
+\newcommand{\tuple}[1]{\ensuremath{\left\langle{#1}\right\rangle}}
+
+\newcommand{\iverson}[1]{\seq{#1}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}{Definition}[section]
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\input{teacher}
+
+\end{document}
