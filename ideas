@@ -72,3 +72,10 @@ Week 3
   shift to java
     simple transition
     actual advantages -- inheritance, constructors, generics
+
+
+Lectures
+
+  - wrt. floating point numbers -- create a plot that shows which numbers are
+    representable exactly by float and double, to give an overview of the
+    "precision", i.e. show which numbers are representable exactly.
