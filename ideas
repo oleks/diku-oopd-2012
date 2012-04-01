@@ -79,3 +79,10 @@ Lectures
   - wrt. floating point numbers -- create a plot that shows which numbers are
     representable exactly by float and double, to give an overview of the
     "precision", i.e. show which numbers are representable exactly.
+
+
+IDE
+
+  - Intellisense and autocompilation with Word-like underlining of errors is
+    GOOD -- error messages are cryptic..
+  - Project (and code) management should be out of the picture in general.

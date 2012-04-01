@@ -1,0 +1,54 @@
+\chapter{Introducing Imperative Programming}
+
+This primal chapter introduces the most fundamental notions of imperative
+programming. Many concepts that you already (should) know from Functional
+Programming you'll find reiterated throughout this chapter. These reiterations
+are made not to irritate you, but to allow you to naturally build up a
+framework for distinction between the imperative and functional paradigms.
+
+\begin{definition}
+
+\underline{Machines} are entities with \underline{state} and
+\underline{computation units}, capable of changing the state of the machine
+through \underline{actions}.
+
+\end{definition}
+
+While it may be modern (about time) to speak of machines as having multiple
+computation units, call them \underline{cores}, for a brief moment it is best
+for our discussion to restrain ourselves to single-core machines.
+
+\begin{definition}
+
+An action is a happening, taking place in a finite period of time and
+establishing a well-defined, intended \underline{net-effect}.
+\cite{dijkstra-introduction}
+
+\end{definition}
+
+This definition has two highlights two important points:
+
+\begin{enumerate}
+
+\item An action occurs over a finite period of time. This allows us to speak of
+a point in time $T_n$ and $T_{n+1}$, as the time of action inception and
+termination, respectively.
+
+\item An action has a well-defined, intended net-effect. This is to emphasize
+our interest in the outcome of an action rather than the action itself.
+
+\end{enumerate}
+
+To this end, it makes sense to describe the ``net-effect'' of an action as the
+difference between the state of the machine at time $T_n$ and $T_{n+1}$. This
+description breaks down as we turn to multi-core machines where the clear
+benefit of performing multiple actions simultaneously has been utilized.
+Therefore, apply this notion with care.
+
+The reason this benefit is ``clear'' comes up when we discuss the notion of
+state. In particular, multi-core machines usually share the same state.
+
+
+
+% action -> action clusters (Naur)
+
