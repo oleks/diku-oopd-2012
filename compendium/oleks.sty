@@ -6,6 +6,8 @@
 \PassOptionsToPackage{utf8}{inputenc}
 \PassOptionsToPackage{english}{babel}
 
+\PassOptionsToPackage{T1}{fontenc}
+
 \newcommand\dofancy{false}
 \DeclareOption{fancy}{\renewcommand\dofancy{true}}
 \ProcessOptions\relax
@@ -18,6 +20,7 @@
 
 \RequirePackage{expdlist}
 \RequirePackage{multirow}
+\RequirePackage{paralist}
 
 %colors
 
@@ -32,7 +35,7 @@
 
 % font
 
-\RequirePackage[T1]{fontenc}
+\RequirePackage{fontenc}
 \RequirePackage{mathpazo}
 
 % math
@@ -141,7 +144,7 @@
 
 \ifthenelse{\equal{\dofancy}{true}}{
 
-\RequirePackage{fullpage}
+%\RequirePackage{fullpage}
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 
