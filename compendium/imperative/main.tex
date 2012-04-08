@@ -1,0 +1,212 @@
+\chapter{Imperative and procedural programming}
+
+This chapter introduces some of the most fundamental notions of imperative and
+procedural programming.  Many concepts that you already (should) know you'll
+find reiterated throughout this, and future chapters.  These repetitions are
+not here to excite you, but rather to serve as means for building up a
+framework for understanding various concepts.  In the case of this chapter, it
+is the distinction between declarative, imperative and procedural programming.
+
+What you've been practising thus far, is mostly the \key{declarative}
+programming paradigm.
+
+\begin{definition}
+
+In a declarative programming paradigm, values are \key{immutable}, and
+programming is done by describing the relationships between values using
+\key{functions}.
+
+\end{definition}
+
+\marginpar{Exercise: Write an if-then-else-if-else-statement function in SML.
+(requires explanation of else-if)}
+
+Less formally, in pure declarative programming, we avoid describing the
+control-flow of a program and resort to pure function application. This means,
+for instance, programming without the if-statement, or rather, even the
+if-statement is a function. In this paradigm, the programmer is concerned with
+the mapping of input values to output values, such that the mapping provides a
+class of computations evocable by the program. The programmer is not concerned
+with being very clear about the flow of data and control throughout the
+program, as this is ``implicit'' in the mapping.
+
+\marginpar{A course in Object-oriented programming has historically always
+seemed easier on students after a course on Functional Programming.}
+
+As you may have already noticed, this paradigm can be notoriously difficult to
+apply to certain problems, despite it's nice mathematical properties. What's
+more, the more accurate reader would've already noticed that you haven't done
+pure declarative programming, but rather, already have experience with a few
+\key{control flow structures} such as \key{if-} and \key{case-}
+\key{statements}. Why this is, will become apparent shortly. We will return to
+these, and many new control flow structures, in a bit as well.
+
+An alternative programming paradigm, is historically closer to hardware. It
+derives from John von Neumann's original proposal for the design of the
+general-purpose digital computer\cite{von-neumann}. In this paradigm, the
+programmer is much more exposed to the underlying machine architecture. Since
+computers are historically very mundane, the programmer often has to be very
+explicit about the flow of control and data in a program. The programmer can
+hence get carried away with such mundane details, rather than concentrate on
+the problem at hand.
+
+So much so, that every once in a while the industry goes back to measuring the
+programmer productivity by say, the number of lines of code written. The more
+accurate measure seems to be an evaluation of the class of computations
+evocable by the written program, as well as the time and resource requirements
+of such computations. Hence, the programmer's job becomes the more poetic --
+``designing a class of computations'', rather than the more mundane --
+''writing a program''.
+
+In essence, it seems more fruitful for the industry to be more concerned with
+the net-effect of programs, while the means of getting there are essentially
+non-essential. In essence, this is equivalent to the declarative approach. This
+was a view acceptable before really big software projects came along -- at
+which point it became clear that the code that a programmer writes, has to be
+maintained by others.
+
+\begin{definition}
+
+\key{Computers} are entities with \key{state} and \key{computational units}.
+
+\end{definition}
+
+\begin{definition}
+
+Computational units perform \key{actions} that change the state of the computer.
+
+\end{definition}
+
+While it may be modern (about time) to speak of machines as having multiple
+computational units, call them \key{cores}, for a brief moment it is best for
+our discussion to restrain ourselves to single-core machines.
+
+\begin{definition}
+
+``An action is a happening, taking place in a finite period of time and
+establishing a well-defined, intended \key{net-effect}.''
+\cite{dijkstra-introduction}
+
+\end{definition}
+
+This definition highlights two important points:
+
+\begin{enumerate}
+
+\item An action occurs over a finite period of time. This allows us to speak of
+a point in time $T_n$ and $T_{n+1}$, as the time of action inception and
+termination, respectively.
+
+\item An action has a well-defined, intended net-effect. This is to emphasize
+our interest in the outcome of an action rather than the action itself.
+
+\end{enumerate}
+
+To this end, it makes sense to describe the ``net-effect'' of an action as the
+difference between the state of the machine at time $T_n$ and $T_{n+1}$. This
+notion breaks down as we turn to multi-core machines where the clear benefit of
+performing multiple actions at once is utilized. Therefore, apply this notion
+with care.
+
+The reason this benefit is ``clear'' comes up when we discuss the notion of
+state. We can define the state of a computer as a sequence $S$, of
+equally-sized chunks, called \key{words}. The computational unit is historically
+only capable of performing actions on a fixed number of such words at a time.
+Usually, this number is much smaller than $S$. As a matter of fact, it is often
+theoretically beneficial to let the size of $S$ be infinite.
+
+You can imagine the computational unit in a single-core computer as a lonely
+librarian in a large one-dimensional tape library (state)\footnote{Both exist
+in discrete space. Clearly, the librarian is a dot, while the library can be a
+line, segment, or ray, all depending on the theoretical applicability of
+either.}. By our present notion of state, the library consists of equally-sized
+tapes (words) arranged in a linear fashion.  As tapes do not overlap, the
+consequent location of the tapes superimposes an \key{address} for every tape.
+
+The librarian is always at some particular address in the library, and can only
+work with the tape at that location. The librarian is unable to work on
+multiple tapes simultaneously, since the librarian moves through space, one
+location at a time, to the other tape of interest as a part of that action.
+Yet, it is practical for the librarian to be able to work on multiple such
+tapes at a time. For instance, the librarian may wish to merge two tapes into
+one.
+
+%\marginpar{``электронная машина и решения принимала бы быстрее, и просчитывала
+%намного больше вариантов, и не спешила бы домой в конце рабочего дня, и не
+%делала бы ничего «по блату»''}
+
+
+Therefore, if we had to describe what constitutes an action, we'd say that in
+some time frame $T_1$, the librarian should be able to \begin{inparaenum}[(1)]
+\item grab a few tapes, \item examine the data on these tapes, \item overwrite
+them with new data, if necessary, and \item put the tapes back in their
+original locations\end{inparaenum}.
+
+It is important to reiterate that this sequence of the sub-actions,
+constituting an action, has to happen in the fixed time frame of $T_1$, in
+particular, such that $T_n+T_1=T_{n+1}$.  This means that regardless of the
+location of the tapes required for some action, the action must take at most
+time $T_1$. Yet, the librarian has to move about in order to pick up and put
+down various tapes. In the worst case, the tapes of interest may be at opposite
+ends of the library. Therefore, the larger the library, the larger the $T_1$
+has to be. 
+
+Instead of letting our concept of time vary on the size of our library, we
+usually let our state $S$ possess a property known as \key{random access}. In a
+way, this is akin to giving our librarian teleporting abilities. This allows
+the concept of time to be constrained to \begin{inparaenum}[(1)] \item the
+number of tapes a librarian is interested in, \item the time it takes to
+examine and overwrite these tapes, as well as \item perform various
+computations on the examined tapes\end{inparaenum}. However, we need not dig
+deeper down this rabbit hole here.
+
+\begin{definition}
+
+A state $S$ is a sequence of equally sized chunks with random access.
+
+\end{definition}
+
+The librarian analogy is pretty lousy, as a librarian that overwrites the
+library tapes, is surely to be fired rather promptly. The key here is to have
+more tapes than actual data. Computers, unlike librarians are interested in
+doing more with their data than just move it about.
+
+Peter naur.
+
+This is because computer science is both about
+managing data and producing it. 
+
+This sequence of steps constitutes and action. Note, that there is no movement
+of tapes, just reading and writing, everything else, is done by a combination
+of such actions.
+
+
+It gets to be a pretty tiresome work when the size of
+$S$ is large, or even worse, infinite. It is therefore clear that multiple computational
+units could do things faster. The real trouble comes along when these
+computational units have to use the same tape, but that is outside the scope of
+this course.
+
+In particular, multi-core machines usually share the same state.
+
+
+% action -> action clusters (Naur)
+
+
+\begin{quote}"You have perhaps had a dream much like mine: Wouldn't it be nice
+to have a glorious system of complete maps of the world, whereby one could (by
+turning dials) increase or decrease the scale at will? A similar thing can be
+achieved for programs, rather easily, when we give the programs a hierarchic
+structure like those constructed step-wise. It is not hard to imagine a
+computing system which displays a program in such a way that, by pressing
+an-appropriate button, one can replace the name of a routine by its expansion
+on the next level, or conversely."\cite{knuth-review-of-sp}\end{quote}
+
+
+
+
+\section{State of the art}
+
+Traditionally modules. Literate Programming. C\# has regions.
+
+\input{imperative/exercises}
