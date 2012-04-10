@@ -155,8 +155,8 @@ Instead of letting our concept of time vary on the size of our library, we
 usually let our state $S$ possess a property known as \key{random access}. In a
 way, this is akin to giving our librarian teleporting abilities. This allows
 the concept of time to be constrained to \begin{inparaenum}[(1)] \item the
-number of tapes a librarian is interested in, \item the time it takes to
-examine and overwrite these tapes, as well as \item perform various
+number of tapes a librarian is interested in for any action, \item the time it
+takes to examine and overwrite these tapes, as well as \item perform various
 computations on the examined tapes\end{inparaenum}. However, we need not dig
 deeper down this rabbit hole here.
 
@@ -167,9 +167,17 @@ A state $S$ is a sequence of equally sized chunks with random access.
 \end{definition}
 
 The librarian analogy is pretty lousy, as a librarian that overwrites the
-library tapes, is surely to be fired rather promptly. The key here is to have
-more tapes than actual data. Computers, unlike librarians are interested in
-doing more with their data than just move it about.
+library tapes, is surely to be fired rather promptly. The solution to this
+analogy dilemma is to have a range of empty tapes that serve as auxiliaries for
+the librarian's various operations. 
+
+\marginpar{Exercise: XOR swap}
+
+In general, we'd like for our computers, unlike our librarians, to do more than
+simply store our data in a neat order. We want for our computers to sort, move
+about, generate and actually overwrite data on demand. These, and many more
+data operations facilitate our actual goal -- the solution of various
+real-world problems.
 
 Peter naur.
 
