@@ -1,11 +1,12 @@
-\chapter{Imperative and procedural programming}
+\chapter{Assemblage}
 
 This chapter introduces some of the most fundamental notions of imperative and
 procedural programming.  Many concepts that you already (should) know you'll
-find reiterated throughout this, and future chapters.  These repetitions serve
-not to excite you, but are rather means for building up a framework for
-understanding various concepts.  In the case of this chapter, it is the
-distinction between declarative, imperative and procedural programming.
+find reiterated throughout this chapter.  This reiteration is not here to annoy
+you, but rather to provide you with a framework for distinguishing between
+declarative, imperative and procedural programming.
+
+\vspace{0.5in}
 
 What you've been practising thus far, is mostly the \key{declarative}
 programming paradigm.
@@ -25,57 +26,57 @@ Less formally, in pure declarative programming, we avoid describing the
 \key{flow} of the program and resort to pure function application, or rather,
 function application is the only flow construct that we've got.  In this
 paradigm, the programmer is concerned with the mapping of input values to
-output values, such that the mapping provides a class of computations evocable
-by the program. The programmer is not concerned with being particularly clear
-about the flow of data and control throughout the program, as this is
-implicit in the mapping.
+output values, such that the mapping provides a \key{class of computations}
+evocable by the program. The programmer is not concerned with being
+particularly clear about the flow of data and control throughout the program,
+as this is implicit in the mapping.
 
 \marginpar{A course in Object-oriented programming has historically always
 seemed easier on students after a course on Functional Programming.}
 
 As you may have already noticed, this paradigm can be notoriously difficult to
-apply to certain problems, despite it's nice mathematical properties. What's
-more, the more accurate reader would've already noticed that you haven't done
-pure declarative programming, but rather, already have experience with a few
-\key{control flow structures} such as \key{if-} and \key{case-}
-\key{statements}. Why this is, will become apparent shortly. We will return to
-these, and many new control flow structures, in a bit as well.
+apply to certain problems, despite (or due to) it's neat mathematical
+properties.  What's more, the more accurate student would've already noticed
+that you've not done \emph{pure} declarative programming, but rather, already
+have experience with a few \key{control flow structures} such as \key{if-} and
+\key{case-} \key{statements}. Why this is, will become apparent shortly. We
+will return to these, and many more control flow structures, in a bit as well.
 
-An alternative programming paradigm, is historically closer to hardware. It
-derives from John von Neumann's original proposal for the design of the
-general-purpose digital computer\cite{von-neumann}. In this paradigm, the
-programmer is much more exposed to the underlying machine architecture.
+An alternative programming paradigm, the \key{imperative}, is historically
+closer to hardware. It emerged as the programming paradigm for computer
+architectures deriving from John von Neumann's original
+proposal\cite{von-neumann}. By this design, computers are rather feebleminded.
+Hence, the programmer often has to be very clever about specifying the flow of
+the program.
 
-Computers are historically very mundane. Hence, the programmer often has to be
-very explicit about the flow the program in this paradigm. The programmer can
-often get carried away with such mundane details, rather than concentrate on
-the problem at hand.
+\marginpar{Exercise: A good computer scientist would quickly come up with a
+scheme for generating good for nothing intermediate code, and get paid for not
+doing much work at all.}
 
-So much so, that every once in a while the industry goes back to measuring the
-programmer productivity by say, the number of lines of code written. A good
-computer scientist would quickly come up with a scheme for generating good for
-nothing intermediate code, and get paid for not doing much work at all.
+As a by-product, the programmer can often get carried away with some
+non-essential details, instead of concentrating on the problem at hand. The
+paradigm, being ``so close to metal'', opens up for time spenders on various
+frontiers. On the more boring side, the programmer may have to write a great
+deal of code to do simple things, while on the more fun side, the programmer
+can spend a great deal of time figuring out clever tricks to make the code
+marginally faster on that particular architecture. Neither is a particularly
+clever practise, and measuring programmer productivity by say the number of
+lines written seems to be just picking the lesser of the two evils --
+encouraging programmers to be sloppy (but ``productive'').
 
-The more accurate measure seems to be an evaluation of the class of
-computations evocable by the written program, as well as the time and resource
-requirements of such computations. Hence, the programmer's job becomes the more
-poetic -- ``designing a class of computations'', rather than the more mundane
--- ''writing a program''.
+The more accurate productivity measure seems to be an evaluation of the class
+of computations evocable by the written program, as well as the \key{time} and
+\key{resource} \key{requirements} of such computations. Hence, the programmer's
+job becomes the more poetic -- ``designing a class of computations'', rather
+than the more mundane -- ''writing a program''. In essence, it seems more
+fruitful for us to be more concerned with the \key{net-effect} of programs,
+while the means of getting the program written are seemingly non-essential. 
 
-In essence, it seems more fruitful for the industry to be more concerned with
-the net-effect of programs, while the means of getting there are essentially
-non-essential. It is important to note, that this is not equivalent to the
-declarative approach, since generating non-sensical intermediate function
-application is just as easy. In general, we will not be concerned with code
-that does nothing, as this is rather pointless.
-
-This is a view acceptable before we realise that software has to be maintained.
-What's more, it more often than not has to be maintained by other programmers.
-
-This
-was a view acceptable before really big software projects came along -- at
-which point it became clear that the code that a programmer writes, has to be
-maintained by others.
+This view may be acceptable so long as we don't consider that software has to
+evolve. Either due to bugs or changes in the requirements. What's more,
+software is usually evolved by people other than the original programmers. We
+will come back to this thought after we've covered some basics of computer
+architecture.
 
 \begin{definition}
 
