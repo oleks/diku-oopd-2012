@@ -2,17 +2,17 @@
 
 This chapter introduces some of the most fundamental notions of imperative and
 procedural programming.  Many concepts that you already (should) know you'll
-find reiterated throughout this, and future chapters.  These repetitions are
-not here to excite you, but rather to serve as means for building up a
-framework for understanding various concepts.  In the case of this chapter, it
-is the distinction between declarative, imperative and procedural programming.
+find reiterated throughout this, and future chapters.  These repetitions serve
+not to excite you, but are rather means for building up a framework for
+understanding various concepts.  In the case of this chapter, it is the
+distinction between declarative, imperative and procedural programming.
 
 What you've been practising thus far, is mostly the \key{declarative}
 programming paradigm.
 
 \begin{definition}
 
-In a declarative programming paradigm, values are \key{immutable}, and
+In a purely declarative programming paradigm, values are \key{immutable}, and
 programming is done by describing the relationships between values using
 \key{functions}.
 
@@ -22,13 +22,13 @@ programming is done by describing the relationships between values using
 (requires explanation of else-if)}
 
 Less formally, in pure declarative programming, we avoid describing the
-control-flow of a program and resort to pure function application. This means,
-for instance, programming without the if-statement, or rather, even the
-if-statement is a function. In this paradigm, the programmer is concerned with
-the mapping of input values to output values, such that the mapping provides a
-class of computations evocable by the program. The programmer is not concerned
-with being very clear about the flow of data and control throughout the
-program, as this is ``implicit'' in the mapping.
+\key{flow} of the program and resort to pure function application, or rather,
+function application is the only flow construct that we've got.  In this
+paradigm, the programmer is concerned with the mapping of input values to
+output values, such that the mapping provides a class of computations evocable
+by the program. The programmer is not concerned with being particularly clear
+about the flow of data and control throughout the program, as this is
+implicit in the mapping.
 
 \marginpar{A course in Object-oriented programming has historically always
 seemed easier on students after a course on Functional Programming.}
@@ -44,23 +44,35 @@ these, and many new control flow structures, in a bit as well.
 An alternative programming paradigm, is historically closer to hardware. It
 derives from John von Neumann's original proposal for the design of the
 general-purpose digital computer\cite{von-neumann}. In this paradigm, the
-programmer is much more exposed to the underlying machine architecture. Since
-computers are historically very mundane, the programmer often has to be very
-explicit about the flow of control and data in a program. The programmer can
-hence get carried away with such mundane details, rather than concentrate on
+programmer is much more exposed to the underlying machine architecture.
+
+Computers are historically very mundane. Hence, the programmer often has to be
+very explicit about the flow the program in this paradigm. The programmer can
+often get carried away with such mundane details, rather than concentrate on
 the problem at hand.
 
 So much so, that every once in a while the industry goes back to measuring the
-programmer productivity by say, the number of lines of code written. The more
-accurate measure seems to be an evaluation of the class of computations
-evocable by the written program, as well as the time and resource requirements
-of such computations. Hence, the programmer's job becomes the more poetic --
-``designing a class of computations'', rather than the more mundane --
-''writing a program''.
+programmer productivity by say, the number of lines of code written. A good
+computer scientist would quickly come up with a scheme for generating good for
+nothing intermediate code, and get paid for not doing much work at all.
+
+The more accurate measure seems to be an evaluation of the class of
+computations evocable by the written program, as well as the time and resource
+requirements of such computations. Hence, the programmer's job becomes the more
+poetic -- ``designing a class of computations'', rather than the more mundane
+-- ''writing a program''.
 
 In essence, it seems more fruitful for the industry to be more concerned with
 the net-effect of programs, while the means of getting there are essentially
-non-essential. In essence, this is equivalent to the declarative approach. This
+non-essential. It is important to note, that this is not equivalent to the
+declarative approach, since generating non-sensical intermediate function
+application is just as easy. In general, we will not be concerned with code
+that does nothing, as this is rather pointless.
+
+This is a view acceptable before we realise that software has to be maintained.
+What's more, it more often than not has to be maintained by other programmers.
+
+This
 was a view acceptable before really big software projects came along -- at
 which point it became clear that the code that a programmer writes, has to be
 maintained by others.
@@ -122,6 +134,8 @@ line, segment, or ray, all depending on the theoretical applicability of
 either.}. By our present notion of state, the library consists of equally-sized
 tapes (words) arranged in a linear fashion.  As tapes do not overlap, the
 consequent location of the tapes superimposes an \key{address} for every tape.
+This is akin to house numbering along one side of a street.
+
 
 The librarian is always at some particular address in the library, and can only
 work with the tape at that location. The librarian is unable to work on
@@ -169,7 +183,8 @@ A state $S$ is a sequence of equally sized chunks with random access.
 The librarian analogy is pretty lousy, as a librarian that overwrites the
 library tapes, is surely to be fired rather promptly. The solution to this
 analogy dilemma is to have a range of empty tapes that serve as auxiliaries for
-the librarian's various operations. 
+the librarian's various operations, and to assume that tape overwrites are
+lossless. 
 
 \marginpar{Exercise: XOR swap}
 
@@ -210,6 +225,17 @@ computing system which displays a program in such a way that, by pressing
 an-appropriate button, one can replace the name of a routine by its expansion
 on the next level, or conversely."\cite{knuth-review-of-sp}\end{quote}
 
+\emph{Fun fact:} (should come after discussion of representation of data types
+with multiple words) The rooms at DIKU have a peculiar numbering system that
+has a lot to do with the way addressing happens in a computer. If you've ever
+seen DIKU from the outside, you might've noticed that, by design, all the
+windows of a building are of equal size and the windows are equally spaced,
+creating a rather aesthetic outside look. The ``address'' of a room inside DIKU
+consists of 3 parts, building, floor and window. Buildings have number codes,
+as do floors. This leads you to the correct hall, as on any floor there is only
+one hallway. The last part of the address indicates the window at which the
+room begins, numbered from east to west, (0-indexed). The analogy breaks down
+when we find out that not all rooms in a given hall are of the same size.
 
 
 
