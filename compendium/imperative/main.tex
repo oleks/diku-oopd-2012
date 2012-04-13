@@ -70,10 +70,12 @@ time-spenders on opposing programming frontiers. On the one side, the
 programmer has to write a great deal of code to do simple things, while on the
 other hand, the programmer can spend a great deal of time discovering clever
 tricks to make some part of the program marginally faster on some particular
-architecture. Neither is particularly clever in practise. Any self-respecting
-programmer knows that premature optimization is the root of all
-evil\cite{knuth-goto}, as any self-respecting manager knows not to measure
-programmer productivity by the number of lines written.
+architecture.
+
+Neither is particularly clever in practise. Any self-respecting programmer
+knows that premature optimization is the root of all evil\cite{knuth-goto}, as
+any self-respecting manager knows not to measure programmer productivity by the
+number of lines written.
 
 \marginpar{Exercise: A good computer scientist would quickly come up with a
 scheme for generating good for nothing intermediate code, and get paid for not
@@ -82,19 +84,17 @@ doing much work at all.}
 The more accurate productivity measure seems to be an evaluation of the class
 of computations evocable by the written program, as well as the \key{time} and
 \key{resource} \key{requirements} of such computations. Hence, the programmer's
-job becomes the more poetic -- ``designing a class of computations'', rather
-than the more mundane -- ''writing a program''. In essence, it seems more
-fruitful for us to be more concerned with the \key{net-effect} of programs,
-while the means of getting the program written are seemingly non-essential. 
+job becomes the more poetic -- ``design a class of computations'', rather than
+the more mundane -- ''write a program''. In essence, it seems more fruitful for
+us to be more concerned with the behaviour of programs, rather than their
+structure.
 
 This view may be acceptable so long as we don't consider that software has to
-evolve. Either due to bugs in the original implementation or due to changes in
-the software requirements. What's more, software is usually evolved by people
-other than the original programmers. To evolve software efficiently, the programmer has to be able to get 
-
-
-We will come back to this thought after
-we've covered some basics of computer architecture.
+evolve. Either due to changes in the software requirements, or bugs in the
+original implementation. What's more, software is usually evolved by people
+other than its original programmers. To evolve software efficiently, the
+programmer has to be able to get into the shoes of the original programmer and
+understand why the program is structured the way that it is.
 
 \begin{definition}
 
