@@ -1,0 +1,103 @@
+syntax highlighted code
+not a children's book
+
+
+Java for everyone -- Cay Horstmann
+- looks like a children's book
+- not particularly happy about code highlighting
++ explanations of the code with important things highlighted
+- main introduced with forward links
+
+
+A concise survey of computer methods - Peter Naur
+
+p.10:
+
+Indeed, the student should be encouraged to use the original literature, both
+in order to benefit from the wider horizon covered by the combined outlooks of
+many authors, and in order to practise the mode of work that is required to
+keep abreast of new developments.
+
+
+p.11:
+
+By extension I decided that "datalogy" would be a suitable term for "the
+science of data and data processes". To this my collegues Paul Lindgreen and
+Per Brinch Hansen added "datamatics" to denote "automatic data processing" and
+"datamaton" to denote "computer".
+
+p.21:
+
+The difference is that when we talk of a process we are interested in how it is
+done, usually by several work stages, while in a transformation we look at the
+data going in and data coming out and their mutual relation without bothering
+about precisely how the change was effected... Two processes which realize the
+same transformation will be termed equivalent.
+
+  - a pretty neat example of the sum of numbers and various processes possible
+    for achieving the sum transoformation.
+
+p. 23:
+
+This freedom in the choice of phenomenon to use as the data representation of a
+given fact or idea or more briefly, the freedom in the choice of data
+representation, reflects deeply into datalogy.
+
+  - contrasts static/dynamic data, analog/digital, digital being a finite
+    sequence of letters from a finite alphabet.
+
+
+p. 66:
+
+Large programs should always be developed as a number of subprograms that are
+subsequently combined. This is important as a way for the designer to remain
+the master of the situation. The subprograms should be tested separately,
+before being combined, with the aid of specially written testprograms This
+cannot solve all the problems of testing since the interfaces between the
+subprograms may yet contain errors. Still the advantage of achieving some
+degree of division of the testing problem into more managable parts should
+exploited whenever possible.
+
+  - neat, but modern compilers provide ways to ensure interface consistency,
+    leaving the subprogram tests to test their own full compliance with the
+    interfaces. Among the problems at hand are things like x should be >= 10,
+    which is not representable by a type. Note the relation to C.A.R. Hoare
+    assertions.
+
+0.5. Curriculum 68 - Recommendations for academic programs in computer science.
+A report of the ACM Curriculum Commitee on Computer Science. Comm. ACM 11, 3
+(March 1968), 151--197, CR 14,389, 14,390 and 14,391.
+  - I1, Data Structures
+  - I2, Programming Languages
+  - I4, Systems Programming
+  - I5, Compiler Construction
+
+Curriculum Recommendations for Graduate Professional Programs in Information
+Systems (Comm. ACM 15, 5 (May 1972), 363--398).
+  - C1, Information Structures.
+
+IFIP-ICC Vocabulary of Information Processing
+
+0.7 Gould, I. H. (ed.). "IFIP guide to concepts and terms in data processing."
+North Holland Publ. Co., Amsterdam, 1971, 161 pp. CR 23,101.
+  - This is used as basis for the terminology used in this text.
+
+0.12 Naur, P. "Plan for et kursus i datalogi og datamatik" (in Danish, title in
+English: "Outline of a course in data science and data processing.") A/S
+Regnecentralen, Copenhagen, Denmark, 1966, 64 pp., CR 16,098.
+  - An early, brief version of the present book.
+
+0.14 Naur, P. "Datalogy, the science of data and data processes, and its place
+in education." Proc. IFIP Congress 1968, Application 2, Booklet G. 48--52, CR
+15,679.
+  - A description of the early plan for the present book, with a comparison
+    with the ACM Curriculum 68 [0.5].
+
+0.15 Gram, Chr.; Hald, J; Hansen, H.B.; Naur, P.; and Wessel A. "Datamatik", a
+series of booklets, Regnecentralen, Studentlitteratur, Lund.
+  - These booklets are part of a full version of the course described in [0.12]
+    and [0.14], in Danish.
+  - Christian Gram, Jens Hald, H. B. Hansen, Alan Wessel.
+
+1.1 Wittgenstein, L. "Tractatus logico-philosophicus." Routledge and Kegan Paul
+Ltd., London, 1922, 207 pp.
