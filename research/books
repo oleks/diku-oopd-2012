@@ -46,6 +46,14 @@ representation, reflects deeply into datalogy.
   - contrasts static/dynamic data, analog/digital, digital being a finite
     sequence of letters from a finite alphabet.
 
+p. 61:
+
+Strict adherence to the ideas of structured programming will create the problem
+that actions and data representation that have been prescribed at a high level
+may later be found to be inconvenient, or even impossible, when an attempt is
+made to express them at a lower level. Structured programming should therefore
+be supplemented by the methods of systematic problem solving.
+
 
 p. 66:
 
@@ -58,11 +66,53 @@ subprograms may yet contain errors. Still the advantage of achieving some
 degree of division of the testing problem into more managable parts should
 exploited whenever possible.
 
-  - neat, but modern compilers provide ways to ensure interface consistency,
-    leaving the subprogram tests to test their own full compliance with the
-    interfaces. Among the problems at hand are things like x should be >= 10,
-    which is not representable by a type. Note the relation to C.A.R. Hoare
-    assertions.
+% Neat, but modern compilers provide ways to ensure partial interface
+% consistency.  Some things remain elusive of course, due to general
+% intractability. Subprogram testing is (currently) seemingly the only method
+% to ensure (expected) full compliance with the interface. Among the problems
+% at hand are things like "x should be >= 10", which is not representable by
+% e.g.  a type.  Note the relation to C.A.R. Hoare assertions. Of course formal
+% proofs can always save the day, but are generally impracticaly (see also
+% p.71).
+
+p.66:
+
+Indeed, random test data are unlikely to activate all parts of an algorithm and
+will therefore usually leave certain parts of it entirely untried.
+
+% According to naur random test data is not safe when looking for arguments of
+% program correctness, but it is safe when testing arguments of say program
+% resource requirements. Makes sense.
+
+p.70:
+
+The documentation should describe not only the final solution, but also the
+reasoning leading up to it.
+
+p.70:
+
+The data representation used within a program is best described by a set of
+invariants. To make this possible the change to the values of the variables
+should only be made within the context of action clusters, worked out to ensure
+the continued validity of invariants.
+
+p.71:
+
+Test cases should be worked out during the program development, to make sure
+that all parts of the program text are tried and that the full range of
+external specifications is covered.
+
+p.300:
+
+Second, when the designer carefully describes his design problems and their
+solutions, he will often be inspired to improve them.
+
+p.300:
+
+Basically, the documentation of a data system must be viewed in the same way as
+any other factual report, or any piece of written literature for that matter.
+The general principles of report writing and of good style apply fully in this
+problem.
 
 0.5. Curriculum 68 - Recommendations for academic programs in computer science.
 A report of the ACM Curriculum Commitee on Computer Science. Comm. ACM 11, 3
@@ -101,3 +151,14 @@ series of booklets, Regnecentralen, Studentlitteratur, Lund.
 
 1.1 Wittgenstein, L. "Tractatus logico-philosophicus." Routledge and Kegan Paul
 Ltd., London, 1922, 207 pp.
+
+3.21. Naur, P. "An experiment on program construction." BIT 12, 3 (1972),
+347--365, CR 25,213.
+
+% Describes the details of the process of developing a program to solve a given
+% problem, including alternatives rejected.
+
+3.24. Hyman, R.; and Anderson B. "Solving problems." International Science and
+Technology (Sept. 1965), 36--41.
+
+% Discusses 8 precepts of the problem solver.
