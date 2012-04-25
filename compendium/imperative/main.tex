@@ -12,12 +12,15 @@
 %
 % material for first week: the first two chapters.
 
+% humans can only remember about 4 things at once -- the registers of the
+% librarian -- see short-term memory article on wikipedia.
+
 
 This chapter introduces some of the most fundamental notions of imperative and
-procedural programming.  Many concepts that you already (should) know you'll
-find reiterated throughout this chapter.  This reiteration is not here to annoy
-you, but rather to provide you with a framework for distinguishing between
-declarative, imperative and procedural programming.
+procedural programming.  Many concepts that you already (should) know from your
+experience with funcational programming, you'll find reiterated throughout this
+chapter.  This reiteration, I hope, provides a yardstick for distinguishing
+between declarative, imperative and procedural programming.
 
 \vspace{0.5in}
 
@@ -37,10 +40,10 @@ programming is done by describing the relationships between values using
 
 Less formally, in pure declarative programming, we avoid describing the
 \key{flow} of the program and resort to pure function application, or rather,
-function application is the only flow construct that we've got.  In this
+function application is the only program flow connective we've got.  In this
 paradigm, the programmer is concerned with the mapping of input values to
-output values, such that the mapping provides a \key{class of computations}
-evocable by the program. The programmer is not concerned with being
+output values, such that the mapping defines a \key{class of computations} that
+the program can evoke.  The programmer is \emph{not} concerned with being
 particularly clear about the flow of data or control throughout the program, as
 this is implicit in the mapping.
 
@@ -57,19 +60,22 @@ will return to these, and many more control flow structures, in a bit as well.
 
 An alternative programming paradigm, the \key{imperative}, is historically
 closer to hardware. It emerged as the programming paradigm for computer
-architectures deriving from John von Neumann's original architectural proposal
-\cite{von-neumann}. By this architecture, computers are rather feebleminded.
-Therefore, it is the programmer has to be the clever one when specifying the
-program flow.
+architectures deriving from John von Neumann's original digital computer
+architecture proposal \cite{von-neumann}, henceforth referred to as the von
+Nuemann architecture. By this architecture, computers are rather feebleminded.
+Inevitebly, the programmer has to be the clever one when specifying the program
+flow.
 
 As a by-product, the programmer can often get carried away with some
 non-essential details, rather than concentrate on the problem at hand. Indeed,
 being ``so close to the bear metal'', the paradigm opens up for marvelous
 time-spenders on opposing programming frontiers. On the one hand, the
-programmer has to write a great deal of code to do simple things, while on the
-other hand, the programmer can spend a great deal of time looking for clever
-tricks to make some part of the program marginally faster on some particular
-architecture.
+programmer may have to write a great deal of code to even get the simplest
+things done, while on the other hand, the programmer can spend a great deal of
+time looking for clever tricks to make some part of the program marginally
+faster on some particular architecture.
+
+Blah blah conventional CS problem -- abstraction vs. performance.
 
 Time has shown, that neither is a dominating strategy practise. Any
 self-respecting programmer knows that premature optimization is the root of all
@@ -80,13 +86,13 @@ programmer productivity by the number of lines written.
 scheme for generating good for nothing intermediate code, and get paid for not
 doing much work at all.}
 
-The more accurate productivity measure seems to be an evaluation of the class
-of computations evocable by the written program, as well as the \key{time} and
-\key{resource} \key{requirements} of such computations. Hence, the programmer's
-job becomes the more poetic -- ``design a class of computations'', rather than
-the more mundane -- ''write a program''. In essence, it seems more fruitful for
-us to be more concerned with the behaviour of programs, rather than their
-contruction.
+The more accurate productivity measure seems to be an evaluation of
+\begin{inparaenum}[(1)] \item the class of computations that the program can
+evoke, and \item the \key{time-} and \key{resource} \key{requirements} of such
+evocations\end{inparaenum}. Hence, the programmer's job becomes the more poetic
+-- ``designing a class of computations'', rather than the more mundane --
+''writing a program''. In essence, it seems more fruitful for us to be more
+concerned with the behaviour of programs, rather than their contruction.
 
 This view may be acceptable so long as we're not reminded that programs often
 have to evolve, either due to changes in the program requirements, or due to
@@ -96,8 +102,8 @@ program \emph{efficiently}, the epoch programmers have to be able to put
 themselves in the shoes of the original programmers, and understand why the
 program was constructed the way that it was.  This allows them to evolve the
 program efficiently, rather than having to resort to say, rewriting the program
-from scratch. Of course, sometimes, the only way to efficiently evolve a
-program is to write it from scratch. 
+from scratch\footnote{Sometimes, the only way to efficiently evolve a program
+is to write it from scratch.}.
 
 \begin{definition}
 
@@ -111,7 +117,7 @@ In essence, as programmers, we're playwriters for two rather distinct
 audiences: the feebleminded computer that has to evoke the program, and the
 generally clever, but sometimes feebleminded programmers that have to evolve
 the program. In order to contrast these two audiences, we first need an
-abstract understanding of the so-called von Neumann architecture.
+abstract understanding of the infamous von Neumann architecture.
 
 \begin{definition}
 
@@ -154,10 +160,11 @@ notion with care.
 
 The reason this benefit is ``clear'' comes up when we discuss the notion of
 state. We can define the state of a computer as a sequence $S$, of
-equally-sized chunks, called \key{words}. The computational unit is historically
-only capable of performing actions on a fixed number of such words at a time.
-Usually, this number is much smaller than $S$. As a matter of fact, it is often
-theoretically beneficial to let $S$ be infinite in size.
+equally-sized chunks, called \key{words}. The computational unit is
+historically only capable of performing actions on a fixed number of such words
+at a time.  Usually, this number is much smaller than the length of the
+sequence $S$. As a matter of fact, it is often theoretically beneficial to let
+$S$ be infinite in size.
 
 You can imagine the computational unit in a single-core computer as a lonely
 librarian in a large one-dimensional tape library\footnote{Both exist in
@@ -171,25 +178,22 @@ relative to the position of the librarian. In a sense, this is akin to house
 numbering along a street.
 
 The librarian is always at some particular location in the library, and can
-only work on the tape at that location, or some fixed number of tapes adjacent
-to that location. Initially, the librarian is unable to work on multiple
-randomly distributed tapes simultaneously, since the librarian has to be ``on
-site'' to work on particular tapes. If in the course of an action, the
-librarian wishes to work on some fixed number of disjoint tapes, the librarian
-has to move through the library, from one location to the other, one location
-at a time -- as a part of that action. It is practical for the librarian to be
-able to do this. For instance, the librarian may wish to merge two tapes into
-one.
+only work on the tape at that location. Initially, the librarian is unable to
+work on multiple randomly distributed tapes simultaneously, since the librarian
+has to be ``on site'' to work on particular tapes. If in the course of an
+action, the librarian wishes to work on some fixed number of disjoint tapes,
+the librarian has to move through the library, from one location to the other,
+one location at a time -- as a part of that action. It is practical for the
+librarian to be able to do this. For instance, the librarian may wish to merge
+two tapes into one.
 
 \marginpar{
 
 ``\cyrtext{электронная машина и решения принимала бы быстрее, и просчитывала
-намного больше вариантов, и не спешила бы домой в конце рабочего дня, и не
-делала бы ничего «по блату»}''
+намного больше вариантов, и не спешила бы домой в конце рабочего дня}''
 
 Translation: The electronic machine would've made decisions faster, considered
-more options, and wouldn't hurry home at the end of the work day, and wouldn't
-do anything by blat.
+more options, and wouldn't hurry home at the end of the day.
 
 }
 
@@ -211,12 +215,12 @@ $T_1$ has to be.
 Instead of letting our concept of time vary on the size of our library, we
 usually make an abstraction and let our state $S$ possess a property known as
 \key{random access}. In a way, this is akin to giving our librarian teleporting
-abilities, but really we're just letting $T_1$ be the time it. This allows the concept of time to be constrained to
-\begin{inparaenum}[(1)] \item the number of tapes a librarian is interested in
-for any action, \item the time it takes to examine and overwrite these tapes,
-as well as \item perform various computations on the examined
-tapes\end{inparaenum}. However, we need not dig deeper down this rabbit hole
-here.
+abilities, but really we're just letting $T_1$ be the time it. This allows the
+concept of time to be constrained to \begin{inparaenum}[(1)] \item the number
+of tapes a librarian is interested in for any action, \item the time it takes
+to examine and overwrite these tapes, as well as \item perform various
+computations on the examined tapes\end{inparaenum}. However, we need not dig
+deeper down this rabbit hole here.
 
 \begin{definition}
 
