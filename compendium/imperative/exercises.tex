@@ -29,9 +29,28 @@ the following control flow structures as polymorphic higher-order functions in
 
 \item Consider the following action cluster:
 
-
 \begin{codebox}
-\Procname{$\proc{XOR}(x,y)$}
+\Procname{$\proc{XOR}(x:\kw{boolean},y:\kw{boolean})$}
+\zi \kw{returns}\ $\left\{
+\begin{array}{ll}
+\kw{false} & \kw{if}\ (x\ \wedge\ y)\ \vee\ (\neg x\ \wedge\ \neg y)\\
+\kw{true} & \kw{otherwise}
+\end{array}
+\right.$
 \end{codebox}
+
+\begin{enumerate}
+
+\item Can a sequence of applications of the $\proc{XOR}$ function be used to
+swap two boolean values?
+
+\item Go has a built-in binary infix operator \verb ^ , which corresponds to
+running the $\proc{XOR}$ function on the respective bits of the two arguments.
+Can you come up with a sequence of Go code that swaps two integers?
+
+\item Can a similar sequence be used to swap two floating point values without
+loss of precision?
+
+\end{enumerate}
 
 \end{enumerate}
