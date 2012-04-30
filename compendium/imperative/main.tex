@@ -1,5 +1,11 @@
 \chapter{Assemblage}
 
+% outline: (imperative -> computer -> action -> action sequence -> action
+% cluster) | state -> (time | variables -> types -> aggregates -> structures ->
+% value vs. reference)
+%
+% hmm.. how about control flow structures?
+
 % to be introduced in one chapter:
 %
 % (declarative), imperative, procedural, and structured programming.
@@ -14,6 +20,10 @@
 
 % humans can only remember about 4 things at once -- the registers of the
 % librarian -- see short-term memory article on wikipedia.
+
+% what's prohibited by the language vs. what's left up to the programmer.
+% Consider for instance implicit state references in imperative programming vs.
+% functional programming where all input parameters are specified.
 
 \input{imperative/abstract}
 
@@ -32,12 +42,12 @@ programming is done by describing the relationships between values using
 
 Less formally, in pure declarative programming, we avoid describing the
 \key{flow} of the program and resort to pure function application, or rather,
-function application is the only program flow connective we've got.  In this
-paradigm, the programmer is concerned with the mapping of input values to
-output values, such that the mapping defines a \key{class of computations} that
-the program can evoke.  The programmer is \emph{not} concerned with being
-particularly clear about the flow of data or control throughout the program, as
-this is implicit in the mapping.
+function application is the only connective we've got.  In this paradigm, the
+programmer is concerned with the mapping of input values to output values, such
+that the mapping defines a \key{class of computations} that the program can
+evoke.  The programmer is less concerned with being particularly clear about
+the flow of data or control throughout the program, as this is implicit in the
+mapping.
 
 As you may have already noticed, this paradigm can be notoriously difficult to
 apply to certain problems, despite (or due to) it's neat mathematical
@@ -52,12 +62,11 @@ An alternative programming paradigm, the \key{imperative}, is historically
 closer to hardware. It emerged as the programming paradigm for computer
 architectures stemming from John von Neumann's original proposal for the design
 of the digital computer\cite{von-neumann}.  The von Neumann architecture leaves
-the computer rather feebleminded, and hence it is the programmer that has to be
-the clever one.
+the computer rather feebleminded, and hence, it is the programmer that has to
+be the clever one when specifying the program to evoke.
 
-An explanation of the imperative paradigm seems hence to be pointless without a
-gentle introduction to the inner workings of a computer, at least in some
-abstract sense.
+A good explanation of the imperative paradigm calls for a gentle introduction
+to the von Neumann architecture, at least in some general sense.
 
 \begin{definition}
 
@@ -67,10 +76,13 @@ the computer.
 
 \end{definition}
 
+We conventionally use the words ``\key{machine}'' and ``\key{system}''
+interchangeably with the word ``computer''.
+
 While it may be modern (about time) to speak of computers as having multiple
-processors, we will restrain ourselves to uniprocessor computers, unless
-discussing multiprocessor computers is particularly interesting for some
-particular concept, in which they will be mentioned explicitly.
+processors, we will restrain ourselves to uniprocessor machines. Sometimes it
+will provide for an interesting discussion to consider multiprocessor machines,
+but in such cases they will be mentioned explicitly.
 
 \begin{definition}
 
@@ -81,17 +93,71 @@ establishing a well-defined, intended \key{net-effect}.''
 \end{definition}
 
 This definition highlights two important points. Firstly, an action takes place
-in a finite period of time, call it $T_1$. This allows us to speak of a point
+in a finite period of time, say $T_1$. This allows for us to speak of a point
 in time $T_n$ and $T_{n+1}$, as the time of action inception and termination,
-respectively. Secondly, an action establishes a well-defined, intended
-net-effect. This emphasises that the real objective of the computer's actions
-is to perform deterministic computations that change the state of the computer.
+respectively. In particular, such that $T_{n+1}=T_n+T_1$. Secondly, an action
+establishes a well-defined, intended net-effect. This highlights that we are
+interested in deterministic actions that change the state of the computer.
 
 To this end, it makes sense to describe the ``net-effect'' of an action as the
 difference between the state of the computer at time $T_n$ and $T_{n+1}$.
 However, this notion breaks down as we turn to multiprocessor machines where
 the clear benefit of performing multiple actions at once has been utilized.
-Therefore, apply this notion with care.
+Therefore, apply this notion with care. We will discuss the notion of ``state''
+in depth in a latter section.
+
+% brewing coffee (perhaps too few instructions)
+% going to work (boring instructions)
+% elevator (example of coroutines by Knuth)
+% doing the dishes
+% preparing dinner
+% making tea (too few operations)
+% following a recipe 
+% solving a second degree equation
+
+% As an example of an action, let us consider the taming of a craving for a New
+% York Cheesecake\footnote{A lot of potential cheesecakes were harmed in the
+% preparation of this example.}, which we'll refer to simply as ``cheesecake''.
+% Hence, at point $T_n$, you have a craving for a cheesecake, and at point
+% $T_{n+1}$, that craving has already been tamed.
+
+% Rather intuitively, we can come up with a general sequence of sub-actions for
+% this action. For instance, we have to \begin{inparaenum}[(1)] \item find a
+% recipe for the cheesecake, \item gather ingredients for the cheesecake, and
+% \item actually prepare and bake the cheesecake\end{inparaenum}. It is also
+% intuitively clear that it is important that these sub-actions occur in this
+% particular order, otherwise we'll almost surely end up with a different
+% net-effect than originally intended.
+
+% What's less clear, but equally as important is that there are other options to
+% taming this craving. For instance, we could go down to the local bakery or
+% coffee shop and pay for a ready-made piece of the delicacy. Alternatively, if
+% we're billionaires, we might catch a flight to New York and get a piece of the
+% ``real'' New York Cheesecake.
+
+% All of these possibilities have their pros and cons. For instance, the home
+% made solution is probably the cheapest, and gives you the best options to cater
+% the delicacy as you wish, however it requires considerable effort on your side,
+% and it takes a considerable amount of time. The local bakery solution is
+% probably the quickest, yet probably not the cheapest, and gives you rather few
+% catering choices. The last solution is the most expensive, the lengthiest, but
+% according to some people may be the most pleasant.
+
+% Depending on the context in which we're referring to the action, it may be
+% beneficial to regard it as either an action or this sequence of actions, i.e.
+% sub-actions. What's more, the sub-actions themselves can be further broken down
+% into their respective sub-actions, recursively. For instance, if we're hungry 
+
+As an example of an action let us consider solving second degree equations of
+the form $ax^2 + bx + c = 0$.  This is done using the well-known formula:
+
+$${-b \pm \sqrt{\Delta} \over 2a}.$$
+
+Where $\Delta$ is commonly known as the discriminant and is defined as follows:
+
+$$ \Delta = b^2 - 4ac.$$
+
+\newpage
 
 The reason this benefit is ``clear'' comes up when we discuss the notion of
 state. We can define the state of a computer as a sequence $S$, of
