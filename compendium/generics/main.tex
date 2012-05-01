@@ -25,7 +25,7 @@ collecting any type of object. Let the collection have the following methods:
 \end{codebox}
 
 Here the type \code{T} is used as a placeholder, and is not a built-in or
-declared type.  The question is hence -- what type should we put in place of
+declared type.  The question is -- what type should we put in place of
 \code{T}? Our requirement was that the collection can collect any type of
 object that we can instantiate in our system. We know that there is a supertype
 to all reference types in our system, namely \code{Object}, and that our system
@@ -41,7 +41,25 @@ convention, then it is safe to explicitly cast the \code{Object} that we get
 from an \code{AggregateCollection} prefixed with \code{StringCollection} to the
 appropriate subtype, i.e. \mono{String}.
 
-Naturally, this is notoriously error prone.
+Naturally, this is notoriously error prone. Note, how this is case of the
+common to computer science problem of the lack of semantics in the programming
+language to ensure formality.
+
+The immediate alternative is to copy and paste this code for every type that we
+might wish to collect, thereby declaring a collection type for each collected
+type.  This is both notoriously error prone and notoriously
+boring\footnote{Especially given the fact the number of such types is countably
+infinite.}. Surely there must be a way to automate this process, and sure
+enough, we figured it out back in the
+1970's\cite{the-c++-programming-language}. The technique is formally called
+\key{parametric polymorphism}, but has the generally accepted popular names of
+\key{template programming} and \key{generic programming}.
+
+Object-oriented languages generally posses a special type of parametric
+polymorphism. In particular, the parameters limit only the supertype of the
+possible objects, and there are means to limit the types of parameters with
+various constraints, for instance, that they implement some sequence of
+interfaces.
 
 \newpage
 
