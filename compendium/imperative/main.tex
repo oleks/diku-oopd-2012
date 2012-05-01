@@ -1,6 +1,6 @@
-\chapter{Assemblage}
+\chapter{Stateful programming}
 
-% outline: (imperative -> computer -> action -> action sequence -> action
+% outline: (declarative -> imperative -> computer -> action -> action sequence -> action
 % cluster) | state -> (time | variables -> types -> aggregates -> structures ->
 % value vs. reference)
 %
@@ -29,82 +29,13 @@
 
 \vspace{0.5in}
 
-What you've been practising thus far, is mostly the \key{declarative}
-programming paradigm.
+\input{imperative/declarative}
 
-\begin{definition}
+\input{imperative/imperative}
 
-In a purely declarative programming paradigm, values are \key{immutable}, and
-programming is done by describing the relationships between values using
-\key{functions}.
+\input{imperative/computer}
 
-\end{definition}
-
-Less formally, in pure declarative programming, we avoid describing the
-\key{flow} of the program and resort to pure function application, or rather,
-function application is the only connective we've got.  In this paradigm, the
-programmer is concerned with the mapping of input values to output values, such
-that the mapping defines a \key{class of computations} that the program can
-evoke.  The programmer is less concerned with being particularly clear about
-the flow of data or control throughout the program, as this is implicit in the
-mapping.
-
-As you may have already noticed, this paradigm can be notoriously difficult to
-apply to certain problems, despite (or due to) it's neat mathematical
-properties.  What's more, the more accurate student would've already noticed
-that you've not done \emph{pure} declarative programming, but rather, already
-have experience with a few \key{control flow structures} such as \key{if-} and
-\key{case-} \key{statements}\marginExercise{cfsahof}.  Why this is, will become
-apparent shortly. We will return to these, and many more control flow
-structures, in a bit as well.
-
-An alternative programming paradigm, the \key{imperative}, is historically
-closer to hardware. It emerged as the programming paradigm for computer
-architectures stemming from John von Neumann's original proposal for the design
-of the digital computer\cite{von-neumann}.  The von Neumann architecture leaves
-the computer rather feebleminded, and hence, it is the programmer that has to
-be the clever one when specifying the program to evoke.
-
-A good explanation of the imperative paradigm calls for a gentle introduction
-to the von Neumann architecture, at least in some general sense.
-
-\begin{definition}
-
-A \key{computer} is an entity with \key{state} and a series of
-\key{processors}.  Processors perform \key{actions} that change the state of
-the computer.
-
-\end{definition}
-
-We conventionally use the words ``\key{machine}'' and ``\key{system}''
-interchangeably with the word ``computer''.
-
-While it may be modern (about time) to speak of computers as having multiple
-processors, we will restrain ourselves to uniprocessor machines. Sometimes it
-will provide for an interesting discussion to consider multiprocessor machines,
-but in such cases they will be mentioned explicitly.
-
-\begin{definition}
-
-``An action is a happening, taking place in a finite period of time and
-establishing a well-defined, intended \key{net-effect}.''
-\cite{dijkstra-introduction}
-
-\end{definition}
-
-This definition highlights two important points. Firstly, an action takes place
-in a finite period of time, say $T_1$. This allows for us to speak of a point
-in time $T_n$ and $T_{n+1}$, as the time of action inception and termination,
-respectively. In particular, such that $T_{n+1}=T_n+T_1$. Secondly, an action
-establishes a well-defined, intended net-effect. This highlights that we are
-interested in deterministic actions that change the state of the computer.
-
-To this end, it makes sense to describe the ``net-effect'' of an action as the
-difference between the state of the computer at time $T_n$ and $T_{n+1}$.
-However, this notion breaks down as we turn to multiprocessor machines where
-the clear benefit of performing multiple actions at once has been utilized.
-Therefore, apply this notion with care. We will discuss the notion of ``state''
-in depth in a latter section.
+\input{imperative/action}
 
 % brewing coffee (perhaps too few instructions)
 % going to work (boring instructions)

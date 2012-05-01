@@ -1,0 +1,57 @@
+\chapter{Generics}
+
+Sometimes subtype polymorphism doesn't quite cut it. This is best illustrated
+by an example. Consider building an \mono{AggregateCollection}, capable of
+collecting any type of object. Let the collection have the following methods:
+
+\begin{codebox}
+\Procname{\mono{uint AggregateCollection::Length()}}
+\end{codebox}
+
+\begin{codebox}
+\Procname{\code{void AggregateCollection::Append(T value)}}
+\zi Appends the \mono{value} at the end of the collection.
+\zi \kw{before} $\textt{\kw{this}.length} = n$
+\zi \kw{after} $\left\{
+\begin{array}{l}
+\textt{\kw{this}.length} = n + 1\\
+\textt{\kw{this}.Get(n)} = \textt{value}
+\end{array}
+\right.$
+\end{codebox}
+
+\begin{codebox}
+\Procname{\mono{T AggregateCollection::Get(uint index)}}
+\end{codebox}
+
+Here the type \code{T} is used as a placeholder, and is not a built-in or
+declared type.  The question is hence -- what type should we put in place of
+\code{T}? Our requirement was that the collection can collect any type of
+object that we can instantiate in our system. We know that there is a supertype
+to all reference types in our system, namely \code{Object}, and that our system
+has subtype polymorphism.  Shouldn't we then simply use \code{Object} in place
+of \code{T}?
+
+This has the major pitfall that all \code{Object}'s that we append to the
+collection are merely \code{Object}'s when we get them again, i.e. precious
+type information is lost. Hence, programmers have to resort to meagre
+conventions. For instance, all \code{AggregateCollection}s of \code{String}s
+get the prefix \code{StringCollection}. If all programmers follow this
+convention, then it is safe to explicitly cast the \code{Object} that we get
+from an \code{AggregateCollection} prefixed with \code{StringCollection} to the
+appropriate subtype, i.e. \mono{String}.
+
+Naturally, this is notoriously error prone.
+
+\newpage
+
+
+The requirement of generics is akin to so many other problems in computer
+science, where the type system is extended to ensure that certain logical
+errors are be avoided at runtime.
+
+Wrt. structured programming -- it is not an extension of the type system -- it
+is an extension of the language semantics with the intent to ensure that
+certain logical errors (that arise with the use of say goto statements) are
+avoided at runtime. Hence, this behaviour is observed not only in type system
+extensions, but elsewhere as well.
