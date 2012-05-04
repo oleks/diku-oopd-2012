@@ -1,0 +1,92 @@
+\section{Access control}\label{section:objects:encapsulation}
+
+% Prerequisites: array, dynamic array, inheritance, objects as data structures,
+% object invariants, packages. 
+
+Since objects are first and foremost data structures, they have to maintain
+certain invariants in order to stay safe for others to use. On the one hand
+there is the problem of designing an object's methods in such a way that
+invariants are not broken, and on the other hand there is the problem of
+ensuring that no adversary can break these invariants through access to the
+underlying data representation. In this case, the adversary is the humble
+programmer.
+
+The process of \emph{modifying} who can access certain fields and methods of an
+object, is called \key{access control}, and can be done using \key{access
+modifiers}. By far the most languages come with default access settings,
+therefore it is important to stress that access modifiers indeed \emph{modify}
+an access setting rather than set it. [TODO: provide a list of languages and
+access modifiers here].
+
+When is it a good idea to make the fields of an object private? One convention
+is to keep \emph{all} the fields private. As a matter of fact, a language like
+Smalltalk enforces this in the language semantics, i.e. fields cannot be
+non-private. If any access to the data in the fields is necessary, appropriate
+methods should provide access to that data in such a way that an adversary
+cannot corrupt the object invariants.
+
+Although this is almost surely invariant-preserving (the programmer has to be
+careful about what these ``appropriate methods'' return), this can be thought
+of as overly protective. Sometimes, exposing internals is a good thing. In
+particular, if you're designing a data structure with another data structure
+underneath, and the underlying data structure already provides certain methods
+that you'd like for your new data structure to provide. Said otherwise, you
+would like to provide an interface akin to the one of the underlying data
+structure, and the implementation should merely delegate the operations to the
+underlying data structure.
+
+For instance, if we consider our \code{DynamicArray}, it can, and certainly
+should, have $O(1)$ random access capabilities. After-all, the underlying data
+structure, an array, has them.
+
+, since the underlying data structure, an
+array, has this property. This capability would allow for a general-purpose
+swap method to be defined, which in turn would allow for a general-purpose sort
+operation to be defined, that sorts the elements of a \code{DynamicArray}
+without any extra space requirements.
+
+
+
+
+Although safe, in the sense that the data structure invariants will be
+maintained (as long as the programmer is clever about what these accessible
+methods return) this is also overly protective. Sometimes, exposing internals
+is a good thing.
+
+
+
+Delegation of such methods from your data structure to the underlying data
+structure is not always trivial.
+
+
+For
+instance, consider building a series different of containers with random access.
+
+
+if we can implement a general-purpose swap function, we can implement
+a general-purpose sorting function that sorts the elements in the container . If we have some sort of a container, and merely get and set functions, such a swap function is unattainable unless 
+
+ which is useful if we
+want to implement a general-purpose sort function.
+
+However, this does not mean that they should be exposed in such a manner that
+makes it possible for an adversary to break the data structure invariants.
+
+The drastic approach of making all fields private has another benefit however.
+It is highly maintainable in the sense that if there ever was a need to change
+the underlying implementation, all of the code that is interacting with objects
+of this type would still work as the there are no changes imposed on the object
+interface by a concrete implementation change.
+
+\subsection*{Summary}
+
+\begin{itemize}
+
+\item For clarity, always modify the accessibility of classes components.
+
+\item Open access in so far it makes sense to the corresponding interface depth.
+
+\item Limit access such that data structure invariants cannot be broken by an
+adversary.
+
+\end{itemize}
