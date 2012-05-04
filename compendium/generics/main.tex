@@ -1,4 +1,4 @@
-\chapter{Generics}
+\chapter{Generics}\label{chapter:generics}
 
 % Fluency prerequisites:
 %
@@ -28,20 +28,21 @@ collecting any reference type. Let the collection have the following methods:
 \Procname{\mono{T AggregateCollection::Get(uint index)}}
 \end{codebox}
 
-Here the type \code{T} is used as a placeholder, and is not a built-in, or
-user-defined type.  The question is -- what type should type \code{T} be? Our
-requirement was that the collection can collect any reference type. We know
-that there is a supertype to all reference types in our system, namely
-\code{Object}, and that our system has subtype polymorphism.  Shouldn't we then
-simply use \code{Object} in place of \code{T}?
+Here, the type \code{T} is used as a placeholder, and not a built-in, or a
+user-defined type.  The question is -- what type should we use in place of
+\code{T}? Well, our requirement was that the collection can collect any
+reference type. We know that there is a supertype to all reference types in our
+system, namely \code{Object}, and that our system has subtype polymorphism.
+Shouldn't we then simply use \code{Object} in place of \code{T}?
 
 We could, but this has at lest two logical pitfalls. Firstly, as far as the
 type system is concerned, any element that we get from the collection is merely
 just that -- an \code{Object}. That is, we can append an instance of any
 reference type to the collection, but as soon as we do that, we lose precious
-type information about that element. Secondly, we have no guarantee that all
-the elements of a collection share any supertype other than \code{Object}.
-Hence we cannot with all confidence cast an element to \emph{any} other type.
+type information about that element. Secondly, we can't have any guarantee that
+all, or any, of the elements in a collection share any supertype other than
+\code{Object}.  Hence, we cannot with all confidence cast an element to
+\emph{any} other type.
 
 This loss of formality can be na\"ively mitigated for using a naming
 convention. For instance, all \code{AggregateCollection}s of \code{String}s get

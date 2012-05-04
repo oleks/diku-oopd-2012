@@ -189,6 +189,11 @@
 
 % references
 
+\NewDocumentCommand\referToChapter{m}%
+{%
+	Chapter \ref{chapter:#1}/\pageref{chapter:#1}%
+}%
+
 \NewDocumentCommand\referToSection{m}%
 {%
 	\textsection\ \ref{section:#1}/\pageref{section:#1}%
