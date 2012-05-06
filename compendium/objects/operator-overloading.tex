@@ -2,4 +2,14 @@
 
 % Prerequisites: interfaces.
 
+% overriding default methods such as equals and hashCode is akin to overloading
+% operators, sometimes overriding equals MEANS overloading the == operator!
+% However, certain operators may not initially be defined for objects. This is
+% checked at compile time. Would be nice if there were attributes that we could
+% add that would force a compile-time check instead of the
+% "NotImplementedException".
 
+% hashCode should overridden whenever equals is overridden. In particular,
+% equal objects should have the same hashCode but objects with the same
+% hashCode are not necessarily equal! Similarly, if == is defined, != should
+% also be, and same goes for < and >, and subsequently <= and >=.
