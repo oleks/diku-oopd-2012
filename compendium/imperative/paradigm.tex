@@ -1,18 +1,32 @@
-A \key{programming paradigm} is a way of writing a certain class of programs
-well. A programming language that supports a particular paradigm, simply
-provides good facilitates for programming using that paradigm.
+A \key{programming paradigm} is a technique for writing a certain class of
+programs well. A programming language \emph{supports} a particular paradigm if
+it provides good facilities for writing programs using that paradigm.
 
-Not all programs can be well-written in any particular paradigm. It is not
-uncommon to see programming languages that provide descent support for a
-variety of different paradigms. At the same time, just because a programming
-language does not provide good facilities for a particular paradigm, it does
-not mean that this paradigm cannot be forced on top of this language with due
-effort.
+The existence and popularity of a variety of paradigms seems like solid
+empirical evidence that not all programs can be written \emph{well} in any
+particular paradigm, or at least that the \emph{ultimate} paradigm is yet to be
+found.  Indeed, it is not uncommon to see programming languages that support
+multiple paradigms, and well-written programs that utilize multiple paradigms
+for their various constituents.
 
-In effect, new programming languages and paradigms often arise whenever
-programmers realise that they have to make a considerable effort to write
-certain classes of programs well.  For instance, one of the reasons the
-original creators of the UNIX operating system created the C programming
-language, was that systems programming in assembler, for such a complex system
-as UNIX, was a rather dreary task\cite{the-development-of-c}.
+At the same time, just because a programming language does not provide
+\emph{good} facilities for a particular paradigm, it does not mean that it is
+\emph{impossible} to use the paradigm to write programs in that language. It
+merely means that using that paradigm in the language might come at a
+considerable cost of the programmer's time.
+
+In effect, new programming languages often arise when programmers realise that
+a considerable effort is required to write certain classes of programs well
+using existing tools. For instance, one of the reasons the original creators of
+the UNIX operating system created the C programming language, was that systems
+programming in assembler, for such a complex system as UNIX, was a rather
+dreary task\cite{the-development-of-c}.
+
+A paradigm is supported by a programming language through \emph{syntactical
+constructs}, such as function declarations, and \emph{semantical rules} that
+can be checked \key{statically}, i.e.  before the program is ever run. In
+principle, this considerably reduces the chances of programming errors. For
+instance, you should by now be well-familiar with the infamous MoscowML type
+checker, which didn't let you run a program unless the types literally made
+sense.
 

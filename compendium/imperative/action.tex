@@ -7,18 +7,19 @@ establishing a well-defined, intended \key{net-effect}.''
 \end{definition}
 
 This definition highlights two important points. Firstly, an action takes place
-in a finite period of time, say $T_1$. This allows for us to speak of a point
-in time $T_n$ and $T_{n+1}$, respectively as the time of action inception and
-termination. In particular, such that $T_{n+1}=T_n+T_1$. Secondly, an action
+in a finite period of time, say $T_1$. This allows for us to speak of the
+points in time $T_n$ and $T_{n+1}$, as the times of action inception and
+termination.  In particular, such that $T_{n+1}=T_n+T_1$. Secondly, an action
 establishes a well-defined, intended net-effect. This highlights that we are
-interested in deterministic actions that change the state of the computer.
+interested in deterministic actions that actually change the state of the
+computer.
 
 To this end, it makes sense to describe the ``net-effect'' of an action as the
 difference between the state of the computer at time $T_n$ and $T_{n+1}$.
 However, this notion breaks down as we turn to multiprocessor machines where
-the clear benefit of performing multiple actions on the same computer at once
-has been utilized.  Therefore, apply this notion with care. We will discuss the
-notion of ``state'' in depth in a latter section.
+the clear benefit of performing multiple actions at once has been utilized.
+Therefore, apply this notion with care. We will discuss the notion of ``state''
+in depth in a latter section.
 
 % ``action – a function or a function object that mutates the value of an
 % object'' -- Alexander Stepanov, Adobe notes.
