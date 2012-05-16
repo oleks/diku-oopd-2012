@@ -1,32 +1,48 @@
-A \key{programming paradigm} is a technique for writing a certain class of
-programs well. A programming language \emph{supports} a particular paradigm if
-it provides good facilities for writing programs using that paradigm.
+A \key{programming paradigm} is a technique for writing a certain \emph{class
+of programs} well. We will develop the notion of a ``well-written program''
+throughout these lecture notes, but initially it suffices to understand
+``well'' in the most general way -- something good, proper, or satisfactory.
 
-The existence and popularity of a variety of paradigms seems like solid
-empirical evidence that not all programs can be written \emph{well} in any
-particular paradigm, or at least that the \emph{ultimate} paradigm is yet to be
-found.  Indeed, it is not uncommon to see programming languages that support
-multiple paradigms, and well-written programs that utilize multiple paradigms
-for their various constituents.
+A programming language \emph{supports} a programming paradigm if it facilitates
+programming using that paradigm well. The existence and popularity of a variety
+of languages and paradigms is considerable empirical evidence that no paradigm
+is suitable for all possible classes of programs. Indeed, it is not uncommon to
+see programming languages that support multiple paradigms, and well-written
+programs that utilize multiple paradigms at once.
 
-At the same time, just because a programming language does not provide
-\emph{good} facilities for a particular paradigm, it does not mean that it is
-\emph{impossible} to use the paradigm to write programs in that language. It
-merely means that using that paradigm in the language might come at a
-considerable cost of the programmer's time.
+At the same time, the absence of good support of a particular paradigm in a
+particular language, does not make it impossible to use the paradigm. Indeed,
+paradigms are often composable, but often at considerable programmer cost.
 
-In effect, new programming languages often arise when programmers realise that
-a considerable effort is required to write certain classes of programs well
-using existing tools. For instance, one of the reasons the original creators of
-the UNIX operating system created the C programming language, was that systems
-programming in assembler, for such a complex system as UNIX, was a rather
-dreary task\cite{the-development-of-c}.
+Indeed, new programming languages and paradigms often arise when programmers
+realise that a considerable effort is required to write a certain class of
+programs well using existing tools. For instance, one of the reasons the
+original creators of the UNIX operating system created the C programming
+language, was that systems programming in assembler, for such a complex system
+as UNIX, was a rather dreary task\cite{the-development-of-c}.
 
-A paradigm is supported by a programming language through \emph{syntactical
-constructs}, such as function declarations, and \emph{semantical rules} that
-can be checked \key{statically}, i.e.  before the program is ever run. In
-principle, this considerably reduces the chances of programming errors. For
-instance, you should by now be well-familiar with the infamous MoscowML type
-checker, which didn't let you run a program unless the types literally made
-sense.
+
+% TODO
+% A programming language supports a particular paradigm through a
+% set of \key{formal rules}. The rules facilitate the use of the paradigm to
+% write programs in that language.
+
+% These rules may both facilitate quicker construction of a certain class of
+% programs, as well as restrict the programmer in order to guard her from making
+% a certain class of logical errors while programming. Hence, a paradigm lets you
+% write a certain class of programs more quickly and be more certain in the
+% correctness of the programs you write.
+
+% These rules include but are not limited to rules of
+% \emph{syntax}, such as how a function should be defined and applied, and rules
+% of \emph{semantics}, such as whether a certain function may be applied to
+% variables of certain types.
+
+% The syntactic and semantic correctness of the program is often checked
+% \key{statically}, i.e. before the program is ever run. In principle, statically
+% checked semantics considerably reduce the chances of a certain class of
+% programming errors. For instance, you should by now be well-familiar with the
+% infamous MoscowML type checker, which didn't let you run a program unless they
+% were syntactically well-written and type-checked.
+
 
