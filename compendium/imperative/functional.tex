@@ -5,11 +5,12 @@ programming paradigm.
 
 \begin{definition}
 
-In a purely functional programming paradigm, values are \key{immutable}, and
-programming is done by describing the relationships between values using
-\key{functions}.
+Pure functional programming treats computation as application of mathematical
+functions to \key{immutable} values.
 
 \end{definition}
+
+Programming using the functional paradigm is done by describing 
 
 Less formally, in pure declarative programming, we avoid describing the
 \key{flow} of the program and resort to pure function application, or rather,
@@ -28,3 +29,31 @@ experience with a few \key{control flow structures} such as \key{if-} and
 \key{case-} \key{statements}\marginExercise{cfsahof}.  Why this is, will become
 apparent shortly. We will return to these, and many more control flow
 structures, in a bit as well.
+
+Post-pone this discussion until a random-access machine has been declared:
+
+Declarative programming is about programming against declarations rather than
+definitions. For instance, the sum $X$ of $n$ values can be declarated as
+
+\begin{equation}
+X=\sum_{i=1}^n x_i\label{decl:sum}
+\end{equation}
+
+The actual value $X$ may be \emph{computed} in a number of different ways.
+Because addition is both \emph{associative} and \emph{commutative}, the $x_i$'s
+may appear in any order, and may be grouped in any way within the sum. Here are
+but a few examplary \emph{definitions} of $X$:
+
+\begin{align}
+X&=x_1+x_2+\ldots+x_n\\
+&=x_n+x_{n-1}+\ldots+x_1\\
+&=\p{x_2+x_1}+\p{x_4+x_3}+\ldots+\p{x_n+x_{n-1}}\label{def:sum:even}.
+\end{align}
+
+The definiiton \ref{def:sum:even} however, is an \emph{invalid} implementation
+of \ref{decl:sum}, or rather, it is only valid so long as $n$ is an even
+number. Hmm, no it is not invalid, the notation is just ambiguous.
+
+
+Exercise: for a sequence of size $n$, how many different implementations of a
+sum of the values in the sequence are there?
