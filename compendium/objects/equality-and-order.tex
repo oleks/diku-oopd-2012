@@ -1,7 +1,21 @@
 \section{Equality and order}
 
-Equality is a commutative binary operation that yields a boolean result. In
-particular, two objects are equal if they're not unequal and vice versa. That
+% object
+% commutative
+% binary
+% boolean
+% reference
+% ontology
+% virtual function
+% user-defined type
+
+\begin{codebox}
+\Procname{$\proc{Equal}:\ (T, T) \rightarrow bool$}
+\zi $\wedge\ \proc{Commutative}$
+\end{codebox}
+
+Equality is a commutative, binary operation that yields a boolean result. In
+particular, two objects are equal if and only if they're not unequal. That
 being said, objects can be ``equal'' in different ways, all depending on the
 use case. For instance, two different cars of the same model are equal, in so
 far as we are interested in a test drive, and not equal if the authorities are
@@ -9,26 +23,31 @@ looking for their respective owners\footnote{Bad example, an object hierarchy
 is rather easy here. Besides, if we're looking for a test drive we'd probably
 provide a model identifier, not a car!}.
 
-This superimplies that an overarching object hierarchy is not always a suitable
-ontology for an application. Sometimes other structural techniques should be
-employed. Among such techniques are generics, which are discussed in detail in
-\referToChapter{generics}.
+This superimposes that an overarching object hierarchy is not always a suitable
+ontology for an application. Sometimes other structural techniques can
+facilitate a better abstraction. Among such techniques are \emph{generics},
+which are discussed in detail in \referToChapter{generics}.
 
-If however, equality can be formally defined for an object type, it is useful
-for the object to facilitate such a method. Many languages come with built-ins
-that facilitate a default implementation of this operation, and some vary
-drastically in their approach. On the one side there are languages that merely
-compare whether two references refer to the same instance of the object type
-(C++, C\#, Python, Java). On the other side there are languages that
-recursively check the equality of the object's constituent fields (Smalltalk).
-The former is clearly the faster alternative, but not always the logically
-correct one as has already been pointed out.
+However, if equality can be formally defined for an object type, it is useful
+for the object to facilitate an \emph{equality method}. Many languages come
+with built-ins that facilitate a default implementation of this operation, and
+some vary drastically in their approach. On the one side there are languages
+that merely compare whether two references refer to the same instance of the
+object type (C++, C\#, Python, Java). On the other side there are languages
+that recursively check the equality of the object's constituent fields
+(Smalltalk).  The former is clearly the faster alternative, but not always the
+logically correct one as has already been pointed out.
 
-The built-in is usually provided through the infix operator \code{==}. Some
-languages provide facilities for overloading the behaviour of this operator for
-user-defined types (C++, C\#, Python). Other languages force you to keep the
-operator as is, and instead let you override a special virtual function (Java),
-which you then have to remember to use instead of the notorios \code{==}
-operator.
+The built-in is usually provided through the infix operator \code{==}, or
+simply \code{=}. The former is a spin-off on the mathematical operator
+$\equiv$, used to denote the \emph{equivalence relation}. It is often used in
+languages that use the \code{=} operator for assignment, which is rather absurd
+as far as mathematicians are concerned.
+
+Some languages provide facilities for overloading the behaviour of this
+operator for user-defined types (C++, C\#, Python). Other languages force you
+to keep the operator as is, and instead let you override a special virtual
+function (Java), which you then have to remember to use instead of the notorios
+\code{==} operator.
 
 
