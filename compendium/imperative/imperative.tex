@@ -1,10 +1,53 @@
-\section{Imperative programming}
+\section{The von Neumann architecture}
 
 An alternative programming paradigm, the \key{imperative}, is historically
 closer to hardware. It emerged as the programming paradigm for computer
 architectures stemming from John von Neumann's original proposal for the design
 of the digital computer\cite{von-neumann}.  A key aspect of the von Neumann
-architecture is that it keeps the computer rather feebleminded, forcing the
-programmer to be the clever one.  Inevitably, no good introduction to the
+architecture is that it keeps the computer rather feebleminded, leaving it to
+the programmer to be the clever one. Inevitably, no good introduction to the
 imperative programming paradigm can commence, without at least a gentle
 introduction to the von Neumann architecture.
+
+\begin{definition}
+
+A \key{computer}\footnotemark is an entity with \key{state} and a series of
+\key{processors}.  A processor performs \key{actions} that change the state of
+the computer.
+
+\footnotetext{Although at the beginning of the 20th century, a computer was
+still a profession, today most computers are electronic machines.  We'll use
+the words ``computer'' and ``machine'' interchangably.}
+
+\end{definition}
+
+While it may be modern (about time) to speak of computers as machines with
+multiple processors, we will restrain ourselves to single processor machines.
+At times it will provide for an interesting discussion to consider how certain
+aspects map over into multiprocessor machines, but in such cases they will be
+mentioned explicitly.
+
+\begin{definition}
+
+``An action is a happening, taking place in a finite period of time and
+establishing a well-defined, intended \key{net-effect}.''
+\cite{dijkstra-introduction}
+
+\end{definition}
+
+This definition highlights two important points. Firstly, an action takes place
+in a finite period of time, say $T_1$. This allows for us to speak of the
+points in time $T_n$ and $T_{n+1}$, as the times of action inception and
+termination, i.e. $T_{n+1}=T_n+T_1$. Secondly, an action establishes a
+well-defined, intended net-effect. This highlights that we are interested in
+deterministic actions that actually change the state of the computer.
+
+To this end, it makes sense to describe the ``net-effect'' of an action as the
+difference between the state of the computer at time $T_n$ and $T_{n+1}$.
+However, this notion breaks down as we turn to multiprocessor machines where
+the clear benefit of performing multiple actions at once has been utilized.
+Therefore, apply this notion with care. We will discuss the notion of ``state''
+in depth in a latter section.
+
+% ``action – a function or a function object that mutates the value of an
+% object'' -- Alexander Stepanov, Adobe notes.
