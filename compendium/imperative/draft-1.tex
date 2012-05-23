@@ -1,0 +1,77 @@
+For instance, we may \emph{declare} the following binary function:
+
+\begin{equation}
+\proc{Power}\p{x,p}=x^p=\underbrace{x\cdot x\cdots x}_{p\ \text{terms}}
+\end{equation}
+
+Here, we've assumed that we have at our disposal the conventional binary infix
+multiplication operator ($\cdot$).
+
+
+is both \emph{associative} and \emph{commutative}. This allows
+us to group and add multiply the $n$ parameters in any order. Here are but a few
+possible \emph{definitions} of the $\proc{Sum}$ function, where parentheses
+have been introduced to emphasise the order of operations:
+
+\begin{align}
+\p{\ldots\p{\p{x_1+x_2}+x_3}\ldots+x_{n-1}}+x_n\label{def:sum:in-order}\\
+\p{\ldots\p{\p{x_n+x_{n-1}}+x_{n-2}}\ldots+x_2}+x_1\label{def:sum:rev-order}
+\end{align}
+
+Whether we add the numbers in order, as in \ref{def:sum:in-order}, or in reverse order, as in \ref{def:sum:rev-order}, should be irrelevant for any other function applying the $\proc{Sum}$ function to some $n$ parameters. In particular, we aim to create a programming environment where other functions rely on declarations 
+
+Function application, together with \key{pattern matching},
+constitutes the programming basis of functional programming. You should also be
+familiar with \key{if-} and \key{case-statements}, but these are mere
+syntactical siblings of pattern matching.
+
+The interesting functional programs have recursive functions.
+
+In functional programming we're not concerned with being clear about the \key{flow} of our program. We often resort to simple function application, and in some functional 
+
+
+% Less formally, in pure declarative programming, we avoid describing the
+% \key{flow} of the program and resort to pure function application, or rather,
+% function application is the only program connective we've got.  In this
+% paradigm, the programmer is concerned with the \key{mapping} of input values to
+% output values, such that the mapping defines a \key{class of computations} that
+% the program can evoke.  The programmer is less concerned with being
+% particularly clear about the flow of control or data throughout the program, as
+% this is superimposed by the mapping.
+
+As you may have already noticed, this paradigm can be notoriously difficult to
+apply to certain problems, despite (or due to) it's neat mathematical
+properties.  What's more, the accurate student would've already noticed that
+you've not done \emph{pure} declarative programming, but rather, already have
+experience with a few \key{control flow structures} such as \key{if-} and
+\key{case-} \key{statements}\marginExercise{cfsahof}.  Why this is, will become
+apparent shortly. We will return to these, and many more control flow
+structures, in a bit as well.
+
+Post-pone this discussion until a random-access machine has been declared:
+
+Declarative programming is about programming against declarations rather than
+definitions. For instance, the sum $X$ of $n$ values can be declarated as
+
+\begin{equation}
+X=\sum_{i=1}^n x_i\label{decl:sum}
+\end{equation}
+
+The actual value $X$ may be \emph{computed} in a number of different ways.
+Because addition is both \emph{associative} and \emph{commutative}, the $x_i$'s
+may appear in any order, and may be grouped in any way within the sum. Here are
+but a few examplary \emph{definitions} of $X$:
+
+\begin{align}
+X&=x_1+x_2+\ldots+x_n\\
+&=x_n+x_{n-1}+\ldots+x_1\\
+&=\p{x_2+x_1}+\p{x_4+x_3}+\ldots+\p{x_n+x_{n-1}}\label{def:sum:even}.
+\end{align}
+
+The definiiton \ref{def:sum:even} however, is an \emph{invalid} implementation
+of \ref{decl:sum}, or rather, it is only valid so long as $n$ is an even
+number. Hmm, no it is not invalid, the notation is just ambiguous.
+
+
+Exercise: for a sequence of size $n$, how many different implementations of a
+sum of the values in the sequence are there?

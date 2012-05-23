@@ -11,11 +11,11 @@ introduction to the von Neumann architecture.
 
 \begin{definition}
 
-A \key{computer}\footnotemark is an entity with \key{state} and a series of
-\key{processors}.  A processor performs \key{actions} that change the state of
+A \key{computer}\footnotemark is an entity with \key{state} and
+\key{processors}. A processor performs \key{actions} that change the state of
 the computer.
 
-\footnotetext{Although at the beginning of the 20th century, a computer was
+\footnotetext{Although at the beginning of the 20th century, a ``computer'' was
 still a profession, today most computers are electronic machines.  We'll use
 the words ``computer'' and ``machine'' interchangably.}
 
@@ -23,9 +23,10 @@ the words ``computer'' and ``machine'' interchangably.}
 
 While it may be modern (about time) to speak of computers as machines with
 multiple processors, we will restrain ourselves to single processor machines.
-At times it will provide for an interesting discussion to consider how certain
-aspects map over into multiprocessor machines, but in such cases they will be
-mentioned explicitly.
+Programming for multiple processors raises a range of problematics irrelevant
+to the core matter of these lecture notes. At times it will provide for an
+interesting discussion to consider how certain aspects map over into
+multiprocessor machines, but in such cases they will be mentioned explicitly.
 
 \begin{definition}
 
@@ -40,14 +41,15 @@ in a finite period of time, say $T_1$. This allows for us to speak of the
 points in time $T_n$ and $T_{n+1}$, as the times of action inception and
 termination, i.e. $T_{n+1}=T_n+T_1$. Secondly, an action establishes a
 well-defined, intended net-effect. This highlights that we are interested in
-deterministic actions that actually change the state of the computer.
+\emph{deterministic} actions that \emph{change the state} of a computer.
 
 To this end, it makes sense to describe the ``net-effect'' of an action as the
 difference between the state of the computer at time $T_n$ and $T_{n+1}$.
 However, this notion breaks down as we turn to multiprocessor machines where
 the clear benefit of performing multiple actions at once has been utilized.
-Therefore, apply this notion with care. We will discuss the notion of ``state''
-in depth in a latter section.
+Therefore, apply this notion with care.
 
 % ``action – a function or a function object that mutates the value of an
 % object'' -- Alexander Stepanov, Adobe notes.
+
+As an example of an action, consider eating lunch.
