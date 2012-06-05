@@ -86,3 +86,16 @@ IDE
   - Intellisense and autocompilation with Word-like underlining of errors is
     GOOD -- error messages are cryptic..
   - Project (and code) management should be out of the picture in general.
+
+Exercises
+- go scripts with main.
+- go packages with specific capital letter functions.
+- java files with main.
+- java classes with specific names or implementing a specific interface.
+- java packages with specific classes having specific names or implementing specific interfaces.
+
+- test case
+  - std/argument type input/output generators
+    - argument types are basically the built-in go and java unit test frameworks.
+    - std could be generated using good old executables.
+  - failure penalty

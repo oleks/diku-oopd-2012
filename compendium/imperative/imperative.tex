@@ -41,24 +41,80 @@ in a finite period of time, say $T_1$. This allows for us to speak of the
 points in time $T_n$ and $T_{n+1}$, as the times of action inception and
 termination, i.e. $T_{n+1}=T_n+T_1$. Secondly, an action establishes a
 well-defined, intended net-effect. This highlights that we are interested in
-\emph{deterministic} actions that \emph{change the state} of a computer.
+actions that do something, in particular, something expected.
 
 To this end, it makes sense to describe the ``net-effect'' of an action as the
 difference between the state of the computer at time $T_n$ and $T_{n+1}$.
-However, this notion breaks down as we turn to multiprocessor machines, where
-the clear benefit of performing multiple actions at once has been utilized.
-Therefore, apply this notion with care.
+However, apply this notion with care. It breaks down as we turn to
+multiprocessor machines, where the clear benefit of performing multiple actions
+at once has been utilized.
 
 % ``action – a function or a function object that mutates the value of an
 % object'' -- Alexander Stepanov, Adobe notes.
 
-% As an example of an action, consider eating lunch. Before the action takes
-% place you're hungry, and after it you're sated. We call these the \key{pre-}
-% and \key{postconditions}, respectively. To sate your hunger you usually have
-% multiple options. For instance, you can \begin{inparaenum}[(1)] \item visit the
-% student kitchen and make a sandwich, \item visit the commercial canteen and buy
-% a sandwich, or \item visit the local food court and buy a wealthy
-% meal\end{inparaenum}. The time it takes for every choice is somewhat the same,
-% the difference, if anything is in the price, quality and choice of foods.
+As an example of an action, consider doing the laundry. Given a pile of dirty
+laundry, the net-effect of this action is that the pile is cleaned. (Naur,
+function vs. process).
 
-As an example of an action consider 
+\begin{codebox}
+\Procname{$\proc{Do-The-Laundry}\p{dirtyPile}$}
+\li \Return $cleanPile$
+\end{codebox}
+
+We can dissect this definition into
+\key{pre-conditions} and \key{post-conditions}, and state their relationship in
+terms of an \key{implication}, denoted by the symbol $\Rightarrow$:
+
+\begin{equation}
+\text{Dirty pile}\Rightarrow \text{Clean pile}.
+\end{equation}
+
+
+
+More formally, if at time $T_n$ we
+have a pile of dirty laundry, and perform an action in the subsequent time slot
+$T_1$, then at time $T_{n+1}$ we have a pile of clean laundry.
+
+
+To define the
+net-effect of an action, we state the conditions that must hold at time
+$T_{n+1}$, given that certain conditions hold at time $T_n$. We call these
+conditions the \key{post-} and \key{pre-conditions}, respectively. Given an
+action $a$, we say that if the preconditions hold, then after the action, the
+post-conditions must hold, denoted
+
+\begin{equation}
+\text{Precondition} \Rightarrow^a \text{Postcondition}.
+\end{equation}
+
+
+The effect
+of the action is that a precondition \emph{implies} a post condition, we denote
+this with the symbol $\Rightarrow$.
+
+It does not make sense to do the laundry without a pile of dirty laundry, and a
+good ``doing the laundry'' action leaves all the laundry clean after the action
+took place. We therefore state the following:
+
+ Before the action
+commences, you have a pile of dirty laundry; after the action, the laundry is
+clean. We call these the \key{pre-} and \key{postconditions} of an action,
+respectively. In particular, it does not make sense to do the laundry unless
+you have a pile of dirty laundry, and the post-condition that the laundry is
+clean is probably useful for future actions.
+
+The post-conditions are not complete. There are certain things that we would
+like to do to facilitate further actions. For instance, it is useful if in the
+process of doing the laundry we didn't mix clean and dirty laundry, and at best
+-- neatly stacked the clean laundry in the closet.
+
+
+The post-conditions are not
+completely well-formed however. In particular, 
+
+where whites are mixed with
+colors. Anyone who's ever done their laundry knows that it's no good to mix 
+
+After the action, the clothes should be neatly stacked in the closet. 
+
+% doing the laundry 
