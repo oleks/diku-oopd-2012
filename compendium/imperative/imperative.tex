@@ -1,4 +1,4 @@
-\section{The von Neumann architecture}
+%\section{The von Neumann architecture}
 
 An alternative programming paradigm, the \key{imperative}, is historically
 closer to hardware. It emerged as the programming paradigm for computer
@@ -45,15 +45,152 @@ actions that do something, in particular, something expected.
 
 To this end, it makes sense to describe the ``net-effect'' of an action as the
 difference between the state of the computer at time $T_n$ and $T_{n+1}$.
-However, apply this notion with care. It breaks down as we turn to
-multiprocessor machines, where the clear benefit of performing multiple actions
-at once has been utilized.
+However, this notion breaks down as we turn to multiprocessor machines, where
+the clear benefit of performing multiple actions at once has been utilized. So
+apply this notion with care.
 
 % ``action – a function or a function object that mutates the value of an
 % object'' -- Alexander Stepanov, Adobe notes.
 
 As an example of an action, consider doing the laundry. Given a pile of dirty
-laundry, the net-effect of this action is that the pile is cleaned. (Naur,
+laundry, the net-effect of this action is the same pile of laundry, but clean.
+Clearly, the functional paradigm fits abnormally to this type of problem.
+Knitting a pile of clean laundry, same but different, is not nearly as
+practical as cleaning the dirty pile. Indeed, why should we dispose of a pile
+of perfectly good laundry, just because it has gotten a little dirty? The
+process of cleaning, rather than knitting, is explicit to the programmer in an
+imperative paradigm.
+
+While modifying global state, rather than producing new values, is a marvel of
+imperative programming, it is important that we achieve \emph{exactly} the
+intended net-effect; nothing more, nothing less. While we wish to change the
+state of the world in a particular way, we also wish to avoid
+\key{side-effects}, so as to avoid a general butterfly effect, where doing the
+laundry for instance, results in a hurricane on the other side of the globe.
+We achieve this ``safety'' by grouping the elements in the world into
+well-defined and well-kept \key{data structures}.
+
+\begin{definition}
+
+A data structure is a particular ordering of data elements with well-defined
+methods for managing the data structure, such that the ordering is maintained.
+
+\end{definition}
+
+We say that a set of data structures defining the same ordering on the same
+types of data elements, and providing the same methods of manipulation, belong
+to the same \key{class} of data structures. A class of data structures is a
+type of data element\footnotemark.
+
+\footnotetext{For now, we'll make due with this recursive definition.}
+
+Depending on our area of interest, we can consider an action as either a basic,
+non-divisible happening, or as a sequence of subactions necessary to achieve
+the overall net-effect. The sub-actions themselves may be considered in terms
+of their sub-sub-actions, and so on. Indeed, one possible program design method
+is to start with a high-level overview and to gradually dig into the details.
+Naturally, such a hierarchical ordering of a program also facilitates the human
+comprehension of the program. This calls to attention a quote by Donald
+Knuth\cite{knuth-review-of-sp}:
+
+\begin{quote}"You have perhaps had a dream much like mine: Wouldn't it be nice
+to have a glorious system of complete maps of the world, whereby one could (by
+turning dials) increase or decrease the scale at will? A similar thing can be
+achieved for programs, rather easily, when we give the programs a hierarchic
+structure like those constructed step-wise. It is not hard to imagine a
+computing system which displays a program in such a way that, by pressing
+an-appropriate button, one can replace the name of a routine by its expansion
+on the next level, or conversely."\end{quote}
+
+Here the word ``routine'' stands for an action, and ``its expansion on the next
+level'' is the sequence of sub-actions necessary to achive the intended
+net-effect. The choice of the word ``routine'' is not an unlucky one. Afterall,
+we all have some sort of routine for doing the laundry, and doing the laundry
+is a rather routine task! Let us now consider the immediate expansion of doing
+the laundry, assuming that we have a common washing machine at our disposal:
+
+\begin{codebox}
+\li Split the pile into colors and whites.
+\li Wash colors.
+\li Wash whites.
+\li Pile up colors and whites in a clean pile.
+\li Return the clean pile.
+\end{codebox}
+
+We all know that whites and colors don't mix well in a washing machine. Indeed,
+a higher temperature should be used for whites, since they are generally harder
+to get clean, and a lower temperature should be used for colors, since high
+temperatures may leed to color bleeding.
+
+A common mistake is to oversee a colored piece in a pile of whites, and wash
+the pile under a high temperature.  Most likely, this will lead to all whites
+in that pile bleeding from white to a light shade of the mixed-in color. That
+definitely leads to a hurricane on the other side of the globe!  As such, this
+is a \key{pre-} and \key{postcondition} pair we forgot to mention. Not only
+should the pile be clean, but every piece of laundry should also keep its
+original color.
+
+\begin{definition}
+
+Assuming that preconditions hold before the action commences, the
+postconditions should hold after the action terminates.
+
+\end{definition}
+
+We say ``should'', becuase there is currently no automatic way of being certain
+of this for an arbitrary action in by far the most practical programming
+languages. Hence, it is often up to the programmer to manually prove that the
+postconditions will hold.
+
+We now state the pre- and postconditions of doing the laundry:
+
+\begin{codebox}
+\zi
+$\begin{array}{ll}
+&\text{Given a dirty pile, a clean pile is returned.}\\
+\wedge&\text{Every piece of laundry keeps its original color.}
+\end{array}$
+\end{codebox}
+
+Here, the symbol $\wedge$ means ``and'', i.e. both statements should hold.
+
+When \key{declaring} an action, we also specify its name, as well input and
+output parameters. So a complete declaration of doing the laundry looks like
+this:
+
+\begin{codebox}
+\Procname{$\proc{Do-The-Laundry}::(Laundry)\rightarrow Laundry$}
+\zi
+$\begin{array}{ll}
+&\text{Given a dirty pile, a clean pile is returned.}\\
+\wedge&\text{Every piece of laundry keeps its original color.}
+\end{array}$
+\end{codebox}
+
+
+
+as well as the pre- and postconditions. When \key{defining}
+an action, we specify its actual sequence of subactions. We make this
+distinction because an action declaration may well have several definitions.
+
+Of course, at some point, some real work has to get done.
+
+A von-Neuman computer has a basic set of actions that it can perform.
+
+
+The initial pile of dirty laundry is not a particularly interesting data
+structure, but it will prove beneficial to morph this data structure into other
+types as we \emph{progress} through the action. Indeed, 
+
+Of course, at some point we must reach basic, non-divisible 
+
+
+ i.e.  doing
+the laundry, or as a sequence of subactions. This sequence represents the steps
+necessary to achieve the overall intended net-effect.
+
+
+(Naur,
 function vs. process).
 
 \begin{codebox}
