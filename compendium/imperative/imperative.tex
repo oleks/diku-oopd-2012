@@ -64,95 +64,135 @@ imperative paradigm.
 While modifying global state, rather than producing new values, is a marvel of
 imperative programming, it is important that we achieve \emph{exactly} the
 intended net-effect; nothing more, nothing less. So while we wish to change the
-state of the world in a particular way, we also wish to avoid
+state of the world in a particular way, we also wish to avoid unexpected
 \key{side-effects}, so as to avoid a general butterfly effect, where doing the
-laundry for instance, causes a hurricane on the other side of the world. We
+laundry for instance, causes a hurricane on the other side of the globe. We
 attempt achieve this ``safety'' by grouping the elements in the world into
-well-defined and well-kept \key{data structures}.
+\key{data structures} and modifying these data structures rather than arbitrary
+global state.
 
 \begin{definition}
 
-A data structure is a particular ordering of data elements with well-defined
-methods for managing the data structure, such that the ordering is maintained.
+A data structure is a particular ordering of data elements. A data structure
+has a set well-defined actions for modifying the data structure, such that the
+ordering is maintained. A data structure is well-kept if only these actions are
+used to modify the data structure.
 
 \end{definition}
 
+A programming language facilitates a programming paradigm if it is both easy,
+and reasonably safe to use the paradigm. Having the ability to define data
+structures, and actions that modify them, is one thing.  Another is having
+assurance that the wrong action is never used to modify the wrong data
+structure. This is where \key{type systems} come in handy.
+
 We say that a set of data structures defining the same ordering on the same
-types of data elements, and providing the same methods of manipulation, belong
-to the same \key{class} of data structures. A class of data structures is a
-type of data element. This notion is intentionally recursive.
+\key{types} of data elements, and having the same methods of modification,
+belong to the same \key{class} of data structures. A class of data structures
+is a type of data element, or simply, type. This notion is intentionally
+recursive.
 
-It is clear that designing a new piece of hardware for every type of action is
-impractical. The desired net-effect can often be achieved through a series of
-basic actions. For instance, the sum of $n$ different numbers can be computed
-using $n-1$ binary additions. Hence, we can make due with a \key{sequencing
-mechanism} and good old binary addition, rather than design a new piece of
-hardware for every conceivable $n$.
+We hence say that actions are defined on particular types, and a type system
+can hence ensure that the wrong action is not used to modify the wrong data
+structure before the program is ever run. You should by now have plenty of
+experience with the notorious SML type system.
 
-A computer, therefore, has a finite set of basic actions, called its
-\key{instruction set}. A computer program is specified in terms of a sequence
-of these basic actions, called a \key{program text}. The computer executes the
-program by performing the sequence of actions in order.
+% It is clear that designing a new piece of hardware for every type of action is
+% impractical. The desired net-effect can often be achieved through a series of
+% basic actions. For instance, the sum of $n$ different numbers can be computed
+% using $n-1$ binary additions. Hence, we can make due with a \key{sequencing
+% mechanism} and good old binary addition, rather than design a new piece of
+% hardware for every conceivable $n$.
 
-The sequence of basic actions is not a sequencing mechanism in and of itself.
-Indeed, we are unable to specify a computer program for summing a sequence of
-an arbitrary size $n$, since no sequence of binary additions will ever be
-enough for every conceivable $n$.  What's more, why duplicate the actions?
-Afterall, as we sequentially sum a sequence of numbers we're doing the same
-action, a binary addition, just on different data.
+% A computer, therefore, has a finite set of basic actions, called its
+% \key{instruction set}. A computer program is specified in terms of a sequence
+% of these basic actions, called a \key{program text}. The computer executes the
+% program by performing the sequence of actions in order.
 
-To mitigate this lack of flexibility, the von Neuman architecture introduces
-the \key{jump} action. Since the program is specified as a finite sequence
-of basic actions, we can easily assign a unique integer index to every action in the sequence.
-As the computer is performing an action at a particular index at any point in time
+% The sequence of basic actions is not a sequencing mechanism in and of itself.
+% Indeed, we are unable to specify a computer program for summing a sequence of
+% an arbitrary size $n$, since no sequence of binary additions will ever be
+% enough for every conceivable $n$.  What's more, why duplicate the actions?
+% Afterall, as we sequentially sum a sequence of numbers we're doing the same
+% action, a binary addition, just on different data.
+
+% To mitigate this lack of flexibility, the von Neuman architecture introduces
+% the \key{jump} action. Since the program is specified as a finite sequence
+% of basic actions, we can easily assign a unique integer index to every action in the sequence.
+% As the computer is performing an action at a particular index at any point in time
+
+% The
+% idea is then to let the computer have an action that allows to specify an arbitrary action as
+% the next action to perform, rather then the one then immediately next
+% instruction.
+
+% At this point it makes sense to reconsider the concept of time. The convention is to let all basic
+% actions be upper bounded by some constant value. This allows us to analyze the
+% running time of computer programs in terms of how much sequencing is going on.
 
 
-The
-idea is then to let the computer have an action that allows to specify an arbitrary action as
-the next action to perform, rather then the one then immediately next
-instruction.
+% At any point in time, the computer is performing some particular action, 
 
-At this point it makes sense to reconsider the concept of time. The convention is to let all basic
-actions be upper bounded by some constant value. This allows us to analyze the
-running time of computer programs in terms of how much sequencing is going on.
+% and provide a
+% mechanism for performing a sequence of actions in order. This however, still does not allow us to write a 
 
+% Depending on our level of interest, we may consider an action as either an
+% atomic happening, or as a sequence of subactions necessary to achieve the
+% overall net-effect. The subactions themselves may be considered in terms of
+% their subsubactions, and so on. Indeed, one possible program design method is
+% to start with a high-level overview and to gradually dig into the details.
+% Naturally, such a hierarchical ordering of a program also facilitates the human
+% comprehension of the program. This calls to attention a quote by Donald
+% Knuth\cite{knuth-review-of-sp}:
 
-At any point in time, the computer is performing some particular action, 
+% \begin{quote}"You have perhaps had a dream much like mine: Wouldn't it be nice
+% to have a glorious system of complete maps of the world, whereby one could (by
+% turning dials) increase or decrease the scale at will? A similar thing can be
+% achieved for programs, rather easily, when we give the programs a hierarchic
+% structure like those constructed step-wise. It is not hard to imagine a
+% computing system which displays a program in such a way that, by pressing
+% an-appropriate button, one can replace the name of a routine by its expansion
+% on the next level, or conversely."\end{quote}
 
-and provide a
-mechanism for performing a sequence of actions in order. This however, still does not allow us to write a 
+% Here the word ``routine'' stands for an action, and ``its expansion on the next
+% level'' is the sequence of sub-actions necessary to achive the intended
+% net-effect. The choice of the word ``routine'' is not an unlucky one. Afterall,
+% we all have some sort of routine for doing the laundry, and doing the laundry
+% is a rather routine task! Let us now consider the immediate expansion of doing
+% the laundry, assuming that we have a common washing machine at our disposal:
 
-Indeed, depending on our level of interest, we may consider an action as either
-a basic, non-divisible happening, or as a sequence of subactions necessary to
-achieve the overall net-effect. The sub-actions themselves may be considered in
-terms of their sub-sub-actions, and so on. Indeed, one possible program design
-method is to start with a high-level overview and to gradually dig into the
-details.  Naturally, such a hierarchical ordering of a program also facilitates
-the human comprehension of the program. This calls to attention a quote by
-Donald Knuth\cite{knuth-review-of-sp}:
+The dirty pile of laundry is not a particularly interesting data structure in
+and of itself, but it will prove interesting to consider how we morph the data
+structure into other well-kept data structures as we do the laundry.
 
-\begin{quote}"You have perhaps had a dream much like mine: Wouldn't it be nice
-to have a glorious system of complete maps of the world, whereby one could (by
-turning dials) increase or decrease the scale at will? A similar thing can be
-achieved for programs, rather easily, when we give the programs a hierarchic
-structure like those constructed step-wise. It is not hard to imagine a
-computing system which displays a program in such a way that, by pressing
-an-appropriate button, one can replace the name of a routine by its expansion
-on the next level, or conversely."\end{quote}
-
-Here the word ``routine'' stands for an action, and ``its expansion on the next
-level'' is the sequence of sub-actions necessary to achive the intended
-net-effect. The choice of the word ``routine'' is not an unlucky one. Afterall,
-we all have some sort of routine for doing the laundry, and doing the laundry
-is a rather routine task! Let us now consider the immediate expansion of doing
-the laundry, assuming that we have a common washing machine at our disposal:
+Depending on our level of interest, we may consider an action as an atomic
+happening or as a sequence of subactions necessary to achieve the overall
+net-effect. Each subaction can in turn be considered in terms of its
+subsubactions, and so on. Let us consider the possible subactions of doing the
+laundry, assuming that we have a common washing machine at our disposal:
 
 \begin{codebox}
 \li Split the pile into colors and whites.
 \li Wash colors.
 \li Wash whites.
-\li Pile up colors and whites in a clean pile.
-\li Return the clean pile.
+\li Make a neat stack of the clean laundry.
+\end{codebox}
+
+This is an example of an \key{algorithm}. An algorithm is a sequence of actions
+that if performed in order achieves some intended net-effect. Formally
+speaking, an algorithm has some sort of input, which it transforms into some
+sort of output through a sequence of actions. Here, the input is a pile of
+dirty laundry, and the output is a neat stack of clean laundry. When specifying
+an algorithm we tend to give it a name, and be somewhat more explicit about its
+inputs and outputs, for instance:
+
+\begin{codebox}
+\Procname{$\proc{Do-The-Laundry}\p{\text{A dirty pile of laundry}}$}
+\li Split the pile into colors and whites.
+\li Wash colors.
+\li Wash whites.
+\li Make a neat stack of the clean laundry.
+\li \Return the neat stack of clean laundry.
 \end{codebox}
 
 We all know that whites and colors don't mix well in a washing machine. Indeed,
@@ -161,31 +201,31 @@ to get clean, and a lower temperature should be used for colors, since high
 temperatures may leed to color bleeding.
 
 A common mistake is to oversee a colored piece in a pile of whites, and wash
-the pile under a high temperature.  Most likely, this will lead to all whites
-in that pile bleeding from white to a light shade of the mixed-in color. That
-definitely leads to a hurricane on the other side of the world!  As such, this
-is a \key{pre-} and \key{postcondition} pair we forgot to mention. Not only
-should the pile be clean, but every piece of laundry should also keep its
+the pile with high temperature.  Most likely, this will lead to all whites in
+that pile bleeding from white to a light shade of the mixed-in color. That
+would definitely cause a hurricane on the other side of the globe!  As such,
+this is a \key{pre-} and \key{postcondition} pair we forgot to mention. Not
+only should the pile be clean, but every piece of laundry should also keep its
 original color.
 
 \begin{definition}
 
 Assuming that preconditions hold before the action commences, the
-postconditions should hold after the action terminates.
+postconditions should hold after the action terminates\footnotemark.
+
+\footnotetext{We say ``should'', becuase there is currently no automatic way of
+assuring this for an arbitrary action in by far the most practical programming
+languages. Hence, it is up to the programmer to manually prove that the
+postconditions will hold.}
 
 \end{definition}
 
-We say ``should'', becuase there is currently no automatic way of being certain
-of this for an arbitrary action in by far the most practical programming
-languages. Hence, it is often up to the programmer to manually prove that the
-postconditions will hold.
-
-We now state the pre- and postconditions of doing the laundry:
+We now state the more accurate pre- and postconditions of doing the laundry:
 
 \begin{codebox}
 \zi
 $\begin{array}{ll}
-&\text{Given a dirty pile, a clean pile is returned.}\\
+&\text{Given a dirty pile, the pile is cleaned.}\\
 \wedge&\text{Every piece of laundry keeps its original color.}
 \end{array}$
 \end{codebox}
