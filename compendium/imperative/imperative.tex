@@ -41,7 +41,7 @@ in a finite period of time, say $T_1$. This allows for us to speak of the
 points in time $T_n$ and $T_{n+1}$, as the times of action inception and
 termination, i.e. $T_{n+1}=T_n+T_1$. Secondly, an action establishes a
 well-defined, intended net-effect. This highlights that we are interested in
-actions that do something, in particular, something expected.
+actions that do something, indeed something expected.
 
 To this end, it makes sense to describe the ``net-effect'' of an action as the
 difference between the state of the computer at time $T_n$ and $T_{n+1}$.
@@ -57,17 +57,17 @@ laundry, the net-effect of this action is the same pile of laundry, but clean.
 Clearly, the functional paradigm fits abnormally to this type of problem.
 Knitting a pile of clean laundry, same but different, is not nearly as
 practical as cleaning the dirty pile. Indeed, why should we dispose of a pile
-of perfectly good laundry, just because it has gotten a little dirty? The
-process of cleaning, rather than knitting, is explicit to the programmer in an
+of perfectly good clothing, just because it has gotten a little dirty? The
+process of cleaning, rather than knitting, is explicit to the programmer in the
 imperative paradigm.
 
 While modifying global state, rather than producing new values, is a marvel of
 imperative programming, it is important that we achieve \emph{exactly} the
-intended net-effect; nothing more, nothing less. While we wish to change the
+intended net-effect; nothing more, nothing less. So while we wish to change the
 state of the world in a particular way, we also wish to avoid
 \key{side-effects}, so as to avoid a general butterfly effect, where doing the
-laundry for instance, results in a hurricane on the other side of the globe.
-We achieve this ``safety'' by grouping the elements in the world into
+laundry for instance, causes a hurricane on the other side of the world. We
+attempt achieve this ``safety'' by grouping the elements in the world into
 well-defined and well-kept \key{data structures}.
 
 \begin{definition}
@@ -80,18 +80,56 @@ methods for managing the data structure, such that the ordering is maintained.
 We say that a set of data structures defining the same ordering on the same
 types of data elements, and providing the same methods of manipulation, belong
 to the same \key{class} of data structures. A class of data structures is a
-type of data element\footnotemark.
+type of data element. This notion is intentionally recursive.
 
-\footnotetext{For now, we'll make due with this recursive definition.}
+It is clear that designing a new piece of hardware for every type of action is
+impractical. The desired net-effect can often be achieved through a series of
+basic actions. For instance, the sum of $n$ different numbers can be computed
+using $n-1$ binary additions. Hence, we can make due with a \key{sequencing
+mechanism} and good old binary addition, rather than design a new piece of
+hardware for every conceivable $n$.
 
-Depending on our area of interest, we can consider an action as either a basic,
-non-divisible happening, or as a sequence of subactions necessary to achieve
-the overall net-effect. The sub-actions themselves may be considered in terms
-of their sub-sub-actions, and so on. Indeed, one possible program design method
-is to start with a high-level overview and to gradually dig into the details.
-Naturally, such a hierarchical ordering of a program also facilitates the human
-comprehension of the program. This calls to attention a quote by Donald
-Knuth\cite{knuth-review-of-sp}:
+A computer, therefore, has a finite set of basic actions, called its
+\key{instruction set}. A computer program is specified in terms of a sequence
+of these basic actions, called a \key{program text}. The computer executes the
+program by performing the sequence of actions in order.
+
+The sequence of basic actions is not a sequencing mechanism in and of itself.
+Indeed, we are unable to specify a computer program for summing a sequence of
+an arbitrary size $n$, since no sequence of binary additions will ever be
+enough for every conceivable $n$.  What's more, why duplicate the actions?
+Afterall, as we sequentially sum a sequence of numbers we're doing the same
+action, a binary addition, just on different data.
+
+To mitigate this lack of flexibility, the von Neuman architecture introduces
+the \key{jump} action. Since the program is specified as a finite sequence
+of basic actions, we can easily assign a unique integer index to every action in the sequence.
+As the computer is performing an action at a particular index at any point in time
+
+
+The
+idea is then to let the computer have an action that allows to specify an arbitrary action as
+the next action to perform, rather then the one then immediately next
+instruction.
+
+At this point it makes sense to reconsider the concept of time. The convention is to let all basic
+actions be upper bounded by some constant value. This allows us to analyze the
+running time of computer programs in terms of how much sequencing is going on.
+
+
+At any point in time, the computer is performing some particular action, 
+
+and provide a
+mechanism for performing a sequence of actions in order. This however, still does not allow us to write a 
+
+Indeed, depending on our level of interest, we may consider an action as either
+a basic, non-divisible happening, or as a sequence of subactions necessary to
+achieve the overall net-effect. The sub-actions themselves may be considered in
+terms of their sub-sub-actions, and so on. Indeed, one possible program design
+method is to start with a high-level overview and to gradually dig into the
+details.  Naturally, such a hierarchical ordering of a program also facilitates
+the human comprehension of the program. This calls to attention a quote by
+Donald Knuth\cite{knuth-review-of-sp}:
 
 \begin{quote}"You have perhaps had a dream much like mine: Wouldn't it be nice
 to have a glorious system of complete maps of the world, whereby one could (by
@@ -125,7 +163,7 @@ temperatures may leed to color bleeding.
 A common mistake is to oversee a colored piece in a pile of whites, and wash
 the pile under a high temperature.  Most likely, this will lead to all whites
 in that pile bleeding from white to a light shade of the mixed-in color. That
-definitely leads to a hurricane on the other side of the globe!  As such, this
+definitely leads to a hurricane on the other side of the world!  As such, this
 is a \key{pre-} and \key{postcondition} pair we forgot to mention. Not only
 should the pile be clean, but every piece of laundry should also keep its
 original color.

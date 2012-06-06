@@ -1,0 +1,44 @@
+Start with Accelerated C++ like exercises -- introduce modular data representation.
+
+Start with GUI rather early -- enabling for a full-blown excel application by the time of the exam.
+
+- A comprehensive GUI exercise.
+
+- Enabling the plug and play of libraries: a good OO exercise.
+
+- Some nice parsing/evaluation exercises.
+  - distinguishing between cells and cell ranges in computations. 
+
+Ideas for exam:
+- Implement drawing of various graphs as a plugin.
+
+
+- Unlike excel, we want both cell and matrix outputs -- we should think
+  carefully about how exactly this is to be implemented.
+
+1.
+
+  - Google Go
+
+  - Input/output
+
+  - Input: one dimensional table where each row is either an integer value or a
+    command. Plug-n-play commands, such as SUM, AVG, etc. At least, it should
+    be easy to add new commands.
+
+  - Various selection methods: single cell or arrays at a time.
+
+  - All commands refer only cells above them, so a top-down execution is fine.
+
+  - There are no nested commands, so the syntax is =<command> <index> <index>
+
+  - Output: static values, where SUM, AVG, etc. have been computed.
+
+  - It is OK to have the entire output in memory for quick access in commands.
+
+Perhaps, this part is best left to the next exercise:
+
+  - This seems almost too easy.. yet impossible to do pretty without
+    interfaces. The complication to make this a full blown exercise is DAG
+    analysis. The necessity of interfaces can be mitigated by the fact that we will
+    be changing previous codebase anyhow. So do it without to begin with. 

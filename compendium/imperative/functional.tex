@@ -32,9 +32,7 @@ that all data is immutable, i.e. there's no notion of one representation being
 mutated into another. Mutation however, may be useful in practise. It is not
 unlikely that the output of a function can have a representation very close to
 the representation of its input. In such cases, mutation can save us a great
-deal of trouble when constructing the output value. For instance, appending a
-value to a list, yields the original list with just one more value appended to
-it.
+deal of trouble when constructing the output value.
 
 Functional programming languages usually hide this aspect from the programmer,
 lettting the language itself worry about such ``premature'' matters. Hence,
