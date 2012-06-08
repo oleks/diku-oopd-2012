@@ -46,8 +46,8 @@ actions that do something, indeed something expected.
 To this end, it makes sense to describe the ``net-effect'' of an action as the
 difference between the state of the computer at time $T_n$ and $T_{n+1}$.
 However, this notion breaks down as we turn to multiprocessor machines, where
-the clear benefit of performing multiple actions at once has been utilized. So
-apply this notion with care.
+the clear benefit of performing multiple actions at once has been utilized.
+Apply this notion with care.
 
 % ``action – a function or a function object that mutates the value of an
 % object'' -- Alexander Stepanov, Adobe notes.
@@ -61,22 +61,28 @@ of perfectly good clothing, just because it has gotten a little dirty? The
 process of cleaning, rather than knitting, is explicit to the programmer in the
 imperative paradigm.
 
-While modifying global state, rather than producing new values, is a marvel of
-imperative programming, it is important that we achieve \emph{exactly} the
-intended net-effect; nothing more, nothing less. So while we wish to change the
-state of the world in a particular way, we also wish to avoid unexpected
-\key{side-effects}, so as to avoid a general butterfly effect, where doing the
-laundry for instance, causes a hurricane on the other side of the globe. We
-attempt achieve this ``safety'' by grouping the elements in the world into
-\key{data structures} and modifying these data structures rather than arbitrary
-global state.
+While modifying global state is a marvel of imperative programming, it is
+important that we achieve an intended net-effect; nothing more, nothing less.
+So while we wish to change the state of the world in some particular way, we
+also wish to avoid unintended \key{side-effects}.  This is to avoid a general
+``butterfly effect'', where doing the laundry causes a thunderstorm on the
+other side of the globe.
+
+A programming language facilitates a programming paradigm if it is both easy,
+and reasonably safe to use the paradigm. A technique that allows to safeguard
+against the butterfly effect is to group the elements of the world into
+\key{data structures} and modify data structures rather than arbitrary global
+state.
+
+We attempt achieve this
+``safety'' by grouping the elements in the world into \key{data structures} and
+modifying these data structures rather than arbitrary global state.
 
 \begin{definition}
 
 A data structure is a particular ordering of data elements. A data structure
 has a set well-defined actions for modifying the data structure, such that the
-ordering is maintained. A data structure is well-kept if only these actions are
-used to modify the data structure.
+ordering is maintained.
 
 \end{definition}
 
