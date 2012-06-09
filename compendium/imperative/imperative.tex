@@ -31,19 +31,19 @@ multiprocessor machines, but in such cases they will be mentioned explicitly.
 \begin{definition}
 
 ``An action is a happening, taking place in a finite period of time and
-establishing a well-defined, intended \key{net-effect}.''
+establishing a well-defined, intended \key{net effect}.''
 \cite{dijkstra-introduction}
 
 \end{definition}
 
 This definition highlights two important points. Firstly, an action takes place
-in a finite period of time, say $T_1$. This allows for us to speak of the
-points in time $T_n$ and $T_{n+1}$, as the times of action inception and
-termination, i.e. $T_{n+1}=T_n+T_1$. Secondly, an action establishes a
-well-defined, intended net-effect. This highlights that we are interested in
-actions that do something, indeed something expected.
+in a finite period of time, say $T_1$. This allows us to speak of the points in
+time $T_n$ and $T_{n+1}$, as the times of action inception and termination,
+i.e. $T_{n+1}=T_n+T_1$. Secondly, an action establishes a well-defined,
+intended net effect. This highlights that we are interested in actions that do
+something, indeed something expected.
 
-To this end, it makes sense to describe the ``net-effect'' of an action as the
+To this end, it makes sense to describe the ``net effect'' of an action as the
 difference between the state of the computer at time $T_n$ and $T_{n+1}$.
 However, this notion breaks down as we turn to multiprocessor machines, where
 the clear benefit of performing multiple actions at once has been utilized.
@@ -53,7 +53,7 @@ Apply this notion with care.
 % object'' -- Alexander Stepanov, Adobe notes.
 
 As an example of an action, consider doing the laundry. Given a pile of dirty
-laundry, the net-effect of this action is the same pile of laundry, but clean.
+laundry, the net effect of this action is the same pile of laundry, but clean.
 Clearly, the functional paradigm fits abnormally to this type of problem.
 Knitting a pile of clean laundry, same but different, is not nearly as
 practical as cleaning the dirty pile. Indeed, why should we dispose of a pile
@@ -62,29 +62,165 @@ process of cleaning, rather than knitting, is explicit to the programmer in the
 imperative paradigm.
 
 While modifying global state is a marvel of imperative programming, it is
-important that we achieve an intended net-effect; nothing more, nothing less.
+important that we achieve an intended net effect; nothing more, nothing less.
 So while we wish to change the state of the world in some particular way, we
 also wish to avoid unintended \key{side-effects}.  This is to avoid a general
 ``butterfly effect'', where doing the laundry causes a thunderstorm on the
 other side of the globe.
 
-A programming language facilitates a programming paradigm if it is both easy,
-and reasonably safe to use the paradigm. A technique that allows to safeguard
-against the butterfly effect is to group the elements of the world into
-\key{data structures} and modify data structures rather than arbitrary global
-state.
+% A bit too early for this, but worth noting in general: ``The great discovery
+% of Turing and von Neumann that set us on a new path was the discovery of
+% memory.  We are not just dealing with numbers: we are storing them in
+% different locations.''\cite{stepanov-adobe}}
 
-We attempt achieve this
-``safety'' by grouping the elements in the world into \key{data structures} and
-modifying these data structures rather than arbitrary global state.
+% A programming language facilitates a programming paradigm if it is both easy,
+% and reasonably safe to use the paradigm.
+
+One technique that the imperative paradigm shares with the functional is
+\key{data abstraction}. The idea is to group the elements of the world into
+well-defined \key{data structures} and modify data structures rather than
+arbitrary global state.
 
 \begin{definition}
 
 A data structure is a particular ordering of data elements. A data structure
-has a set well-defined actions for modifying the data structure, such that the
-ordering is maintained.
+has well-defined methods of modification that maintain this ordering.
 
 \end{definition}
+
+The ``data elements'' that a data structure maintains are data structures
+themselves. So the methods of modification of a particular data structure have
+to take into account the methods of modification of its constituent data
+elements.
+
+This technique allows for arbitrary data abstraction, but of course, at some
+point, some actual modification of the global state has to commence. A computer
+therefore has  at least one \key{basic} data structure, whos methods of
+modification are implemented in hardware. We'll refer to these basic methods of
+modification as the computer's \key{instructions}. The state of the computer
+can then be a finite \key{array} of instances of this basic data structure. We
+call this array the computer's \key{memory}.
+
+\begin{definition}
+
+An array is a collection of data elements. Every element has a unique
+\key{index} that identifies its position within the array. An array has
+\key{random access}.
+
+\end{definition}
+
+An array is a data structure. For all intents and purposes it does not matter
+\emph{how} the elements are actually ordered. We would simply like to be able
+to \key{access} the elements in arbitrary order and modify their values. For
+this purpose we require that the data structure possesses ``random access'',
+which is to say that regardless of which element we attempt to access, it will
+take roughly the same amount of time.
+
+One frequently used basic data structure is a \key{word}: a fixed size group of
+bits, typically 4 bytes in size. For example:
+
+\begin{equation}
+0000 0000\ 0000 0000\ 0000 0000\ 0000 0000 \label{word-0}
+\end{equation}
+
+A possible basic method of modification is ``flip all bits'', so that we can go
+back and forth between the above and the below:
+
+\begin{equation}
+1111 1111\ 1111 1111\ 1111 1111\ 1111 1111 \label{word-1}
+\end{equation}
+
+Such a data structure may not seem particularly useful, but it \emph{can}
+represent a boolean value. An $n$-size array of such values could for example
+be used to automatically monitor a parking lot with $n$ parking spots, where
+each spot is either ``free'' or ``occupied''. Imagine that we have an auxiliary
+sensor system that notifies us whenever a car enters or leaves a particular
+spot. We can then flip all bits of a corresponding word whenever either even
+occurs. However, for such a system to operate consistently this instruction is
+not enough.
+
+Initially, the parking lot is completely empty. Regardless of whether we chose
+to use \ref{word-0} or \ref{word-1} to represent an ``empty'' spot, we cannot
+consistently model this reality. We have no guarantee that a particular word is
+initially either one value or the other. For such purposes, data structures
+have \key{constructors}.
+
+\begin{definition}
+
+A constructor is a modification method that resets a data structure to some
+particular initial value.
+
+\end{definition}
+
+If we have another instruction that resets all the bits of word of a given word
+to $0$, and let \ref{word-0} represent an empty spot, we are able to
+consistently model the real world occupation of the parking lot.
+
+% A program is stored in memory, and therefore a particular word in memory can
+% always be initialized to some particular value.
+
+Using a 32-bit word for a boolean is not particularly efficient. It can
+represent $2^{32}$ different values and we're only utilizing two\footnotemark!
+Another use-case for words is to represent natural numbers in the range
+$[0;2^{32})$.  Useful basic methods of modification would be addition,
+subtraction, multiplication, etc.
+
+\footnotetext{Sometimes it proves practical to waste a little space in favor of
+much faster execution time, so while we could do with a single bit to represent
+a boolean value, computers often use 1, 2, or even 4 bytes due to the hardware
+design.}
+
+As a matter of fact, the common computer comes with these and a myriad of other
+instructions, which hence make up the computer's \key{instruction set}. The
+``word'' in this context becomes a rather ubiquitous data structure. Most of
+the time we won't be needing this ubiquity, and may indeed choose only a small
+subset of the instruction set to apply to any particular word in memory.
+Indeed, we may desire for a particular word to represent a boolean or a natural
+number, but not both at the same time!
+
+While computers could probably support a few more basic data types, it has
+proven to be more practical to facilitate this sort of ``safety'' at a
+different level of abstraction. Enter \key{types}.
+
+\begin{definition}
+
+A data structure is a type. A value of a given type may only be modified using
+a method defined in the corresponding data structure.
+
+\end{definition}
+
+This definition may seem indistinguishible from the definition of a data
+structure, but the important distinction is that a data structure has methods
+of modification that maintain its ordering, and here we prohibit the use of any
+other methods for the data structure.
+
+Imperative programming languages facilitate the definition of types, and like
+computers have basic data structures, have basic types. For a given computer
+with the basic data structure of a 4-byte word, the basic types may be subsets
+or supersets of a word, all depending on the flexibility of the intruction set
+of the computer. Hence, some common basic types are presented in
+\referToTable{basic-types}.
+
+\makeTable
+{basic-types}
+{Basic Types}
+{lll}
+{name & bytes & description}
+{
+  \code{int} & $4$ & natural number in the range $[-2$
+}
+
+
+
+ By far the most programs won't be needing the entire
+instruction set of a modern computer,
+
+ but the intention of the hardware industry
+is to support as many programs as possible, rather than any single one.
+
+
+Because maintaining a data structure generally requires a sequence of actions..
+blah.
 
 A programming language facilitates a programming paradigm if it is both easy,
 and reasonably safe to use the paradigm. Having the ability to define data
@@ -104,7 +240,7 @@ structure before the program is ever run. You should by now have plenty of
 experience with the notorious SML type system.
 
 % It is clear that designing a new piece of hardware for every type of action is
-% impractical. The desired net-effect can often be achieved through a series of
+% impractical. The desired net effect can often be achieved through a series of
 % basic actions. For instance, the sum of $n$ different numbers can be computed
 % using $n-1$ binary additions. Hence, we can make due with a \key{sequencing
 % mechanism} and good old binary addition, rather than design a new piece of
@@ -144,7 +280,7 @@ experience with the notorious SML type system.
 
 % Depending on our level of interest, we may consider an action as either an
 % atomic happening, or as a sequence of subactions necessary to achieve the
-% overall net-effect. The subactions themselves may be considered in terms of
+% overall net effect. The subactions themselves may be considered in terms of
 % their subsubactions, and so on. Indeed, one possible program design method is
 % to start with a high-level overview and to gradually dig into the details.
 % Naturally, such a hierarchical ordering of a program also facilitates the human
@@ -162,7 +298,7 @@ experience with the notorious SML type system.
 
 % Here the word ``routine'' stands for an action, and ``its expansion on the next
 % level'' is the sequence of sub-actions necessary to achive the intended
-% net-effect. The choice of the word ``routine'' is not an unlucky one. Afterall,
+% net effect. The choice of the word ``routine'' is not an unlucky one. Afterall,
 % we all have some sort of routine for doing the laundry, and doing the laundry
 % is a rather routine task! Let us now consider the immediate expansion of doing
 % the laundry, assuming that we have a common washing machine at our disposal:
@@ -172,10 +308,10 @@ and of itself, but it will prove interesting to consider how we morph the data
 structure into other well-kept data structures as we do the laundry.
 
 Depending on our level of interest, we may consider an action as an atomic
-happening or as a sequence of subactions necessary to achieve the overall
-net-effect. Each subaction can in turn be considered in terms of its
-subsubactions, and so on. Let us consider the possible subactions of doing the
-laundry, assuming that we have a common washing machine at our disposal:
+happening or as a sequence of subactions necessary to achieve the overall net
+effect. Each subaction can in turn be considered in terms of its subsubactions,
+and so on. Let us consider the possible subactions of doing the laundry,
+assuming that we have a common washing machine at our disposal:
 
 \begin{codebox}
 \li Split the pile into colors and whites.
@@ -185,7 +321,7 @@ laundry, assuming that we have a common washing machine at our disposal:
 \end{codebox}
 
 This is an example of an \key{algorithm}. An algorithm is a sequence of actions
-that if performed in order achieves some intended net-effect. Formally
+that if performed in order achieves some intended net effect. Formally
 speaking, an algorithm has some sort of input, which it transforms into some
 sort of output through a sequence of actions. Here, the input is a pile of
 dirty laundry, and the output is a neat stack of clean laundry. When specifying
@@ -271,7 +407,7 @@ Of course, at some point we must reach basic, non-divisible
 
  i.e.  doing
 the laundry, or as a sequence of subactions. This sequence represents the steps
-necessary to achieve the overall intended net-effect.
+necessary to achieve the overall intended net effect.
 
 
 (Naur,
@@ -298,7 +434,7 @@ $T_1$, then at time $T_{n+1}$ we have a pile of clean laundry.
 
 
 To define the
-net-effect of an action, we state the conditions that must hold at time
+net effect of an action, we state the conditions that must hold at time
 $T_{n+1}$, given that certain conditions hold at time $T_n$. We call these
 conditions the \key{post-} and \key{pre-conditions}, respectively. Given an
 action $a$, we say that if the preconditions hold, then after the action, the
