@@ -1,5 +1,3 @@
-%\section{The von Neumann architecture}
-
 An alternative programming paradigm, the \key{imperative}, is historically
 closer to hardware. It emerged as the programming paradigm for computer
 architectures stemming from John von Neumann's original proposal for the design
@@ -96,35 +94,35 @@ elements.
 This technique allows for arbitrary data abstraction, but of course, at some
 point, some actual modification of the global state has to commence. A computer
 therefore has  at least one \key{basic} data structure, whos methods of
-modification are implemented in hardware. We'll refer to these basic methods of
-modification as the computer's \key{instructions}. The state of the computer
-can then be a finite \key{array} of instances of this basic data structure. We
-call this array the computer's \key{memory}.
+modification are implemented in hardware. We'll refer to such a basic method of
+modification as an \key{instruction}. The state of the computer can then be a
+finite \key{array} of instances of this basic data structure. We call this
+array the computer's \key{memory}.
 
 \begin{definition}
 
 An array is a collection of data elements. Every element has a unique
-\key{index} that identifies its position within the array. An array has
-\key{random access}.
+identifier, called an \key{index}, which we can use to \key{access} the
+element. We access an element whenever we need to analyze, or modify its value.
+Accessing any element in the array roughly the same amount of time, this
+property is called \key{random access}.
 
 \end{definition}
 
 An array is a data structure. For all intents and purposes it does not matter
 \emph{how} the elements are actually ordered. We would simply like to be able
-to \key{access} the elements in arbitrary order and modify their values. For
-this purpose we require that the data structure possesses ``random access'',
-which is to say that regardless of which element we attempt to access, it will
-take roughly the same amount of time.
+to \key{access} the elements in some arbitrary order.
 
-One frequently used basic data structure is a \key{word}: a fixed size group of
+One frequently used basic data structure is a \key{word}: a fixed-size group of
 bits, typically 4 bytes in size. For example:
 
 \begin{equation}
 0000 0000\ 0000 0000\ 0000 0000\ 0000 0000 \label{word-0}
 \end{equation}
 
-A possible basic method of modification is ``flip all bits'', so that we can go
-back and forth between the above and the below:
+A possible basic modification method is to flip all the bits of a word, known
+as binary negation. We'll refer to this operation as $\proc{Neg}$. With
+$\proc{Neg}$ we can go back and forth between \ref{word-0} and \ref{word-1}:
 
 \begin{equation}
 1111 1111\ 1111 1111\ 1111 1111\ 1111 1111 \label{word-1}
@@ -135,15 +133,15 @@ represent a boolean value. An $n$-size array of such values could for example
 be used to automatically monitor a parking lot with $n$ parking spots, where
 each spot is either ``free'' or ``occupied''. Imagine that we have an auxiliary
 sensor system that notifies us whenever a car enters or leaves a particular
-spot. We can then flip all bits of a corresponding word whenever either even
+spot. We can then $\proc{Neg}$ a corresponding word whenever either event
 occurs. However, for such a system to operate consistently this instruction is
 not enough.
 
 Initially, the parking lot is completely empty. Regardless of whether we chose
 to use \ref{word-0} or \ref{word-1} to represent an ``empty'' spot, we cannot
-consistently model this reality. We have no guarantee that a particular word is
-initially either one value or the other. For such purposes, data structures
-have \key{constructors}.
+consistently model this reality. Indeed, we have no guarantee that a particular
+word is initially either one value or the other. For such purposes, data
+structures have \key{constructors}.
 
 \begin{definition}
 
@@ -152,18 +150,18 @@ particular initial value.
 
 \end{definition}
 
-If we have another instruction that resets all the bits of word of a given word
-to $0$, and let \ref{word-0} represent an empty spot, we are able to
+If we have another instruction, $\proc{Nil}$, which resets all the bits of a
+given word to $0$, and let \ref{word-0} represent an empty spot, we are able to
 consistently model the real world occupation of the parking lot.
 
 % A program is stored in memory, and therefore a particular word in memory can
 % always be initialized to some particular value.
 
 Using a 32-bit word for a boolean is not particularly efficient. It can
-represent $2^{32}$ different values and we're only utilizing two\footnotemark!
-Another use-case for words is to represent natural numbers in the range
-$[0;2^{32})$.  Useful basic methods of modification would be addition,
-subtraction, multiplication, etc.
+represent $2^{32}$ different values and we're only utilizing two
+representations\footnotemark!  Another use-case for words is to represent
+natural numbers in the range $[0;2^{32})$.  Useful modification methods would
+thus be addition, subtraction, multiplication, etc.
 
 \footnotetext{Sometimes it proves practical to waste a little space in favor of
 much faster execution time, so while we could do with a single bit to represent
@@ -178,66 +176,142 @@ subset of the instruction set to apply to any particular word in memory.
 Indeed, we may desire for a particular word to represent a boolean or a natural
 number, but not both at the same time!
 
-While computers could probably support a few more basic data types, it has
-proven to be more practical to facilitate this sort of ``safety'' at a
-different level of abstraction. Enter \key{types}.
+While computers could probably support a few more basic data types, and many
+do, it has proven more practical to facilitate this sort of ``safety'' at a
+different level of abstraction. Enter \key{data types}.
 
 \begin{definition}
 
-A data structure is a type. A value of a given type may only be modified using
-a method defined in the corresponding data structure.
+A data structure defines a data type. A value of a given data type may only be
+modified using a method defined for the corresponding data structure.
 
 \end{definition}
 
-This definition may seem indistinguishible from the definition of a data
-structure, but the important distinction is that a data structure has methods
-of modification that maintain its ordering, and here we prohibit the use of any
-other methods for the data structure.
-
-Imperative programming languages facilitate the definition of types, and like
-computers have basic data structures, have basic types. For a given computer
-with the basic data structure of a 4-byte word, the basic types may be subsets
-or supersets of a word, all depending on the flexibility of the intruction set
-of the computer. Hence, some common basic types are presented in
-\referToTable{basic-types}.
+Imperative programming languages facilitate the definition of data types, and
+much like computers have basic data structures, they have basic data types. The
+actual set of basic data types available to the programmer depends on the
+intentions of the programming language, as well as the architecture of the
+computer in question. For example, we may be able to modify a single byte of a
+word, or modify multiple contiguous words with a single instruction.
+\referToTable{basic-types} presents a sample list of basic data types in an
+imperative programming language.
 
 \makeTable
 {basic-types}
-{Basic Types}
-{lll}
-{name & bytes & description}
+{A sample list of basic data types in an imperative programming language.}
+{lcl}
+{{\bf Name} & {\bf Bytes} & {\bf Represents}}
 {
-  \code{int} & $4$ & natural number in the range $[-2$
+  \code{byte} & $1$ & A raw byte.\\
+  \code{boolean} & $1$ & A boolean.\\
+  \code{char} & $2$ & A character.\\
+  \code{int} & $4$ & An integer in the range $[-2^{31};2^{31})$.\\
+  \code{unsigned int} & $4$ & An integer in the range $[0;2^{32})$.\\
+  \code{long} & $8$ & An integer in the range $[-2^{63};2^{63})$.\\
+  \code{unsigned long} & $8$ & An integer in the range $[0;2^{64})$.
 }
 
+This is not a complete list, and for some particular language, on some
+particular architecture the list may look somewhat different, both in terms of
+which data types there are, and their sizes.
 
+\begin{definition}
 
- By far the most programs won't be needing the entire
-instruction set of a modern computer,
+We refer to the set of numbers $\ldots,-2,-1,0,1,2,\ldots$ as \key{integers}.
 
- but the intention of the hardware industry
-is to support as many programs as possible, rather than any single one.
+\end{definition}
 
+\begin{definition}
+
+We refer to a data type that can represent a subset of the integers as an
+\key{integer data type}.
+
+\end{definition}
+
+There are a few peculiarities about \referToTable{basic-types}.
+
+Firstly, some data types have an ``unsigned'' counterpart. The difference
+between these and their ``signed'' brotheren is easy to see if we consider
+their respective value ranges. Integer data types, such as are usually signed
+to begin with. In cases where negative values don't make much sense, they can
+be explicitly made unsigned.
+
+Second, there are the ranges. An \code{unsigned int} has the range
+$[0;2^{32})$, which is to say it can represent the integers
+$0,1,\ldots,2^{32}-2,2^{32}-1$. This is pretty intuitive since a sequence of
+$4$ bytes can represent $2^{32}$ different values, and we're looking to
+represent positive integral values. What's perhaps less intuitive is the range
+of an \code{int}, $[-2^{31};2^{31})$. This has to do with the data type being
+``signed''. Indeed, a single bit is reserved for repesenting the sign, while
+the remaing $31$ are left to represent some absolute value.
+
+This business of signed integers introduces another peculiarity. Consider some
+\code{int} value $x=-2^{31}$. What is $-1\cdot x$? For regular integers we know
+that the answer is $2^{31}$, but we can't represent this number with an
+\code{int}\ldots
+
+Signed integer data types are often \key{asymmetric} in this manner, and this
+can be a great source of confusion. The convention is that $x$ is its own
+negation, so $-1\cdot x = -2^{31} = x$. Likewise, given $x=2^{31}-1$, $x+1$=$-2^{31}$
+
+\begin{definition}
+
+\key{Integer overflow} occurs whenever the resulting value of a particular
+operation is outside the range of values representable by the integer data type
+of the result.
+
+\end{definition}
+
+Integer overflow is a case where the origins of digital computers shines
+through. Computers are primarily tools for numerical analysis, i.e.  the study
+of algorithms for numerical approximation, not general symbolic manipulation.
+Disregard of these origins can lead to small mathematical absurdities that very
+quickly lead to a thunderstorm on the other side of the globe.
+
+\begin{definition}
+
+Let $[Min;Max]$ denote the range of values representable by a particular
+integer data type. Let $|Min|>|Max|$, and $b\in\set{1,2,\ldots,Max}$, if the
+data type has integer overflow, then:
+
+\begin{align}
+a+b=\left\{
+\begin{array}{ll}
+Min+b-1&\text{\key{if}}\ a=Max\\
+a+b&\text{\key{otherwise}}
+\end{array}\right.\\
+a-b=\left\{
+\begin{array}{ll}
+Max-b+1&\text{\key{if}}\ a=Min\\
+a-b&\text{\key{otherwise}}
+\end{array}\right.\\
+\end{align}
+
+\end{definition}
+
+We can WLOG let all other operations on integers be a sequence of additions or
+subtractions. Also, this definition duely relates to both signed and unsigned
+values.
 
 Because maintaining a data structure generally requires a sequence of actions..
 blah.
 
-A programming language facilitates a programming paradigm if it is both easy,
-and reasonably safe to use the paradigm. Having the ability to define data
-structures, and actions that modify them, is one thing.  Another is having
-assurance that the wrong action is never used to modify the wrong data
-structure. This is where \key{type systems} come in handy.
+% A programming language facilitates a programming paradigm if it is both easy,
+% and reasonably safe to use the paradigm. Having the ability to define data
+% structures, and actions that modify them, is one thing.  Another is having
+% assurance that the wrong action is never used to modify the wrong data
+% structure. This is where \key{type systems} come in handy.
 
-We say that a set of data structures defining the same ordering on the same
-\key{types} of data elements, and having the same methods of modification,
-belong to the same \key{class} of data structures. A class of data structures
-is a type of data element, or simply, type. This notion is intentionally
-recursive.
+% We say that a set of data structures defining the same ordering on the same
+% \key{types} of data elements, and having the same methods of modification,
+% belong to the same \key{class} of data structures. A class of data structures
+% is a type of data element, or simply, type. This notion is intentionally
+% recursive.
 
-We hence say that actions are defined on particular types, and a type system
-can hence ensure that the wrong action is not used to modify the wrong data
-structure before the program is ever run. You should by now have plenty of
-experience with the notorious SML type system.
+% We hence say that actions are defined on particular types, and a type system
+% can hence ensure that the wrong action is not used to modify the wrong data
+% structure before the program is ever run. You should by now have plenty of
+% experience with the notorious SML type system.
 
 % It is clear that designing a new piece of hardware for every type of action is
 % impractical. The desired net effect can often be achieved through a series of

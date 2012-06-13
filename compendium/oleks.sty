@@ -206,7 +206,7 @@
 
 \NewDocumentCommand\referToTable{m}%
 {%
-	Table \textsection\ref{table:#1}/\pageref{table:#1}%
+	Table \ref{table:#1}/\pageref{table:#1}%
 }%
 
 % sections
@@ -244,9 +244,7 @@
 	\centering
 	\rowcolors{2}{shade}{white}
 	\begin{tabular}{#4}
-	\hline
 	#5\\
-	\hline
 	#6\\
 	\end{tabular}
 	\caption[]{#3}
