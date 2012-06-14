@@ -71,9 +71,6 @@ other side of the globe.
 % memory.  We are not just dealing with numbers: we are storing them in
 % different locations.''\cite{stepanov-adobe}}
 
-% A programming language facilitates a programming paradigm if it is both easy,
-% and reasonably safe to use the paradigm.
-
 One technique that the imperative paradigm shares with the functional is
 \key{data abstraction}. The idea is to group the elements of the world into
 well-defined \key{data structures} and modify data structures rather than
@@ -82,7 +79,8 @@ arbitrary global state.
 \begin{definition}
 
 A data structure is a particular ordering of data elements. A data structure
-has well-defined methods of modification that maintain this ordering.
+has well-defined methods of modification that maintain this
+ordering.
 
 \end{definition}
 
@@ -183,7 +181,8 @@ different level of abstraction. Enter \key{data types}.
 \begin{definition}
 
 A data structure defines a data type. A value of a given data type may only be
-modified using a method defined for the corresponding data structure.
+modified using a method defined for the corresponding data
+structure.\label{definition:data-type}
 
 \end{definition}
 
@@ -193,11 +192,11 @@ actual set of basic data types available to the programmer depends on the
 intentions of the programming language, as well as the architecture of the
 computer in question. For example, we may be able to modify a single byte of a
 word, or modify multiple contiguous words with a single instruction.
-\referToTable{basic-types} presents a sample list of basic data types in an
-imperative programming language.
+\referToTable{basic-data-types} presents a sample list of basic data types in
+an imperative programming language.
 
 \makeTable
-{basic-types}
+{basic-data-types}
 {A sample list of basic data types in an imperative programming language.}
 {lcl}
 {{\bf Name} & {\bf Bytes} & {\bf Represents}}
@@ -228,7 +227,7 @@ We refer to a data type that can represent a subset of the integers as an
 
 \end{definition}
 
-There are a few peculiarities about \referToTable{basic-types}.
+There are a few peculiarities about \referToTable{basic-data-types}.
 
 Firstly, some data types have an ``unsigned'' counterpart. The difference
 between these and their ``signed'' brotheren is easy to see if we consider
@@ -248,25 +247,24 @@ the remaing $31$ are left to represent some absolute value.
 This business of signed integers introduces another peculiarity. Consider some
 \code{int} value $x=-2^{31}$. What is $-1\cdot x$? For regular integers we know
 that the answer is $2^{31}$, but we can't represent this number with an
-\code{int}\ldots
-
-Signed integer data types are often \key{asymmetric} in this manner, and this
-can be a great source of confusion. The convention is that $x$ is its own
-negation, so $-1\cdot x = -2^{31} = x$. Likewise, given $x=2^{31}-1$, $x+1$=$-2^{31}$
+\code{int}\ldots\ Signed integer data types are often \key{asymmetric} like
+this, and it can be a great source of confusion. The answer is that the
+\code{int} value $-2^{31}$ is its own negation. This has to do with
+\key{integer overflow}.
 
 \begin{definition}
 
-\key{Integer overflow} occurs whenever the resulting value of a particular
-operation is outside the range of values representable by the integer data type
-of the result.
+Integer overflow occurs whenever the result of an operation is outside the
+representable range of the integer data type.
 
 \end{definition}
 
-Integer overflow is a case where the origins of digital computers shines
-through. Computers are primarily tools for numerical analysis, i.e.  the study
-of algorithms for numerical approximation, not general symbolic manipulation.
-Disregard of these origins can lead to small mathematical absurdities that very
-quickly lead to a thunderstorm on the other side of the globe.
+Integer overflow is one of those cracks that let the origins of digital
+computers shine through. Computers were first and foremost tools for numerical
+analysis, i.e.  the study of algorithms for numerical approximation, not
+general symbolic manipulation. Disregard of these origins can lead to subtle
+mathematical absurdities that can very quickly lead to a thunderstorm on the
+other side of the globe.
 
 \begin{definition}
 
@@ -289,12 +287,85 @@ a-b&\text{\key{otherwise}}
 
 \end{definition}
 
-We can WLOG let all other operations on integers be a sequence of additions or
-subtractions. Also, this definition duely relates to both signed and unsigned
-values.
+We can without loss of generality let all other operations on integers be a
+sequence of additions or subtractions, which gives you an idea of what happens
+when multiplication or division causes overflow. Also, this definition duely
+relates to both signed and unsigned integer data types.
 
-Because maintaining a data structure generally requires a sequence of actions..
-blah.
+We said that imperative programming languages facilitate the definition of data
+types. Data types such as those defined in \referToTable{basic-data-types}
+serve as the basis for such definitions.
+
+As an example of a composite data type, consider the need to model a
+two-dimensional plane. Every point in this plane has two coordinate points, let
+them be called $x$ and $y$, respetively. We may use such points to define
+polygons in the plane, and later manipulate these polygons in the context of
+say, a computer game. These movements, rotations, skewings, etc. of polygons in
+the plane have to make sure to modify both the $x$ and $y$ coordinates of their
+constituent points in order for the manipulation to be correct. Since it will
+be humans programming this functionality, it makes sense to keep the $x$ and
+$y$ corrdinates away from raw manipulation and define manipulation methods that
+duely modify both the $x$ and $y$ coordinate of a given point.
+
+\begin{definition}
+
+We define a data type by specifying its name, its constituent data elements and
+methods of manipulation.
+
+\end{definition}
+
+We can initially define a point in two-dimensional space in the following way:
+
+\begin{verbatim}
+data Point
+{
+  x int
+  y int
+}
+\end{verbatim}
+
+Here we use brackets to denote structural composition, i.e. that a \code{Point}
+consists of two data elements, both of data type \code{int}, namely $x$ and
+$y$. The use of the data type \code{int} should also tell us that we're not
+modelling a point in the plane, but rather a point in the polygon defined by
+the points $\p{-2^{31},-2^{31}}$, $\p{-2^{31},2^{31}-1}$,
+$\p{2^{31}-1,2^{31}-1}$, and $\p{2^{31}-1,-2^{31}}$, and regular integer
+overflow carries over.
+
+The name ``\code{Point}'' is important to a data type definition. Indeed,
+although very similar, this data type is completely different from a
+two-dimensional \code{Vector}:
+
+\begin{verbatim}
+data Vector
+{
+  x int
+  y int
+}
+\end{verbatim}
+
+Some programming languages allow what's called \key{data type coersion}, which
+means that if two data types have the same constituent data elements and the
+same methods of manipulation, they are the same. Of course, it is seemingly
+absurd to use a point in place of a vector and vice versa.
+
+
+The accute reader may now be wondering how does this data type map over into a
+data structure on the computer? Afterall, we haven't discussed how the computer
+facilitates the definition and use of abstract data structures like this.
+
+
+A programming language facilitates a programming paradigm if it is both easy,
+and reasonably safe to use the paradigm. \referToDefinition{data-type} states
+that a data type may only be modified using a method defined for that data
+type. How does a programming language ensure that this holds for our program?
+This is the job of the \key{type system} come into play.
+
+In order to run a program
+
+
+% Because maintaining a data structure generally requires a sequence of actions..
+% blah.
 
 % A programming language facilitates a programming paradigm if it is both easy,
 % and reasonably safe to use the paradigm. Having the ability to define data
