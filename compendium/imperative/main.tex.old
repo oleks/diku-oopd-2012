@@ -1,0 +1,352 @@
+\chapter{Imperative programming}
+
+% outline: (declarative -> imperative -> computer -> action -> action sequence -> action
+% cluster) | state -> (time | variables -> types -> aggregates -> structures ->
+% value vs. reference)
+%
+% hmm.. how about control flow structures?
+
+% to be introduced in one chapter:
+%
+% (declarative), imperative, procedural, and structured programming.
+%
+% under procedural: subroutines vs. coroutines.
+%
+% primitive types, arrays, structures, value and reference types.
+%
+% next chapter: data structures.
+%
+% material for first week: the first two chapters.
+
+% humans can only remember about 4 things at once -- the registers of the
+% librarian -- see short-term memory article on wikipedia.
+
+% what's prohibited by the language vs. what's left up to the programmer.
+% Consider for instance implicit state references in imperative programming vs.
+% functional programming where all input parameters are specified.
+
+\teaser{\input{imperative/teaser}}
+
+\input{imperative/paradigm}
+
+\input{imperative/functional}
+
+\input{imperative/imperative}
+
+% brewing coffee (perhaps too few instructions)
+% going to work (boring instructions)
+% elevator (example of coroutines by Knuth)
+% doing the dishes
+% preparing dinner
+% making tea (too few operations)
+% following a recipe 
+% solving a second degree equation
+
+% As an example of an action, let us consider the taming of a craving for a New
+% York Cheesecake\footnote{A lot of potential cheesecakes were harmed in the
+% preparation of this example.}, which we'll refer to simply as ``cheesecake''.
+% Hence, at point $T_n$, you have a craving for a cheesecake, and at point
+% $T_{n+1}$, that craving has already been tamed.
+
+% Rather intuitively, we can come up with a general sequence of sub-actions for
+% this action. For instance, we have to \begin{inparaenum}[(1)] \item find a
+% recipe for the cheesecake, \item gather ingredients for the cheesecake, and
+% \item actually prepare and bake the cheesecake\end{inparaenum}. It is also
+% intuitively clear that it is important that these sub-actions occur in this
+% particular order, otherwise we'll almost surely end up with a different
+% net-effect than originally intended.
+
+% What's less clear, but equally as important is that there are other options to
+% taming this craving. For instance, we could go down to the local bakery or
+% coffee shop and pay for a ready-made piece of the delicacy. Alternatively, if
+% we're billionaires, we might catch a flight to New York and get a piece of the
+% ``real'' New York Cheesecake.
+
+% All of these possibilities have their pros and cons. For instance, the home
+% made solution is probably the cheapest, and gives you the best options to cater
+% the delicacy as you wish, however it requires considerable effort on your side,
+% and it takes a considerable amount of time. The local bakery solution is
+% probably the quickest, yet probably not the cheapest, and gives you rather few
+% catering choices. The last solution is the most expensive, the lengthiest, but
+% according to some people may be the most pleasant.
+
+% Depending on the context in which we're referring to the action, it may be
+% beneficial to regard it as either an action or this sequence of actions, i.e.
+% sub-actions. What's more, the sub-actions themselves can be further broken down
+% into their respective sub-actions, recursively. For instance, if we're hungry 
+
+% As an example of an action let us consider solving second degree equations of
+% the form $ax^2 + bx + c = 0$.  This is done using the well-known formula:
+
+% $${-b \pm \sqrt{\Delta} \over 2a}.$$
+
+% Where $\Delta$ is commonly known as the discriminant and is defined as follows:
+
+% $$ \Delta = b^2 - 4ac.$$
+
+\newpage
+
+The reason this benefit is ``clear'' comes up when we discuss the notion of
+state. We can define the state of a computer as a sequence $S$, of
+equally-sized chunks, called \key{words}. The processor is historically only
+capable of performing actions on a fixed number of such words at a time.
+Usually, this number is \emph{much} smaller than the length of $S$. As a matter
+of fact, it is often theoretically beneficial to let $S$ be infinite in size.
+
+For instance, it is not uncommon for a processor to be capable of adding two
+numbers together, but it is uncommon for it to be able to perform a summation
+of an arbitrary sequence of numbers. If one wishes to perform such a summation,
+one must resort to iterated application of the aforementioned binary addition. 
+
+You can imagine the processor in a uniprocessor computer as a lonely librarian
+in a long one-dimensional tape library. To comply with our present notion of
+state, let the library consist of equally-sized tapes arranged in a linear
+fashion. The consequent location of the tapes along the single library
+dimension superimposes an \key{address} for every tape relative to some
+reference tape. In particular, although the number of tapes can often be left
+unspecified, there should always be a discrete finite number of tapes between
+any chosen pair of tapes in the library.
+
+The librarian walks atop these tapes, and is so fat that he occupies exactly
+the size of one tape. The librarian also has some eye problems, and is
+therefore only capable of observing the tape directly below him. Hence, the
+librarian is unable to observe multiple randomly distributed tapes
+simultaneously. However, like any human, the librarian has a fairly limited
+short term memory, but can never-the-less remember a few things at once.
+Therefore, he can keep a few tapes in memory while he travels to the other
+tapes to observe their values. Once all the values for a particular action are
+in his short term memory, the librarian can perform the action and place the
+results back in his short term memory.
+
+If the librarian is not going to use the results in the foreseeable future, it
+is probably best to write them down somewhere. The only way for the librarian
+to do this is to overwrite some library tapes and keep the results there until
+they are needed again. This frees up the rather meager short term memory of the
+librarian for the performance of other actions.
+
+If we had to hence describe the essential constituents an action, we'd say that
+in the time frame $T_1$, the librarian should be able to
+\begin{inparaenum}[(1)] \item observe a fixed number of tapes, \item perform an
+action with those tapes in his short-term memory, and \item overwrite a fixed
+number of tapes with the results\end{inparaenum}.
+
+It is important to reiterate that this sequence of the ``sub-actions'' has to
+happen in the fixed time frame of $T_1$, in particular, such that
+$T_n+T_1=T_{n+1}$.  This means that regardless of the locations of the tapes in
+question, the action must take at most time $T_1$. Yet, the librarian has to
+move about in order to observe and overwrite, i.e. to \key{access} various
+tapes. In the worst case, the tapes of interest may be at opposite ends of the
+(finite) library.  Therefore, the larger the library, the larger the $T_1$ has
+to be. 
+
+Instead of letting our concept of time vary on the length of our library, or on
+the spatial discontinuity of our actions, we usually take a leap of faith and
+let our state $S$ possess a property known as \key{random access}.
+
+\begin{definition}
+
+A sequence with random access, allows for any element of the sequence to
+retrieved in equal time, regardless of the sequence size.
+
+\end{definition}
+
+\begin{definition}
+
+A state $S$ is a sequence of equally sized chunks with random access.
+
+\end{definition}
+
+In general, we will refer to any finite-size sequence with consequent element
+addressing and random access as an \key{array}. Therefore, any state of a
+computer that is finite in size is an array. It is common to refer to the state
+of a computer as it's \key{memory} (not to be confused with the short term
+memory), and we shall no longer diverge from that jargon.
+
+You can contrast random access to e.g. \key{sequential access}, where elements
+further along in the sequence require longer time to retrieve. In a way, this
+is akin to giving our librarian teleporting abilities, but really we're just
+trusting for an access to a random library tape to be nonessential to the time
+frame $T_1$. 
+
+This allows for $T_1$ to be constrained to \begin{inparaenum}[(1)] \item the
+number of tapes the librarian needs to perform an action, \item the time it
+takes to actually perform the action, and \item the number of tapes that need
+to be overwritten as a result of the action\end{inparaenum}. Clearly, much of
+this is constrained by the short term memory of the librarian.  Yet, for all
+actions, the same restrictive short term memory is used.  Therefore, so long as
+the time that it takes to perform an action does not vary considerably from
+action to action, the time frame $T_1$ can be regarded as a basic unit of time
+for all further time analyses of programs executed on this computer. 
+
+% If we desired a precise estimate of the running time of a program on some
+% particular computer, and we had such an abstract analysis at hand, we'd be a
+% constant multiplication factor away from the solution. It is practical to
+% perform analysis of the running time and space requirements in this manner,
+% since they facilitate an analysis of the program regardless of the precise
+% details of the underlying architecture.
+
+There's quite a few leaps of faith that we've taken here, and they are worth a
+deeper afterthought. First off, we trust for the hardware of the computer to
+function properly. For instance, although the librarian has a small short term
+memory, we expect him to remember those few tapes par excellence. What's more,
+we expect for the tape observations and overwrites to lossless, and so on.
+
+If one is familiar with basic electronics this may seem like quite a leap of
+faith to make. However, separation of concerns is an important aspect in the
+programmer's profession if she is to remain productive. It has therefore become
+conventional for the programmer to assume the correct functioning of a lot of
+hardware elements, leaving it to the electrical engineers to make sure that the
+assumptions are (almost surely) sound.
+
+On the other hand we've taken the leap of faith that the time frame of an
+action does not vary much from action to action, such that it is not completely
+absurd to measure the running time of a program by using an action as the basic
+unit of time. Interestingly, this does not have to be the case. The intent of
+this is to provide means to analyze programs regardless of the actual
+architecture on which the program may be run, to a certain extent of course.
+Indeed, practice shows that the most popular programs run on a variety of
+different computers, varying in the size of memory, speed of the processor,
+etc.
+
+Another leap of faith that we've taken is that while some tapes are in short
+term memory, the actual tapes in the computer's memory are not overwritten with
+new data, i.e. we've assumed that an action is \key{atomic} wrt. the state of
+the computer. If we consider a multiprocessor computer, we would have to keep
+all other processors from working while some particular processor performs its
+action, effectively turning our multiprocessor computer into a uniprocessor
+computer. Clearly, this is not very practical, so there exist a series of
+techniques that allow for multiple processors to share a single memory on a
+given computer, however they are generally outside of the scope of this course.
+
+\marginpar{
+
+``\cyrtext{электронная машина и решения принимала бы быстрее, и просчитывала
+намного больше вариантов, и не спешила бы домой в конце рабочего дня}''
+
+Translation: The electronic machine would've made decisions faster, considered
+more options, and wouldn't hurry home at the end of the day.
+
+}
+
+It gets to be a pretty tiresome work when the size of $S$ is large, or even
+worse, infinite. It is therefore clear that multiple computational units could
+do things faster. The real trouble comes along when these computational units
+have to use the same tape, but that is outside the scope of this course.
+
+The librarian analogy is pretty lousy, as a librarian that overwrites the
+library tapes, is surely to be fired rather promptly. The solution to this
+analogy dilemma is to have a range of nonessential tapes that serve as
+auxiliaries for the librarian's various operations on essential tapes.
+
+\marginpar{Exercise: XOR swap}
+
+In general, we'd like for our computers, unlike our librarians, to do more than
+simply store our data in a neat order. We want for our computers to rearrange,
+generate and overwrite data on demand. These, and many more data operations
+facilitate our actual goals -- the solution of various real-world problems.
+Auxiliary \key{variables}, such as our nonessential tapes, can in this context
+be used to store structural information necessary to perform such complex data
+manipulations in an efficient manner.
+
+This sequence of steps constitutes and action. Note, that there is no movement
+of tapes, just reading and writing, everything else, is done by a combination
+of such actions.
+
+
+
+
+% action -> action clusters (Naur)
+
+
+
+\newpage
+
+As a by-product, the programmer can often get carried away with some
+non-essential details, rather than concentrate on the problem at hand. Indeed,
+being ``so close to bear metal'', the paradigm opens up for marvelous
+time-spenders on opposing programming frontiers. On the one hand, the
+programmer may have to write a great deal of code to even get the simplest
+things done, while on the other hand, the programmer can spend a great deal of
+time looking for clever tricks to make some part of the program marginally
+faster on some particular architecture.
+
+Blah blah conventional CS problem -- abstraction vs. performance.
+
+Time has shown, that neither is a dominating strategy practise. Any
+self-respecting programmer knows that premature optimization is the root of all
+evil \cite{knuth-goto}, as any self-respecting manager knows not to measure
+programmer productivity by the number of lines written.
+
+\marginpar{Exercise: A good computer scientist would quickly come up with a
+scheme for generating good for nothing intermediate code, and get paid for not
+doing much work at all.}
+
+The more accurate productivity measure seems to be an evaluation of
+\begin{inparaenum}[(1)] \item the class of computations that the program can
+evoke, and \item the \key{time-} and \key{resource} \key{requirements} of such
+evocations\end{inparaenum}. Hence, the programmer's job becomes the more poetic
+-- ``designing a class of computations'', rather than the more mundane --
+''writing a program''. In essence, it seems more fruitful for us to be more
+concerned with the behaviour of programs, rather than their contruction.
+
+This view may be acceptable so long as we're not reminded that programs often
+have to evolve, either due to changes in the program requirements, or due to
+bugs in the original implementation. What's more, programs are usually evolved
+by programmers other than their original programmers. In order to evolve a
+program \emph{efficiently}, the epoch programmers have to be able to put
+themselves in the shoes of the original programmers, and understand why the
+program was constructed the way that it was.  This allows them to evolve the
+program efficiently, rather than having to resort to say, rewriting the program
+from scratch\footnote{Sometimes, the only way to efficiently evolve a program
+is to write it from scratch.}.
+
+\begin{definition}
+
+Efficient program evolution is an evolution that increases program compliance
+with its requirements, while introducing the least possible changes to the
+original program, and accomodating possible future program  evolution.
+
+\end{definition}
+
+In essence, as programmers, we're playwriters for two rather distinct audiences
+(almost) at the same time: the feebleminded computer that has to evoke the
+program, and the generally clever, but sometimes feebleminded programmer that
+has to evolve our program. In order to contrast these two audiences, we first
+need an abstract understanding of the notorious von Neumann architecture.
+
+
+
+
+
+
+
+\begin{quote}"You have perhaps had a dream much like mine: Wouldn't it be nice
+to have a glorious system of complete maps of the world, whereby one could (by
+turning dials) increase or decrease the scale at will? A similar thing can be
+achieved for programs, rather easily, when we give the programs a hierarchic
+structure like those constructed step-wise. It is not hard to imagine a
+computing system which displays a program in such a way that, by pressing
+an-appropriate button, one can replace the name of a routine by its expansion
+on the next level, or conversely."\cite{knuth-review-of-sp}\end{quote}
+
+\emph{Fun fact:} (should come after discussion of representation of data types
+with multiple words) The rooms at DIKU have a peculiar numbering system that
+has a lot to do with the way addressing happens in a computer. If you've ever
+seen DIKU from the outside, you might've noticed that, by design, all the
+windows of a building are of equal size and the windows are equally spaced,
+creating a rather aesthetic outside look. The ``address'' of a room inside DIKU
+consists of 3 parts, building, floor and window. Buildings have number codes,
+as do floors. This leads you to the correct hall, as on any floor there is only
+one hallway. The last part of the address indicates the window at which the
+room begins, numbered from east to west, (0-indexed). The analogy breaks down
+when we find out that not all rooms in a given hall are of the same size.
+
+
+
+\section{State of the art}
+
+Traditionally modules. Literate Programming. C\# has regions.
+
+\input{imperative/algorithms}
+
+\input{imperative/exercises}

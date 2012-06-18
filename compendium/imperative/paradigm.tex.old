@@ -1,0 +1,53 @@
+%\section{Programming paradigms}
+
+\begin{definition}
+
+A \key{programming paradigm} is a technique for writing a certain class of
+programs well.
+
+\end{definition}
+
+We will develop the notion of a ``well-written program''
+throughout these lecture notes, but initially it suffices to understand
+``well'' in the most general sense --- something good, proper, or satisfactory.
+
+A programming language \emph{supports} a programming paradigm, if it
+facilitates programming using that paradigm well. The existence and popularity
+of a variety of languages and paradigms is considerable empirical evidence that
+no language nor paradigm is suitable for all conceivable programs. It is not
+uncommon to see programming languages that support multiple paradigms, and
+well-written programs that utilize multiple paradigms at once.
+
+The absence of good support for a particular paradigm does not imply the
+inapplicability of that paradigm in a particular language.  Paradigms are often
+composable; but often at considerable cost to the programmers' time, and the
+well-being of programs. As programmers tend to be lazy, yet aesthetic, this
+leads to the evolution of programming languages. For instance, one of the
+reasons the original creators of the Unix operating system created the C
+programming language, was that systems programming in assembly, for a complex
+system like Unix, was a rather ``dreary'' task\cite{the-development-of-c}.
+
+% TODO
+% A programming language supports a particular paradigm through a
+% set of \key{formal rules}. The rules facilitate the use of the paradigm to
+% write programs in that language.
+
+% These rules may both facilitate quicker construction of a certain class of
+% programs, as well as restrict the programmer in order to guard her from making
+% a certain class of logical errors while programming. Hence, a paradigm lets you
+% write a certain class of programs more quickly and be more certain in the
+% correctness of the programs you write.
+
+% These rules include but are not limited to rules of
+% \emph{syntax}, such as how a function should be defined and applied, and rules
+% of \emph{semantics}, such as whether a certain function may be applied to
+% variables of certain types.
+
+% The syntactic and semantic correctness of the program is often checked
+% \key{statically}, i.e. before the program is ever run. In principle, statically
+% checked semantics considerably reduce the chances of a certain class of
+% programming errors. For instance, you should by now be well-familiar with the
+% infamous MoscowML type checker, which didn't let you run a program unless they
+% were syntactically well-written and type-checked.
+
+

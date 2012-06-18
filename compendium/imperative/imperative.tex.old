@@ -1,0 +1,693 @@
+An alternative paradigm, the \key{imperative}, lets you be explicit about such
+matters. The paradigm emerged as the prime programming paradigm for computers
+with architectures stemming from John von Neumann's original proposal for the
+design of the digital computer\cite{von-neumann}. Today, the overwhelming
+majority of computers derive from this architecture; and no good introduction
+to the imperative paradigm can commence without at least a gentle introduction
+to the von Neumann architecture.
+
+A key aspect of the von Neumann architecture is that it keeps the computer
+rather feebleminded, leaving it to the programmer to be the clever one. As we
+shall discover, we've managed to come up with clever methods of abstraction
+that guard us against certain pitfalls, but programming is still an immensely
+challenging endeavour; in part, due to the persistent fundamental difficulty of
+solving certain kinds of problems automatically.
+
+\begin{definition}
+
+A \key{computer}\footnotemark is an entity with \key{state} and
+\key{processors}. A processor performs \key{actions} that modify the state of
+the computer.
+
+\footnotetext{Although at the beginning of the 20th century, a ``computer'' was
+still a profession, today most computers are electronic machines.  We'll use
+the words ``computer'' and ``machine'' interchangably.}
+
+\end{definition}
+
+While it may be modern (about time) to speak of computers as machines with
+multiple processors, we will restrain ourselves to single processor machines.
+Programming for multiple processors raises a range of problematics irrelevant
+to the core matter of these lecture notes. At times, it will provide for an
+interesting discussion to consider how certain aspects map over to
+multiprocessor machines, but in such cases they will be mentioned explicitly.
+
+\begin{definition}
+
+``An action is a happening, taking place in a finite period of time and
+establishing a well-defined, intended \key{net effect}.''
+\cite{dijkstra-introduction}
+
+\end{definition}
+
+This definition highlights two important points. Firstly, an action takes place
+in a finite period of time, say $T_1$. This allows us to speak of the points in
+time $T_n$ and $T_{n+1}$, as the times of action inception and termination,
+i.e. $T_{n+1}=T_n+T_1$. Secondly, an action establishes a well-defined,
+intended net effect. This highlights that we are interested in actions that do
+something, indeed something expected.
+
+To this end, it makes sense to describe the ``net effect'' of an action as the
+difference between the state of the computer at time $T_n$ and $T_{n+1}$.
+However, this notion breaks down as we turn to multiprocessor machines, where
+the clear benefit of performing multiple actions at once has been utilized.
+Apply this notion with care.
+
+% ``action – a function or a function object that mutates the value of an
+% object'' -- Alexander Stepanov, Adobe notes.
+
+As an example of an action, consider doing the laundry. Given a pile of dirty
+laundry, the net effect of this action is the same pile of laundry; but clean.
+Let us refer to this action as \function{Do-The-Laundry}.
+
+Clearly, the functional paradigm fits abnormally to this type of problem.
+Knitting a pile of laundry --- clean, but otherwise equivalent --- is not
+nearly as practical as cleaning the dirty pile. Why should we dispose of a pile
+of perfectly good laundry, just because it has gotten a little dirty? The
+process of cleaning --- rather than knitting --- is more explicit in the
+imperative paradigm.
+
+\function{Do-The-Laundry} has a rather abstract definition at the moment. We've
+defined it's net effect, but not how to achieve it. In some contexts, such as
+planning chores around the house, this definition may be sufficient. In others,
+such as actually doing the laundry, it is insufficient.
+
+As a matter of fact, even in the context of planning chores around the house,
+the current definition is insufficient. We have important programs to write, so
+chores around the house cannot take up an indefinite amount of time. We have a
+budget to keep, so doing the laundry cannot cost an indefinite amount of money.
+These, and other important attributes of the action cannot be defined without
+defining how we do the laundry first, indeed because there are different ways
+to do the laundry, each with different costs implied.
+
+A processor is a discrete physical entity. As such, it only has a finite set of
+actions that it can perform. While possible, it would be impractical to extend
+the physical processor whenever we needed to do a new kind of action. Instead,
+we seek to build \key{general-purpose} processors, and sequence basic actions
+to achieve more complex overall net effects. Given a complex action, we
+gradually decompose it into sequences of subactions that overall achieve the
+desired net effect. Let us attempt to do this for the \function{Do-The-Laundry}
+action:
+
+\begin{codebox}
+\Procname{\function{Do-The-Laundry}(A pile of dirty laundry)}
+\li Split the pile into colors and whites.
+\li Wash colors.
+\li Wash whites.
+\li Make a neat stack of the clean laundry.
+\li \Return the neat stack.
+\end{codebox}
+
+This is an example of a \key{routine}, \key{procedure}, \key{method},
+\key{process}, \key{function}, \ldots
+
+\begin{flushright}
+
+``What's in a name? that which we call a rose\\
+By any other name would smell as sweet;''\\
+--- William Shakespeare, Romeo and Juliet.
+
+\end{flushright}
+
+Indeed, a sequence of actions, with a name, an input and an output has many
+names. We'll adopt the term routine, since all of us have a routine for doing
+the laundry and doing the laundry is a rather routine task!
+
+\newpage
+
+We all know that whites and colors don't mix well in a washing machine. Indeed,
+a higher temperature should be used for whites, since they are generally harder
+to get clean, and a lower temperature should be used for colors, since high
+temperatures may leed to color bleeding.
+
+
+
+\newpage
+
+So long as an action is not an action a processor can perform atomically, the
+action is a sequence of subactions.
+
+\begin{definition}
+
+A \key{computer program} is a sequence of actions.
+
+\end{definition}
+
+Since every action has some well-defined effect on the state of the computer, a sequence of actions, performed in turn has a well-defined effect on the state of the computer. 
+
+As far as the computer is concerned, there is no notion of an outside world.
+Hence, the state of the computer is often reffered to as the \key{global
+state}. The state itself is a collection of \emph{atomic} \key{data elements},
+i.e. the smallest elements of data that a processor can modify.
+
+While modifying global state is a marvel of imperative programming, it is
+important that we achieve the intended net effect; nothing more, nothing less.
+We wish to avoid unintended \emph{side-effects}, where doing the laundry causes
+a thunderstorm on the other side of the globe, i.e. a \emph{butterfly effect}.
+
+% A bit too early for this, but worth noting in general: ``The great discovery
+% of Turing and von Neumann that set us on a new path was the discovery of
+% memory.  We are not just dealing with numbers: we are storing them in
+% different locations.''\cite{stepanov-adobe}}
+
+One avoidance technique is \key{data abstraction}. The idea is to group data
+into well-defined \key{data structures} and modify data structures rather than
+arbitrary global state.
+
+\begin{definition}
+
+A data structure is a particular ordering of a collection of data elements. A data structure
+has well-defined methods of modification that maintain this ordering.
+
+\end{definition}
+
+Note, that a data structure is not an ordering of \emph{atomic} data elements,
+but data elements in general. In particular, a collection of data elements that
+has a particular data structure can be a data element in another data
+strcuture.
+
+% An invariant is a mathematical predicate that is maintained throughout a
+% sequence of actions. The ordering that a data structure defines is an
+% invariant that is maintained by the modification methods of the data
+% structure. The modification methods are a sequence of actions.
+
+% The role of the modification methods in the definition of a data structure
+% should not be underestimated. We say that the modification methods maintain a
+% series of data structure \key{invariants}.
+
+% \begin{definition}
+
+% A data structure invariant is a mathematically stated invariant that holds
+% throughout the lifetime of a data structure.
+
+% \end{definition}
+
+This technique allows for arbitrary data abstraction, but of course, at some
+point, some actual modification of the global state has to commence.  The
+atomic data elements of a computer have a basic data structure, whos
+modification methods are implemented in hardware. We refer to such basic
+modification methods as the computer's \key{instructions}.
+
+
+The state of the computer is a finite \key{array} of atomic data elements. We
+call this array the computer's \key{memory}.
+
+\begin{definition}
+
+An array is a collection of data elements. Every element has a unique
+identifier, called an \key{index}, which we can use to \key{access} the
+element. We access an element whenever we need to see, or modify its value.
+Accessing any element in the array roughly the same amount of time, this
+property is called \key{random access}.
+
+\end{definition}
+
+An array is a data structure. For all intents and purposes it does not matter
+\emph{how} the elements are actually ordered. We would simply like to be able
+to \emph{access} the elements in some arbitrary order.
+
+One frequently used basic data structure is a \key{word}: a fixed-size group of
+bits, typically 4 bytes in size. For example:
+
+\begin{equation}
+0000 0000\ 0000 0000\ 0000 0000\ 0000 0000 \label{word-0}
+\end{equation}
+
+A possible basic modification method is to flip all the bits of a word, known
+as binary negation. We'll refer to this operation as $\proc{Neg}$. With
+$\proc{Neg}$ we can go back and forth between \ref{word-0} and \ref{word-1}:
+
+\begin{equation}
+1111 1111\ 1111 1111\ 1111 1111\ 1111 1111 \label{word-1}
+\end{equation}
+
+Such a data structure may not seem particularly useful, but it \emph{can}
+represent a boolean value. An $n$-size array of such values could for example
+be used to automatically monitor a parking lot with $n$ parking spots, where
+each spot is either ``free'' or ``occupied''. Imagine that we have an auxiliary
+sensor system that notifies us whenever a car enters or leaves a particular
+spot. We can then $\proc{Neg}$ a corresponding word whenever either event
+occurs. However, for such a system to operate consistently this instruction is
+not enough.
+
+Initially, the parking lot is completely empty. Regardless of whether we chose
+to use \ref{word-0} or \ref{word-1} to represent an ``empty'' spot, we cannot
+consistently model this reality. Indeed, we have no guarantee that a particular
+word is initially either one value or the other. For such purposes, data
+structures have \key{constructors}.
+
+\begin{definition}
+
+A constructor is a modification method that resets a data structure to some
+particular initial value.
+
+\end{definition}
+
+If we have another instruction, $\proc{Nil}$, which resets all the bits of a
+given word to $0$, and let \ref{word-0} represent an empty spot, we are able to
+consistently model the real world occupation of the parking lot.
+
+% A program is stored in memory, and therefore a particular word in memory can
+% always be initialized to some particular value.
+
+Using a 32-bit word for a boolean is not particularly efficient. It can
+represent $2^{32}$ different values and we're only utilizing two
+representations\footnotemark!  Another use-case for words is to represent
+natural numbers in the range $[0;2^{32})$.  Useful modification methods would
+thus be addition, subtraction, multiplication, etc.
+
+\footnotetext{Sometimes it proves practical to waste a little space in favor of
+much faster execution time, so while we could do with a single bit to represent
+a boolean value, computers often use 1, 2, or even 4 bytes due to the hardware
+design.}
+
+As a matter of fact, the common computer comes with these and a myriad of other
+instructions, which hence make up the computer's \key{instruction set}. The
+``word'' in this context becomes a rather ubiquitous data structure. Most of
+the time we won't be needing this ubiquity, and may indeed choose only a small
+subset of the instruction set to apply to any particular word in memory.
+Indeed, we may desire for a particular word to represent a boolean or a natural
+number, but not both at the same time!
+
+While computers could probably support a few more basic data types, and many
+do, it has proven more practical to facilitate this sort of ``safety'' at a
+different level of abstraction. Enter \key{data types}.
+
+\begin{definition}
+
+A data structure defines a data type. A value of a given data type may only be
+modified using a method defined for the corresponding data
+structure.\label{definition:data-type}
+
+\end{definition}
+
+Imperative programming languages facilitate the definition of data types, and
+much like computers have basic data structures, they have basic data types. The
+actual set of basic data types available to the programmer depends on the
+intentions of the programming language, as well as the architecture of the
+computer in question. For example, we may be able to modify a single byte of a
+word, or modify multiple contiguous words with a single instruction.
+\referToTable{basic-data-types} presents a sample list of basic data types in
+an imperative programming language.
+
+\makeTable
+{basic-data-types}
+{A sample list of basic data types in an imperative programming language.}
+{lcl}
+{{\bf Name} & {\bf Bytes} & {\bf Represents}}
+{
+  \code{byte} & $1$ & A raw byte.\\
+  \code{boolean} & $1$ & A boolean.\\
+  \code{char} & $2$ & A character.\\
+  \code{int} & $4$ & An integer in the range $[-2^{31};2^{31})$.\\
+  \code{unsigned int} & $4$ & An integer in the range $[0;2^{32})$.\\
+  \code{long} & $8$ & An integer in the range $[-2^{63};2^{63})$.\\
+  \code{unsigned long} & $8$ & An integer in the range $[0;2^{64})$.
+}
+
+This is not a complete list, and for some particular language, on some
+particular architecture the list may look somewhat different, both in terms of
+which data types there are, and their sizes.
+
+\begin{definition}
+
+We refer to the set of numbers $\ldots,-2,-1,0,1,2,\ldots$ as \key{integers}.
+
+\end{definition}
+
+\begin{definition}
+
+We refer to a data type that can represent a subset of the integers as an
+\key{integer data type}.
+
+\end{definition}
+
+There are a few peculiarities about \referToTable{basic-data-types}.
+
+Firstly, some data types have an ``unsigned'' counterpart. The difference
+between these and their ``signed'' brotheren is easy to see if we consider
+their respective value ranges. Integer data types, such as are usually signed
+to begin with. In cases where negative values don't make much sense, they can
+be explicitly made unsigned.
+
+Second, there are the ranges. An \code{unsigned int} has the range
+$[0;2^{32})$, which is to say it can represent the integers
+$0,1,\ldots,2^{32}-2,2^{32}-1$. This is pretty intuitive since a sequence of
+$4$ bytes can represent $2^{32}$ different values, and we're looking to
+represent positive integral values. What's perhaps less intuitive is the range
+of an \code{int}, $[-2^{31};2^{31})$. This has to do with the data type being
+``signed''. Indeed, a single bit is reserved for repesenting the sign, while
+the remaing $31$ are left to represent some absolute value.
+
+This business of signed integers introduces another peculiarity. Consider some
+\code{int} value $x=-2^{31}$. What is $-1\cdot x$? For regular integers we know
+that the answer is $2^{31}$, but we can't represent this number with an
+\code{int}\ldots\ Signed integer data types are often \key{asymmetric} like
+this, and it can be a great source of confusion. The answer is that the
+\code{int} value $-2^{31}$ is its own negation. This has to do with
+\key{integer overflow}.
+
+\begin{definition}
+
+Integer overflow occurs whenever the result of an operation is outside the
+range of values representable by  data type.
+
+\end{definition}
+
+Integer overflow is one of those cracks that let the origins of digital
+computers shine through. Computers were first and foremost tools for numerical
+analysis, i.e.  the study of algorithms for numerical approximation, not
+general symbolic manipulation. Disregard of these origins can lead to subtle
+mathematical absurdities that can very quickly lead to a thunderstorm on the
+other side of the globe.
+
+\begin{definition}
+
+Let $[Min;Max]$ denote the range of values representable by a particular
+integer data type. Let $|Min|>|Max|$, and $b\in\set{1,2,\ldots,Max}$, if the
+data type has integer overflow, then:
+
+\begin{align}
+a+b=\left\{
+\begin{array}{ll}
+Min+b-1&\text{\key{if}}\ a=Max\\
+a+b&\text{\key{otherwise}}
+\end{array}\right.\\
+a-b=\left\{
+\begin{array}{ll}
+Max-b+1&\text{\key{if}}\ a=Min\\
+a-b&\text{\key{otherwise}}
+\end{array}\right.\\
+\end{align}
+
+\end{definition}
+
+We can without loss of generality let all other operations on integers be a
+sequence of additions or subtractions, which gives you an idea of what happens
+when multiplication or division causes overflow. Also, this definition duely
+relates to both signed and unsigned integer data types.
+
+We said that imperative programming languages facilitate the definition of data
+types. Data types such as those defined in \referToTable{basic-data-types}
+serve as the basis for such definitions.
+
+As an example of a composite data type, consider a 2-dimensional coordinate
+vector. Such a vector can represent a vector in Euclidean space and as such
+have applications in say, computer graphics.
+
+
+
+Every point in this plane has two coordinate points, let
+them be called $x$ and $y$, respetively. We may use such points to define
+polygons in the plane, and later manipulate these polygons in the context of
+say, a computer game. These movements, rotations, skewings, etc. of polygons in
+the plane have to make sure to modify both the $x$ and $y$ coordinates of their
+constituent points in order for the manipulation to be correct. Since it will
+be humans programming this functionality, it makes sense to keep the $x$ and
+$y$ corrdinates away from raw manipulation and define manipulation methods that
+duely modify both the $x$ and $y$ coordinate of a given point.
+
+\begin{definition}
+
+We define a data type by specifying its name, its constituent data elements and
+methods of manipulation.
+
+\end{definition}
+
+We can initially define a point in two-dimensional space in the following way:
+
+\begin{verbatim}
+data Point
+{
+  x int
+  y int
+}
+\end{verbatim}
+
+Here we use brackets to denote structural composition, i.e. that a \code{Point}
+consists of two data elements, both of data type \code{int}, namely $x$ and
+$y$. The use of the data type \code{int} should also tell us that we're not
+modelling a point in the plane, but rather a point in the polygon defined by
+the points $\p{-2^{31},-2^{31}}$, $\p{-2^{31},2^{31}-1}$,
+$\p{2^{31}-1,2^{31}-1}$, and $\p{2^{31}-1,-2^{31}}$, and regular integer
+overflow carries over.
+
+The name ``\code{Point}'' is important to a data type definition. Indeed,
+although very similar, this data type is completely different from a
+two-dimensional \code{Vector}:
+
+\begin{verbatim}
+data Vector
+{
+  x int
+  y int
+}
+\end{verbatim}
+
+Some programming languages allow what's called \key{data type coersion}, which
+means that if two data types have the same constituent data elements and the
+same methods of manipulation, they are the same. Of course, it is seemingly
+absurd to use a point in place of a vector and vice versa.
+
+
+The accute reader may now be wondering how does this data type map over into a
+data structure on the computer? Afterall, we haven't discussed how the computer
+facilitates the definition and use of abstract data structures like this.
+
+
+A programming language facilitates a programming paradigm if it is both easy,
+and reasonably safe to use the paradigm. \referToDefinition{data-type} states
+that a data type may only be modified using a method defined for that data
+type. How does a programming language ensure that this holds for our program?
+This is the job of the \key{type system} come into play.
+
+In order to run a program
+
+
+% Because maintaining a data structure generally requires a sequence of actions..
+% blah.
+
+% A programming language facilitates a programming paradigm if it is both easy,
+% and reasonably safe to use the paradigm. Having the ability to define data
+% structures, and actions that modify them, is one thing.  Another is having
+% assurance that the wrong action is never used to modify the wrong data
+% structure. This is where \key{type systems} come in handy.
+
+% We say that a set of data structures defining the same ordering on the same
+% \key{types} of data elements, and having the same methods of modification,
+% belong to the same \key{class} of data structures. A class of data structures
+% is a type of data element, or simply, type. This notion is intentionally
+% recursive.
+
+% We hence say that actions are defined on particular types, and a type system
+% can hence ensure that the wrong action is not used to modify the wrong data
+% structure before the program is ever run. You should by now have plenty of
+% experience with the notorious SML type system.
+
+% It is clear that designing a new piece of hardware for every type of action is
+% impractical. The desired net effect can often be achieved through a series of
+% basic actions. For instance, the sum of $n$ different numbers can be computed
+% using $n-1$ binary additions. Hence, we can make due with a \key{sequencing
+% mechanism} and good old binary addition, rather than design a new piece of
+% hardware for every conceivable $n$.
+
+% A computer, therefore, has a finite set of basic actions, called its
+% \key{instruction set}. A computer program is specified in terms of a sequence
+% of these basic actions, called a \key{program text}. The computer executes the
+% program by performing the sequence of actions in order.
+
+% The sequence of basic actions is not a sequencing mechanism in and of itself.
+% Indeed, we are unable to specify a computer program for summing a sequence of
+% an arbitrary size $n$, since no sequence of binary additions will ever be
+% enough for every conceivable $n$.  What's more, why duplicate the actions?
+% Afterall, as we sequentially sum a sequence of numbers we're doing the same
+% action, a binary addition, just on different data.
+
+% To mitigate this lack of flexibility, the von Neuman architecture introduces
+% the \key{jump} action. Since the program is specified as a finite sequence
+% of basic actions, we can easily assign a unique integer index to every action in the sequence.
+% As the computer is performing an action at a particular index at any point in time
+
+% The
+% idea is then to let the computer have an action that allows to specify an arbitrary action as
+% the next action to perform, rather then the one then immediately next
+% instruction.
+
+% At this point it makes sense to reconsider the concept of time. The convention is to let all basic
+% actions be upper bounded by some constant value. This allows us to analyze the
+% running time of computer programs in terms of how much sequencing is going on.
+
+
+% At any point in time, the computer is performing some particular action, 
+
+% and provide a
+% mechanism for performing a sequence of actions in order. This however, still does not allow us to write a 
+
+% Depending on our level of interest, we may consider an action as either an
+% atomic happening, or as a sequence of subactions necessary to achieve the
+% overall net effect. The subactions themselves may be considered in terms of
+% their subsubactions, and so on. Indeed, one possible program design method is
+% to start with a high-level overview and to gradually dig into the details.
+% Naturally, such a hierarchical ordering of a program also facilitates the human
+% comprehension of the program. This calls to attention a quote by Donald
+% Knuth\cite{knuth-review-of-sp}:
+
+% \begin{quote}"You have perhaps had a dream much like mine: Wouldn't it be nice
+% to have a glorious system of complete maps of the world, whereby one could (by
+% turning dials) increase or decrease the scale at will? A similar thing can be
+% achieved for programs, rather easily, when we give the programs a hierarchic
+% structure like those constructed step-wise. It is not hard to imagine a
+% computing system which displays a program in such a way that, by pressing
+% an-appropriate button, one can replace the name of a routine by its expansion
+% on the next level, or conversely."\end{quote}
+
+% Here the word ``routine'' stands for an action, and ``its expansion on the next
+% level'' is the sequence of sub-actions necessary to achive the intended
+% net effect. The choice of the word ``routine'' is not an unlucky one. Afterall,
+% we all have some sort of routine for doing the laundry, and doing the laundry
+% is a rather routine task! Let us now consider the immediate expansion of doing
+% the laundry, assuming that we have a common washing machine at our disposal:
+
+The dirty pile of laundry is not a particularly interesting data structure in
+and of itself, but it will prove interesting to consider how we morph the data
+structure into other well-kept data structures as we do the laundry.
+
+Depending on our level of interest, we may consider an action as an atomic
+happening or as a sequence of subactions necessary to achieve the overall net
+effect. Each subaction can in turn be considered in terms of its subsubactions,
+and so on. Let us consider the possible subactions of doing the laundry,
+assuming that we have a common washing machine at our disposal:
+
+A common mistake is to oversee a colored piece in a pile of whites, and wash
+the pile with high temperature.  Most likely, this will lead to all whites in
+that pile bleeding from white to a light shade of the mixed-in color. That
+would definitely cause a hurricane on the other side of the globe!  As such,
+this is a \key{pre-} and \key{postcondition} pair we forgot to mention. Not
+only should the pile be clean, but every piece of laundry should also keep its
+original color.
+
+\begin{definition}
+
+Assuming that preconditions hold before the action commences, the
+postconditions should hold after the action terminates\footnotemark.
+
+\footnotetext{We say ``should'', becuase there is currently no automatic way of
+assuring this for an arbitrary action in by far the most practical programming
+languages. Hence, it is up to the programmer to manually prove that the
+postconditions will hold.}
+
+\end{definition}
+
+We now state the more accurate pre- and postconditions of doing the laundry:
+
+\begin{codebox}
+\zi
+$\begin{array}{ll}
+&\text{Given a dirty pile, the pile is cleaned.}\\
+\wedge&\text{Every piece of laundry keeps its original color.}
+\end{array}$
+\end{codebox}
+
+Here, the symbol $\wedge$ means ``and'', i.e. both statements should hold.
+
+When \key{declaring} an action, we also specify its name, as well input and
+output parameters. So a complete declaration of doing the laundry looks like
+this:
+
+\begin{codebox}
+\Procname{$\proc{Do-The-Laundry}::(Laundry)\rightarrow Laundry$}
+\zi
+$\begin{array}{ll}
+&\text{Given a dirty pile, a clean pile is returned.}\\
+\wedge&\text{Every piece of laundry keeps its original color.}
+\end{array}$
+\end{codebox}
+
+
+
+as well as the pre- and postconditions. When \key{defining}
+an action, we specify its actual sequence of subactions. We make this
+distinction because an action declaration may well have several definitions.
+
+Of course, at some point, some real work has to get done.
+
+A von-Neuman computer has a basic set of actions that it can perform.
+
+
+The initial pile of dirty laundry is not a particularly interesting data
+structure, but it will prove beneficial to morph this data structure into other
+types as we \emph{progress} through the action. Indeed, 
+
+Of course, at some point we must reach basic, non-divisible 
+
+
+ i.e.  doing
+the laundry, or as a sequence of subactions. This sequence represents the steps
+necessary to achieve the overall intended net effect.
+
+
+(Naur,
+function vs. process).
+
+\begin{codebox}
+\Procname{$\proc{Do-The-Laundry}\p{dirtyPile}$}
+\li \Return $cleanPile$
+\end{codebox}
+
+We can dissect this definition into
+\key{pre-conditions} and \key{post-conditions}, and state their relationship in
+terms of an \key{implication}, denoted by the symbol $\Rightarrow$:
+
+\begin{equation}
+\text{Dirty pile}\Rightarrow \text{Clean pile}.
+\end{equation}
+
+
+
+More formally, if at time $T_n$ we
+have a pile of dirty laundry, and perform an action in the subsequent time slot
+$T_1$, then at time $T_{n+1}$ we have a pile of clean laundry.
+
+
+To define the
+net effect of an action, we state the conditions that must hold at time
+$T_{n+1}$, given that certain conditions hold at time $T_n$. We call these
+conditions the \key{post-} and \key{pre-conditions}, respectively. Given an
+action $a$, we say that if the preconditions hold, then after the action, the
+post-conditions must hold, denoted
+
+\begin{equation}
+\text{Precondition} \Rightarrow^a \text{Postcondition}.
+\end{equation}
+
+
+The effect
+of the action is that a precondition \emph{implies} a post condition, we denote
+this with the symbol $\Rightarrow$.
+
+It does not make sense to do the laundry without a pile of dirty laundry, and a
+good ``doing the laundry'' action leaves all the laundry clean after the action
+took place. We therefore state the following:
+
+ Before the action
+commences, you have a pile of dirty laundry; after the action, the laundry is
+clean. We call these the \key{pre-} and \key{postconditions} of an action,
+respectively. In particular, it does not make sense to do the laundry unless
+you have a pile of dirty laundry, and the post-condition that the laundry is
+clean is probably useful for future actions.
+
+The post-conditions are not complete. There are certain things that we would
+like to do to facilitate further actions. For instance, it is useful if in the
+process of doing the laundry we didn't mix clean and dirty laundry, and at best
+-- neatly stacked the clean laundry in the closet.
+
+
+The post-conditions are not
+completely well-formed however. In particular, 
+
+where whites are mixed with
+colors. Anyone who's ever done their laundry knows that it's no good to mix 
+
+After the action, the clothes should be neatly stacked in the closet. 
+
+% doing the laundry 

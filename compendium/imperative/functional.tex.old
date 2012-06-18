@@ -19,19 +19,17 @@ its \key{domain}, and a set of possible outputs, its \key{codomain}. For a
 function to be well-defined, every value in its domain of must have a
 \emph{unique} \key{representation}, as must every value in its codomain.  A
 function can then \key{consume} a representation of a value in its domain, and
-\key{produce} a representation of a corresponding value in its codomain. We say
-that a function takes a value as \key{input}, and return a value as
-\key{output}.
+\key{produce} a representation of a corresponding value in its codomain.
 
 % Domain and codomain representations do not have to unique wrt. to one
 % another.
 
 Due to this pattern of consumption and production, we say that all data is
-immutable; i.e., there is no notion of one representation being mutated
-(modified) into another. Mutation; however, is useful in practise. It is not
-unlikely that the output of a function has a representation very close to the
-representation of its input. In such cases, mutation can save us a great deal
-of trouble when preparing a value to output.
+immutable, i.e. there's no notion of one representation being mutated into
+another. Mutation however, is useful in practise. It is not unlikely that the
+output of a function has a representation very close to the representation of
+its input. In such cases, mutation can save us a great deal of trouble when
+preparing a value to output.
 
 Functional programming languages usually hide this aspect from the programmer,
 letting the language itself worry about such ``premature'' matters. We say that
