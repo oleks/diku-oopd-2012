@@ -73,29 +73,32 @@ planning chores around the house, this definition may be sufficient. In others,
 such as actually doing the laundry, it is insufficient.
 
 As a matter of fact, even in the context of planning chores around the house,
-the current definition is insufficient. We have important programs to write, so
-chores around the house cannot take up an indefinite amount of time. We have a
-budget to keep, so doing the laundry cannot cost an indefinite amount of money.
-These, and other important attributes of the action cannot be defined without
-defining how we do the laundry first, indeed because there are different ways
-to do the laundry, each with different costs implied.
+the current definition is insufficient. We have important programs to write ---
+chores around the house should not take up an indefinite amount of time. We
+have a budget to keep --- doing the laundry should not cost an indefinite
+amount of money. These, and other important attributes of the action cannot be
+defined without defining how we do the laundry first, indeed because there are
+different ways to do the laundry, each with different costs implied.
 
 A processor is a discrete physical entity. As such, it only has a finite set of
-actions that it can perform. While possible, it would be impractical to extend
-the physical processor whenever we needed to do a new kind of action. Instead,
-we seek to build \key{general-purpose} processors, and sequence basic actions
-to achieve more complex overall net effects. Given a complex action, we
+actions that it can perform. While possible, it is clearly impractical to
+extend the physical processor whenever we needed to do a new kind of action.
+This realization is what leads to another, and probably most important marvel
+of the von Neumann architecture, a \key{stored-program computer}.
+
+Instead, we seek to build \key{general-purpose} processors, and sequence basic
+actions to achieve more complex overall net effects. Given a complex action, we
 gradually decompose it into sequences of subactions that overall achieve the
 desired net effect. Let us attempt to do this for the \function{Do-The-Laundry}
 action:
 
 \begin{codebox}
-\Procname{\function{Do-The-Laundry}(A pile of dirty laundry):}
-\li split the pile into colors and whites;
-\li wash colors;
-\li wash whites;
-\li make a neat stack of the clean laundry;
-\li \Return the neat stack.
+\Procname{\function{Do-The-Laundry}(a pile of dirty laundry)}
+\li split the pile into colors and whites\label{code:do-the-laundry:1}
+\li wash colors
+\li wash whites
+\li make a neat stack of the clean laundry
+\li \Return the neat stack
 \end{codebox}
 
 This is an example of a \key{routine}, \key{procedure}, \key{method},
@@ -109,6 +112,28 @@ By any other name would smell as sweet;''\\
 
 \end{flushright}
 
-Indeed, a named sequence of actions, that establishes a some net effect has
-many names. We'll adopt the term ``routine'', since all of us have a routine
-for doing the laundry and doing the laundry is a rather routine task!
+Indeed, a named sequence of actions, that establishes some overall net effect
+has many names. We'll adopt the term ``routine'', since all of us have a
+routine for doing the laundry and doing the laundry is a rather routine task!
+
+The subactions specified above aren't particularly ``basic''. Indeed, we've
+specified the complex \function{Do-The-Laundry} in terms of a series of other
+complex actions. These subactions are not well-defined, in the sense that we've
+simply used natural language to describe them. Let us consider the sequence of
+subactions that would constitute the action on line
+\ref{code:do-the-laundry:1}:
+
+\begin{codebox}
+\Procname{\function{Split-Whites-And-Colors}(a pile of laundry)}
+\li let $whites$ be an empty pile
+\li let $colors$ be an empty pile
+\li \For each piece of laundry \Do
+\li \If peace is white \Then
+\li put piece in $whites$
+\li \Else
+\li put piece in $colors$
+\End
+\End
+\li \Return $whites$ and $colors$
+\end{codebox}
+
