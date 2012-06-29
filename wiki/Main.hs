@@ -33,3 +33,11 @@ parseFileToHtml filePath =
         return $ Right ()
       }
       Left error -> return $ Left error
+
+compileFile :: FilePath -> IO String
+compileFile filePath = do
+  result <- parseFile filePath
+  case result of
+    Right latex -> return $ compile latex
+    Left errorMessage -> error $ show $ errorPos errorMessage
+

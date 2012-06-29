@@ -18,10 +18,13 @@ parseString = do
 parseParagraph :: Parser Paragraph
 parseParagraph = do
   optional (char '\n')
-  texemes <- many1 $
-    (try parseCommand) <|>
-    parseRaw
+  texemes <- many1 parseTeXeme
   return $ TeXemes texemes
+
+parseTeXeme :: Parser TeXeme
+parseTeXeme =
+  (try parseCommand) <|>
+  parseRaw
 
 parseCommand :: Parser TeXeme
 parseCommand = do
@@ -61,4 +64,4 @@ parseRaw = do
     (satisfy Char.isAlphaNum) <|>
     (satisfy (\ char -> elem char [' ','.'])) <|>
     try (do { newline; notFollowedBy newline; return ' '})
-  return $ TeXRaw $ (strip $ pack raw)
+  return $ TeXRaw $ strip $ pack raw
