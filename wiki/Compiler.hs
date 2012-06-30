@@ -1,6 +1,5 @@
 module Compiler(compile) where
 
---import Data.Foldable
 import qualified Data.List as List
 import qualified Data.Text as Text
 import Grammar
@@ -14,7 +13,9 @@ data Context
     environmentStack :: [String],
     paragraphLength :: Int,
     output :: String,
-    contextParagraph :: String
+    contextParagraph :: String,
+    contextItem :: Bool,
+    groupStack :: [String]
   }
 
 initialContext :: Context
@@ -23,7 +24,9 @@ initialContext
     environmentStack = [],
     paragraphLength = 0,
     output = "",
-    contextParagraph = ""
+    contextParagraph = "",
+    contextItem = False,
+    groupStack = []
   }
 
 data TeX t = TeX {
@@ -57,35 +60,16 @@ getFromContext f = do
   context <- getContext
   return $ f context
 
-{--
-getContextStack :: TeX Stack
-getContextStack = getFromContext contextStack
-
-setContextStack :: Stack -> TeX ()
-setContextStack stack =
-  TeX { runTeX = \context -> ((), context { contextStack = stack }) }
-
-pushState :: State -> TeX ()
-pushState state = do
-  stack <- getContextStack
-  setContextStack (state : stack)
-
-popState :: TeX State
-popState = do
-  stack <- getContextStack
-  case stack of
-    (state : tail) -> do
-      setContextStack tail
-      retrun state
-    _ -> fail "stack underflow"
---}
-
 compile :: LaTeX -> String
 compile latex =
   let
     (_, context) = (runTeX (compileLaTeX latex)) initialContext
   in
-    output context
+    "<!DOCTYPE html><html>" ++
+    "<head><link rel='stylesheet' href='style.css'>" ++
+    "<body><article>" ++
+    output context ++
+    "</article></body></html>"
 
 compileLaTeX :: LaTeX -> TeX ()
 compileLaTeX (Paragraphs paragraphs) = do
@@ -121,6 +105,37 @@ addToParagraph text = do
 inParagraph :: Context -> Bool
 inParagraph context = paragraphLength context > 0
 
+openItem :: TeX ()
+openItem = do
+  closeParagraph
+  context <- getContext
+  if contextItem context
+  then fail "Item is already open."
+  else setContext context {
+    output = (output context) ++ "<li>",
+    contextItem = True
+  }
+
+closeItem :: TeX ()
+closeItem = do
+  closeParagraph
+  context <- getContext
+  if contextItem context
+  then do
+    setContext context {
+      output = (output context) ++ "</li>",
+      contextItem = False
+    }
+  else return ()
+
+addToGroupStack :: String -> TeX ()
+addToGroupStack name = do
+  context <- getContext
+  setContext context {
+    groupStack = name : (groupStack context)
+  }
+  addToParagraph $ Text.pack ("<" ++ name ++ ">")
+
 compileParagraph :: Paragraph -> TeX ()
 compileParagraph (TeXemes texemes) = do
 
@@ -149,10 +164,9 @@ compileTeXeme (TeXBegin name) = do
   }
 
 compileTeXeme (TeXEnd name) = do
-  closeParagraph
+  closeItem
   context <- getContext
-  stack <- getFromContext environmentStack
-  case stack of
+  case (environmentStack context) of
     (frame : tail) ->
       if frame == name
       then do
@@ -162,3 +176,40 @@ compileTeXeme (TeXEnd name) = do
         }
       else fail "stack underflow 0"
     _ -> fail "stack underflow 1"
+
+compileTeXeme (TeXCommand "item" _) = do
+  closeItem
+  openItem
+
+compileTeXeme (TeXCommand "bf" _) = do
+  addToGroupStack "b"
+
+compileTeXeme (TeXCommand "it" _) = do
+  addToGroupStack "i"
+
+compileTeXeme (TeXGroup paragraphs) = do
+  length <- getParagraphLength
+  if length > 0
+  then addToParagraph $ Text.pack " "
+  else return ()
+
+  mapM (\(TeXemes texemes) -> mapM compileTeXeme texemes) paragraphs
+
+  context <- getContext
+
+  if paragraphLength context > 0
+  then do
+    mapM closeGroupAux (groupStack context)
+    addToParagraph $ Text.pack " "
+  else return ()
+
+getParagraphLength :: TeX Int
+getParagraphLength = do
+  context <- getContext
+  return $ paragraphLength context
+
+closeGroupAux :: String -> TeX ()
+closeGroupAux name = do
+  addToParagraph $ Text.pack ("</" ++ name ++ ">")
+
+

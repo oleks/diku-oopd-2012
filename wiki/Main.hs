@@ -20,8 +20,8 @@ parseFile filePath = do
   input <- readFile filePath
   return $ runParser parseString () filePath (pack input)
 
-parseFileToHtml :: FilePath -> IO (Either ParseError ())
-parseFileToHtml filePath =
+compileFileToHtml :: FilePath -> IO (Either ParseError ())
+compileFileToHtml filePath =
   let
     outPath = FilePath.addExtension (FilePath.dropExtension filePath) ".html"
   in do
@@ -29,7 +29,7 @@ parseFileToHtml filePath =
     case result of
       Right latex -> do
       {
-        writeFile outPath (show latex);
+        writeFile outPath (compile latex);
         return $ Right ()
       }
       Left error -> return $ Left error

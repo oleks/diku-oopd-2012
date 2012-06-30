@@ -1,0 +1,26 @@
+Consider doing the laundry. If we have a common, house-hold washing machine at
+our disposal; the {\it procedure} may look something like this:
+
+\begin{enumerate}
+
+\item Split into colors and whites.
+
+\item Wash whites.
+
+\item Wash colors.
+
+\item Dry the laundry.
+
+\item Neatly pile up the laundry.
+
+\end{enumerate}
+
+In a functional programming language, e.g. SML, this may end up looking like
+this:
+
+pile(map dry (map wash (split laundry)))
+
+While comprehensible, the program does not really read well. In English, we
+read left-to-right, top-to-bottom; here we read right-to-left and there is no
+concept of top-to-bottom at all.
+

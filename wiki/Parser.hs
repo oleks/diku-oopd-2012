@@ -24,6 +24,7 @@ parseParagraph = do
 parseTeXeme :: Parser TeXeme
 parseTeXeme =
   (try parseCommand) <|>
+  do { texemes <- parseGroup; return (TeXGroup texemes) } <|>
   parseRaw
 
 parseCommand :: Parser TeXeme
@@ -45,7 +46,7 @@ parseEnd = parseSpecialCommand "end" TeXEnd
 
 parseSpecialCommand :: String -> (String -> TeXeme) -> Parser TeXeme
 parseSpecialCommand command constructor = do
-  string command
+  try $ string command
   char '{'
   name <- many1 alphaNum
   char '}'
@@ -62,6 +63,7 @@ parseRaw :: Parser TeXeme
 parseRaw = do
   raw <- many1 $
     (satisfy Char.isAlphaNum) <|>
-    (satisfy (\ char -> elem char [' ','.'])) <|>
+    (satisfy (\ char ->
+      elem char [' ','.',',','-',':',';','\'','(',')'])) <|>
     try (do { newline; notFollowedBy newline; return ' '})
   return $ TeXRaw $ strip $ pack raw
