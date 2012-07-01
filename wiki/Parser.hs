@@ -46,15 +46,14 @@ parseBegin = do
   if name == "code"
   then do
     optional (char '\n')
-    code <- manyTill parseVerbatimLine (try $ string "\\end{code}")
-    return $ TeXVerbatim code
+    code <- manyTill anyChar (try parseEndCode)
+    return $ TeXVerbatim $ pack code
   else return $ TeXBegin name
 
-parseVerbatimLine :: Parser VerbatimLine
-parseVerbatimLine = do
-  offset <- many (char ' ')
-  line <- manyTill anyChar (char '\n')
-  return $ VerbatimLine (List.length offset) line
+parseEndCode :: Parser String
+parseEndCode = do
+  optional (char '\n')
+  string "\\end{code}"
 
 parseEnd :: Parser TeXeme
 parseEnd = do
@@ -78,3 +77,4 @@ parseRaw = do
       elem char [' ','.',',','-',':',';','\'','(',')'])) <|>
     try (do { newline; notFollowedBy newline; return ' '})
   return $ TeXRaw $ strip $ pack raw
+

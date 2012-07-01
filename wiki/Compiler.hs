@@ -25,7 +25,6 @@ environmentMap :: Map.Map String (String, String)
 environmentMap = Map.fromList [
   ("enumerate", ("<ol>", "</ol>")),
   ("itemize", ("<ul>", "</ol>")),
-  ("code", ("<pre><code>", "</code></pre>")),
   ("definition", ("<dfn>", "</dfn>"))]
 
 initialContext :: Context
@@ -165,11 +164,12 @@ compileTeXeme (TeXRaw text) =
     0 -> return ()
     _ -> addToParagraph text
 
-compileTeXeme (TeXVerbatim lines) = do
+compileTeXeme (TeXVerbatim text) = do
   closeParagraph
   context <- getContext
   setContext context {
-    output = (output context) ++ ("<code>" ++ (compileLines lines "") ++ "</code>")
+    output = (output context) ++
+      ("<pre><code>" ++ (Text.unpack text) ++ "</code></pre>")
   }
 
 compileTeXeme (TeXBegin name) = do
@@ -219,18 +219,6 @@ compileTeXeme (TeXGroup paragraphs) = do
     mapM closeGroupAux (groupStack context)
     addToParagraph $ Text.pack " "
   else return ()
-
-compileLines :: [VerbatimLine] -> String-> String
-compileLines (line : lines @ (_:_)) string =
-  compileLines lines (string ++ (compileLine line) ++ "<br/>")
-compileLines (line : _) string =
-  string ++ (compileLine line)
-compileLines _ string = string
-
-compileLine :: VerbatimLine -> String
-compileLine (VerbatimLine offset string) =
-  (List.concat (replicate offset "&nbsp;")) ++ string
-
 
 getParagraphLength :: TeX Int
 getParagraphLength = do
