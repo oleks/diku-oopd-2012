@@ -3,11 +3,11 @@ our disposal; the {\it procedure} may look something like this:
 
 \begin{enumerate}
 
-\item Split into colors and whites.
+\item Split the laundry into whites and colours.
 
 \item Wash whites.
 
-\item Wash colors.
+\item Wash colours.
 
 \item Dry the laundry.
 
@@ -15,12 +15,39 @@ our disposal; the {\it procedure} may look something like this:
 
 \end{enumerate}
 
-In a functional programming language, e.g. SML, this may end up looking like
-this:
+In a conventional functional programming language, e.g. SML, this may end up
+looking something like this:
 
-pile(map dry (map wash (split laundry)))
+\begin{code}
+(pile (dry (wash (split laundry))))
+\end{code}
 
-While comprehensible, the program does not really read well. In English, we
-read left-to-right, top-to-bottom; here we read right-to-left and there is no
-concept of top-to-bottom at all.
+While comprehensible, this does not read very well. Most Indo-European
+languages read left-to-right, top-to-bottom; here, the flow of the program is
+expressed right-to-left, and there is no notion of top-down descent at all. If
+anything, there could've been a notion of bottom-up ascent, if we layed out the
+program like this:
 
+\begin{code}
+(pile
+  (dry
+    (wash
+      (split laundry))))
+\end{code}
+
+This reads like we're putting the cart before the horse. Some tasks, such as
+doing the laundry, cooking a meal, writing a program, are inherently
+sequential. Functional programming languages may often be syntactically unfit
+for writing such programs well.
+
+We will develop the notion of a {\it well-written program} throughout these
+lecture notes. However, we begin with the following definition:
+
+\begin{definition}
+A well-written program is a well-read program.
+\end{definition}
+
+You might not be convinsed that 
+
+We've arguably cheated a bit when we showed you the procedure first, and the
+functional implementation last. Let's try doing it the other way around:

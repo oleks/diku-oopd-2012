@@ -17,7 +17,7 @@ parseString = do
 
 parseParagraph :: Parser Paragraph
 parseParagraph = do
-  optional (char '\n')
+  many (char '\n')
   texemes <- many1 parseTeXeme
   return $ TeXemes texemes
 
@@ -39,18 +39,29 @@ parseGenericCommand = do
   return $ TeXCommand name group
 
 parseBegin :: Parser TeXeme
-parseBegin = parseSpecialCommand "begin" TeXBegin
-
-parseEnd :: Parser TeXeme
-parseEnd = parseSpecialCommand "end" TeXEnd
-
-parseSpecialCommand :: String -> (String -> TeXeme) -> Parser TeXeme
-parseSpecialCommand command constructor = do
-  try $ string command
-  char '{'
+parseBegin = do
+  try $ string "begin{"
   name <- many1 alphaNum
   char '}'
-  return $ constructor name
+  if name == "code"
+  then do
+    optional (char '\n')
+    code <- manyTill parseVerbatimLine (try $ string "\\end{code}")
+    return $ TeXVerbatim code
+  else return $ TeXBegin name
+
+parseVerbatimLine :: Parser VerbatimLine
+parseVerbatimLine = do
+  offset <- many (char ' ')
+  line <- manyTill anyChar (char '\n')
+  return $ VerbatimLine (List.length offset) line
+
+parseEnd :: Parser TeXeme
+parseEnd = do
+  try $ string "end{"
+  name <- many1 alphaNum
+  char '}'
+  return $ TeXEnd name
 
 parseGroup :: Parser [Paragraph]
 parseGroup = do

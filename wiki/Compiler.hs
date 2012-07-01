@@ -2,7 +2,10 @@ module Compiler(compile) where
 
 import qualified Data.List as List
 import qualified Data.Text as Text
+import qualified Data.Map as Map
 import Grammar
+
+import Text.Show
 
 data State = OrderedList | OrderedItem
 
@@ -17,6 +20,13 @@ data Context
     contextItem :: Bool,
     groupStack :: [String]
   }
+
+environmentMap :: Map.Map String (String, String)
+environmentMap = Map.fromList [
+  ("enumerate", ("<ol>", "</ol>")),
+  ("itemize", ("<ul>", "</ol>")),
+  ("code", ("<pre><code>", "</code></pre>")),
+  ("definition", ("<dfn>", "</dfn>"))]
 
 initialContext :: Context
 initialContext
@@ -155,12 +165,19 @@ compileTeXeme (TeXRaw text) =
     0 -> return ()
     _ -> addToParagraph text
 
+compileTeXeme (TeXVerbatim lines) = do
+  closeParagraph
+  context <- getContext
+  setContext context {
+    output = (output context) ++ ("<code>" ++ (compileLines lines "") ++ "</code>")
+  }
+
 compileTeXeme (TeXBegin name) = do
   closeParagraph
   context <- getContext
   setContext context {
     environmentStack = name : (environmentStack context),
-    output = (output context) ++ "<ol>"
+    output = (output context) ++ fst (environmentMap Map.! name)
   }
 
 compileTeXeme (TeXEnd name) = do
@@ -172,7 +189,7 @@ compileTeXeme (TeXEnd name) = do
       then do
         setContext context {
           environmentStack = tail,
-          output = (output context) ++ "</ol>"
+          output = (output context) ++ snd (environmentMap Map.! name)
         }
       else fail "stack underflow 0"
     _ -> fail "stack underflow 1"
@@ -203,6 +220,18 @@ compileTeXeme (TeXGroup paragraphs) = do
     addToParagraph $ Text.pack " "
   else return ()
 
+compileLines :: [VerbatimLine] -> String-> String
+compileLines (line : lines @ (_:_)) string =
+  compileLines lines (string ++ (compileLine line) ++ "<br/>")
+compileLines (line : _) string =
+  string ++ (compileLine line)
+compileLines _ string = string
+
+compileLine :: VerbatimLine -> String
+compileLine (VerbatimLine offset string) =
+  (List.concat (replicate offset "&nbsp;")) ++ string
+
+
 getParagraphLength :: TeX Int
 getParagraphLength = do
   context <- getContext
@@ -211,5 +240,4 @@ getParagraphLength = do
 closeGroupAux :: String -> TeX ()
 closeGroupAux name = do
   addToParagraph $ Text.pack ("</" ++ name ++ ">")
-
 
