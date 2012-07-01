@@ -97,18 +97,22 @@ closeParagraph = do
   context <- getContext
   if inParagraph context
   then setContext $ context {
-    output = (output context) ++ "<p>" ++ (contextParagraph context) ++ "</p>",
+    output =
+      showString (output context) $
+      showString "<p>" $
+      showString (contextParagraph context) "</p>",
     paragraphLength = 0,
     contextParagraph = ""
   }
   else return ()
 
-addToParagraph :: Text.Text -> TeX ()
-addToParagraph text = do
+addToParagraph :: String -> TeX ()
+addToParagraph string = do
   context <- getContext
   setContext context {
-    paragraphLength = (paragraphLength context) + (Text.length text),
-    contextParagraph = (contextParagraph context) ++ (Text.unpack text)
+    paragraphLength = (paragraphLength context) + (length string),
+    contextParagraph =
+      showString (contextParagraph context) string
   }
 
 inParagraph :: Context -> Bool
@@ -143,7 +147,7 @@ addToGroupStack name = do
   setContext context {
     groupStack = name : (groupStack context)
   }
-  addToParagraph $ Text.pack ("<" ++ name ++ ">")
+  addToParagraph $ showString "<" $ showString name ">"
 
 compileParagraph :: Paragraph -> TeX ()
 compileParagraph (TeXemes texemes) = do
@@ -162,14 +166,16 @@ compileTeXeme :: TeXeme -> TeX ()
 compileTeXeme (TeXRaw text) =
   case (Text.length text) of
     0 -> return ()
-    _ -> addToParagraph text
+    _ -> addToParagraph $ Text.unpack text
 
 compileTeXeme (TeXVerbatim text) = do
   closeParagraph
   context <- getContext
   setContext context {
-    output = (output context) ++
-      ("<pre><code>" ++ (Text.unpack text) ++ "</code></pre>")
+    output =
+      showString (output context) $
+      showString "<pre><code>" $
+      showString (Text.unpack text) "</code></pre>"
   }
 
 compileTeXeme (TeXBegin name) = do
@@ -177,7 +183,9 @@ compileTeXeme (TeXBegin name) = do
   context <- getContext
   setContext context {
     environmentStack = name : (environmentStack context),
-    output = (output context) ++ fst (environmentMap Map.! name)
+    output =
+      showString (output context) $
+      fst (environmentMap Map.! name)
   }
 
 compileTeXeme (TeXEnd name) = do
@@ -189,7 +197,9 @@ compileTeXeme (TeXEnd name) = do
       then do
         setContext context {
           environmentStack = tail,
-          output = (output context) ++ snd (environmentMap Map.! name)
+          output =
+            showString (output context) $
+            snd (environmentMap Map.! name)
         }
       else fail "stack underflow 0"
     _ -> fail "stack underflow 1"
@@ -207,7 +217,7 @@ compileTeXeme (TeXCommand "it" _) = do
 compileTeXeme (TeXGroup paragraphs) = do
   length <- getParagraphLength
   if length > 0
-  then addToParagraph $ Text.pack " "
+  then addToParagraph " "
   else return ()
 
   mapM (\(TeXemes texemes) -> mapM compileTeXeme texemes) paragraphs
@@ -217,7 +227,7 @@ compileTeXeme (TeXGroup paragraphs) = do
   if paragraphLength context > 0
   then do
     mapM closeGroupAux (groupStack context)
-    addToParagraph $ Text.pack " "
+    addToParagraph " "
   else return ()
 
 getParagraphLength :: TeX Int
@@ -227,5 +237,5 @@ getParagraphLength = do
 
 closeGroupAux :: String -> TeX ()
 closeGroupAux name = do
-  addToParagraph $ Text.pack ("</" ++ name ++ ">")
+  addToParagraph $ showString "</" $ showString name ">"
 
