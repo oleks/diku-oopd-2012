@@ -8,7 +8,7 @@ data TeXeme
   | TeXVerbatim Text
   | TeXBegin String
   | TeXEnd String
-  | TeXCommand String [Paragraph]
+  | TeXCommand String
   | TeXGroup [Paragraph]
   deriving(Show)
 

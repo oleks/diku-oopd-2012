@@ -17,6 +17,7 @@ data Context
     paragraphLength :: Int,
     output :: String,
     contextParagraph :: String,
+    contextTeXemes :: [TeXeme],
     contextItem :: Bool,
     groupStack :: [String]
   }
@@ -34,6 +35,7 @@ initialContext
     paragraphLength = 0,
     output = "",
     contextParagraph = "",
+    contextTeXemes = [],
     contextItem = False,
     groupStack = []
   }
@@ -85,12 +87,14 @@ compileLaTeX (Paragraphs paragraphs) = do
   mapM compileParagraph paragraphs
   return ()
 
-openParagraph :: TeX ()
-openParagraph = do
+openParagraph :: [TeXeme] -> TeX ()
+openParagraph texemes = do
   context <- getContext
   if inParagraph context
   then fail "Paragraph is already open."
-  else return ()
+  else setContext context {
+      contextTeXemes = texemes
+    }
 
 closeParagraph :: TeX ()
 closeParagraph = do
@@ -102,7 +106,8 @@ closeParagraph = do
       showString "<p>" $
       showString (contextParagraph context) "</p>",
     paragraphLength = 0,
-    contextParagraph = ""
+    contextParagraph = "",
+    contextTeXemes = []
   }
   else return ()
 
@@ -152,23 +157,23 @@ addToGroupStack name = do
 compileParagraph :: Paragraph -> TeX ()
 compileParagraph (TeXemes texemes) = do
 
-  openParagraph
+  openParagraph texemes
 
-  mapM compileTeXeme texemes
+  compileTeXemes texemes
 
   context <- getContext
   if inParagraph context
   then closeParagraph
   else return ()
 
-compileTeXeme :: TeXeme -> TeX ()
-
-compileTeXeme (TeXRaw text) =
+compileTeXemes :: [TeXeme] -> TeX ()
+compileTeXemes [] = return ()
+compileTeXemes ((TeXRaw text):tail) = do
   case (Text.length text) of
     0 -> return ()
     _ -> addToParagraph $ Text.unpack text
-
-compileTeXeme (TeXVerbatim text) = do
+  compileTeXemes tail
+compileTeXemes ((TeXVerbatim text):tail) = do
   closeParagraph
   context <- getContext
   setContext context {
@@ -177,8 +182,8 @@ compileTeXeme (TeXVerbatim text) = do
       showString "<pre><code>" $
       showString (Text.unpack text) "</code></pre>"
   }
-
-compileTeXeme (TeXBegin name) = do
+  compileTeXemes tail
+compileTeXemes ((TeXBegin name):tail) = do
   closeParagraph
   context <- getContext
   setContext context {
@@ -187,8 +192,8 @@ compileTeXeme (TeXBegin name) = do
       showString (output context) $
       fst (environmentMap Map.! name)
   }
-
-compileTeXeme (TeXEnd name) = do
+  compileTeXemes tail
+compileTeXemes ((TeXEnd name):tail) = do
   closeItem
   context <- getContext
   case (environmentStack context) of
@@ -203,32 +208,84 @@ compileTeXeme (TeXEnd name) = do
         }
       else fail "stack underflow 0"
     _ -> fail "stack underflow 1"
+  compileTeXemes tail
+compileTeXemes (
+  (TeXCommand "item") :
+  tail) = do
+    closeItem
+    openItem
+    compileTeXemes tail
+compileTeXemes (
+  (TeXCommand "bf") :
+  tail) = do
+    addToGroupStack "b"
+    compileTeXemes tail
+compileTeXemes (
+  (TeXCommand "it") :
+  tail) = do
+    addToGroupStack "i"
+    compileTeXemes tail
+compileTeXemes (
+  (TeXCommand "explanation") :
+  (TeXGroup text) :
+  (TeXGroup explanation) :
+  tail) = do
+    addParagraphSpace
+    addToParagraph "<span class='tooltip' title='"
+    compileTeXGroup explanation
+    addToParagraph "'>"
+    compileTeXGroup text
+    addToParagraph "</span>"
+    addParagraphSpace
+    compileTeXemes tail
+compileTeXemes (
+  (TeXGroup paragraphs) :
+  tail) = do
+    addParagraphSpace
+    compileTeXGroup paragraphs
+    addParagraphSpace
+    compileTeXemes tail
 
-compileTeXeme (TeXCommand "item" _) = do
-  closeItem
-  openItem
-
-compileTeXeme (TeXCommand "bf" _) = do
-  addToGroupStack "b"
-
-compileTeXeme (TeXCommand "it" _) = do
-  addToGroupStack "i"
-
-compileTeXeme (TeXGroup paragraphs) = do
+addParagraphSpace :: TeX ()
+addParagraphSpace = do
   length <- getParagraphLength
   if length > 0
   then addToParagraph " "
   else return ()
 
-  mapM (\(TeXemes texemes) -> mapM compileTeXeme texemes) paragraphs
+compileTeXGroup :: [Paragraph] -> TeX ()
+compileTeXGroup paragraphs = do
+  mapM (\(TeXemes texemes) -> compileTeXemesAux texemes) paragraphs
 
   context <- getContext
+  mapM closeGroupAux (groupStack context)
+  context <- getContext
+  setContext context {
+    groupStack = []
+  }
 
-  if paragraphLength context > 0
-  then do
-    mapM closeGroupAux (groupStack context)
-    addToParagraph " "
-  else return ()
+compileTeXemesAux :: [TeXeme] -> TeX ()
+compileTeXemesAux texemes = do
+  context <- getContext
+  oldTeXemes <- return $ contextTeXemes context
+  setContext context {
+    contextTeXemes = texemes
+  }
+
+  compileTeXemes texemes
+
+  context <- getContext
+  setContext context {
+    contextTeXemes = oldTeXemes
+  }
+
+addToOutput :: String -> TeX ()
+addToOutput string = do
+  context <- getContext
+  setContext context {
+    output =
+      showString (output context) string
+  }
 
 getParagraphLength :: TeX Int
 getParagraphLength = do

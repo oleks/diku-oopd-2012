@@ -13,3 +13,9 @@ background:#FFF;
 display:block;
 padding:2px
 }
+
+.tooltip{
+width:33em;
+cursor:help;
+text-decoration:underline
+}

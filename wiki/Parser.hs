@@ -35,8 +35,7 @@ parseCommand = do
 parseGenericCommand :: Parser TeXeme
 parseGenericCommand = do
   name <- many1 alphaNum
-  group <- parseGroup <|> return []
-  return $ TeXCommand name group
+  return $ TeXCommand name
 
 parseBegin :: Parser TeXeme
 parseBegin = do
