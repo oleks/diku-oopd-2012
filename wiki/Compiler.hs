@@ -171,7 +171,9 @@ compileTeXemes [] = return ()
 compileTeXemes ((TeXRaw text):tail) = do
   case (Text.length text) of
     0 -> return ()
-    _ -> addToParagraph $ Text.unpack text
+    _ -> do
+      addParagraphSpace
+      addToParagraph $ Text.unpack text
   compileTeXemes tail
 compileTeXemes ((TeXVerbatim text):tail) = do
   closeParagraph
@@ -226,6 +228,36 @@ compileTeXemes (
     addToGroupStack "i"
     compileTeXemes tail
 compileTeXemes (
+  (TeXCommand "emph") :
+  (TeXGroup paragraphs) :
+  tail) = do
+    addParagraphSpace
+    addToParagraph "<em>"
+    compileTeXGroup paragraphs
+    addToParagraph "</em>"
+    compileTeXemes tail
+compileTeXemes (
+  (TeXCommand "var") :
+  (TeXGroup paragraphs) :
+  tail) = do
+    addParagraphSpace
+    addToParagraph "<var>"
+    compileTeXGroup paragraphs
+    addToParagraph "</var>"
+    compileTeXemes tail
+compileTeXemes (
+  (TeXCommand "wikipedia") :
+  (TeXGroup page) :
+  (TeXGroup text) :
+  tail) = do
+    addParagraphSpace
+    addToParagraph "<a target='_blank' href='http://en.wikipedia.org/wiki/"
+    compileTeXGroup page
+    addToParagraph "'>"
+    compileTeXGroup text
+    addToParagraph "</a>"
+    compileTeXemes tail
+compileTeXemes (
   (TeXCommand "explanation") :
   (TeXGroup text) :
   (TeXGroup explanation) :
@@ -236,14 +268,12 @@ compileTeXemes (
     addToParagraph "'>"
     compileTeXGroup text
     addToParagraph "</span>"
-    addParagraphSpace
     compileTeXemes tail
 compileTeXemes (
   (TeXGroup paragraphs) :
   tail) = do
     addParagraphSpace
     compileTeXGroup paragraphs
-    addParagraphSpace
     compileTeXemes tail
 
 addParagraphSpace :: TeX ()

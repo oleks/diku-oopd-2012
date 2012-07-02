@@ -73,7 +73,19 @@ parseRaw = do
   raw <- many1 $
     (satisfy Char.isAlphaNum) <|>
     (satisfy (\ char ->
-      elem char [' ','.',',','-',':',';','\'','(',')'])) <|>
+      elem char [
+        ' ',
+        '.',
+        '!',
+        '?',
+        ',',
+        '-',
+        ':',
+        ';',
+        '\'',
+        '(',
+        ')'
+      ])) <|>
     try (do { newline; notFollowedBy newline; return ' '})
   return $ TeXRaw $ strip $ pack raw
 
