@@ -3,9 +3,10 @@ module Compiler(compile) where
 import qualified Data.List as List
 import qualified Data.Text as Text
 import qualified Data.Map as Map
-import Grammar
-
+import qualified Data.Foldable as Foldable
 import Text.Show
+
+import Grammar
 
 data State = OrderedList | OrderedItem
 
@@ -15,30 +16,34 @@ data Context
   = Context {
     environmentStack :: [String],
     paragraphLength :: Int,
-    output :: String,
+    output :: [String],
     contextParagraph :: String,
     contextTeXemes :: [TeXeme],
     contextItem :: Bool,
-    groupStack :: [String]
+    groupStack :: [String],
+    headerDepth :: Int,
+    headerStack :: [Int]
   }
-
-environmentMap :: Map.Map String (String, String)
-environmentMap = Map.fromList [
-  ("enumerate", ("<ol>", "</ol>")),
-  ("itemize", ("<ul>", "</ol>")),
-  ("definition", ("<dfn>", "</dfn>"))]
 
 initialContext :: Context
 initialContext
   = Context {
     environmentStack = [],
     paragraphLength = 0,
-    output = "",
+    output = [],
     contextParagraph = "",
     contextTeXemes = [],
     contextItem = False,
-    groupStack = []
+    groupStack = [],
+    headerDepth = 0,
+    headerStack = []
   }
+
+environmentMap :: Map.Map String (String, String)
+environmentMap = Map.fromList [
+  ("enumerate", ("<ol>", "</ol>")),
+  ("itemize", ("<ul>", "</ul>")),
+  ("definition", ("<dfn>", "</dfn>"))]
 
 data TeX t = TeX {
   runTeX :: Context -> (t, Context)
@@ -79,7 +84,7 @@ compile latex =
     "<!DOCTYPE html><html>" ++
     "<head><link rel='stylesheet' href='style.css'>" ++
     "<body><article>" ++
-    output context ++
+    (List.foldl' (\text i -> showString i text) "" (output context)) ++
     "</article></body></html>"
 
 compileLaTeX :: LaTeX -> TeX ()
@@ -100,14 +105,27 @@ closeParagraph :: TeX ()
 closeParagraph = do
   context <- getContext
   if inParagraph context
-  then setContext $ context {
-    output =
-      showString (output context) $
-      showString "<p>" $
-      showString (contextParagraph context) "</p>",
-    paragraphLength = 0,
-    contextParagraph = "",
-    contextTeXemes = []
+  then do
+    addManyToOutput ["<p>", (contextParagraph context), "</p>"]
+    context <- getContext
+    setContext context {
+      paragraphLength = 0,
+      contextParagraph = "",
+      contextTeXemes = []
+    }
+  else return ()
+
+simpleCloseParagraph :: TeX ()
+simpleCloseParagraph = do
+  context <- getContext
+  if inParagraph context
+  then do
+    addToOutput (contextParagraph context)
+    context <- getContext
+    setContext $ context {
+      paragraphLength = 0,
+      contextParagraph = "",
+      contextTeXemes = []
   }
   else return ()
 
@@ -129,10 +147,12 @@ openItem = do
   context <- getContext
   if contextItem context
   then fail "Item is already open."
-  else setContext context {
-    output = (output context) ++ "<li>",
-    contextItem = True
-  }
+  else do
+    addToOutput "<li>"
+    context <- getContext
+    setContext context {
+      contextItem = True
+    }
 
 closeItem :: TeX ()
 closeItem = do
@@ -140,8 +160,9 @@ closeItem = do
   context <- getContext
   if contextItem context
   then do
+    addToOutput "</li>"
+    context <- getContext
     setContext context {
-      output = (output context) ++ "</li>",
       contextItem = False
     }
   else return ()
@@ -177,22 +198,14 @@ compileTeXemes ((TeXRaw text):tail) = do
   compileTeXemes tail
 compileTeXemes ((TeXVerbatim text):tail) = do
   closeParagraph
-  context <- getContext
-  setContext context {
-    output =
-      showString (output context) $
-      showString "<pre><code>" $
-      showString (Text.unpack text) "</code></pre>"
-  }
+  addManyToOutput ["<pre><code>", (Text.unpack text), "</code></pre>"]
   compileTeXemes tail
 compileTeXemes ((TeXBegin name):tail) = do
   closeParagraph
+  addToOutput $ fst $ environmentMap Map.! name
   context <- getContext
   setContext context {
-    environmentStack = name : (environmentStack context),
-    output =
-      showString (output context) $
-      fst (environmentMap Map.! name)
+    environmentStack = name : (environmentStack context)
   }
   compileTeXemes tail
 compileTeXemes ((TeXEnd name):tail) = do
@@ -202,15 +215,27 @@ compileTeXemes ((TeXEnd name):tail) = do
     (frame : tail) ->
       if frame == name
       then do
+        addToOutput $ snd (environmentMap Map.! name)
+        context <- getContext
         setContext context {
-          environmentStack = tail,
-          output =
-            showString (output context) $
-            snd (environmentMap Map.! name)
+          environmentStack = tail
         }
       else fail "stack underflow 0"
     _ -> fail "stack underflow 1"
+  context <- getContext
   compileTeXemes tail
+compileTeXemes (
+  (TeXCommand "chapter") :
+  (TeXGroup title) :
+  tail) = do
+    closeParagraph
+    advanceHeader 1
+    numeral <- getHeaderNumeral
+    addManyToOutput ["<h1>", numeral]
+    compileTeXGroup title
+    simpleCloseParagraph
+    addToOutput "</h1>"
+    compileTeXemes tail
 compileTeXemes (
   (TeXCommand "item") :
   tail) = do
@@ -313,8 +338,14 @@ addToOutput :: String -> TeX ()
 addToOutput string = do
   context <- getContext
   setContext context {
-    output =
-      showString (output context) string
+    output = string : (output context)
+  }
+
+addManyToOutput :: [String] -> TeX ()
+addManyToOutput strings = do
+  context <- getContext
+  setContext context {
+    output = List.foldl' (\acc i -> i : acc) (output context) strings
   }
 
 getParagraphLength :: TeX Int
@@ -326,3 +357,32 @@ closeGroupAux :: String -> TeX ()
 closeGroupAux name = do
   addToParagraph $ showString "</" $ showString name ">"
 
+advanceHeader :: Int -> TeX ()
+advanceHeader depth = do
+  context <- getContext
+  if headerDepth context < 1
+  then setContext context {
+    headerDepth = (headerDepth context) + 1,
+    headerStack = 0 : (headerStack context)
+  }
+  else
+    case (headerStack context) of
+      [] -> fail "header stack underflow"
+      (currentNumber:tail) -> setContext context {
+        headerStack = (currentNumber + 1) : tail
+      }
+
+getHeaderNumeral :: TeX String
+getHeaderNumeral = do
+  context <- getContext
+  return $ let
+      numbers = headerStack context
+    in
+      showString "<a class='margin' name='S." $
+      prependNumbers numbers $
+      showString "'>&sect; " $
+      prependNumbers numbers "&nbsp;</a>"
+
+prependNumbers :: [Int] -> String -> String
+prependNumbers numbers text =
+  List.foldl' (\text i -> showString (show i) ('.' : text)) text numbers

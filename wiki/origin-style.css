@@ -1,21 +1,32 @@
 body{
-background:#F5F5F5;
-margin-left:10em;
-font-family:'Times New Roman', Times, serif
+background:#FAFAFA;
+font-family:'Times New Roman', Times, serif;
+font-size:10pt
 }
 
 article{
+margin-left:100pt;
 width:33em
 }
 
 code{
-background:#FFF;
+background:#EEE;
+border-top:1px solid #CCC;
+border-bottom:1px solid #CCC;
 display:block;
-padding:2px
+padding:2px;
+font-size:9pt
 }
 
 .tooltip{
 width:33em;
 cursor:help;
 text-decoration:underline
+}
+
+.margin{
+display:inline-block;
+width:100pt;
+text-align:right;
+margin-left:-100pt;
 }

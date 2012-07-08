@@ -1,3 +1,5 @@
+\chapter{Imperative programming}
+
 Consider doing the laundry. If we have a common, house-hold washing machine at
 our disposal; the \emph{routine} may look something like this:
 
@@ -22,11 +24,12 @@ looking something like this:
 (pile (dry (wash (split laundry))))
 \end{code}
 
-While comprehensible, this does not read very well. Most
-\wikipedia{Indo-european}{Indo-European} languages read left-to-right,
-top-to-bottom; here, the flow of the program is expressed right-to-left, and
-there is no notion of top-down descent at all. If anything, there could've been
-a notion of bottom-up ascent, if we had layed out the program like this:
+While comprehensible, this does not read very well; in particular, it reads
+backwards. Most \wikipedia{Indo-european}{Indo-European} languages read
+left-to-right, top-to-bottom. Here, the flow of the program is expressed
+right-to-left, and there is no notion of top-down descent at all. If anything,
+there could've been a notion of bottom-up ascent, if we had, for instance,
+layed out the program like this:
 
 \begin{code}
 (pile
@@ -35,13 +38,13 @@ a notion of bottom-up ascent, if we had layed out the program like this:
       (split laundry))))
 \end{code}
 
-This reads like we're putting the cart before the horse. Some tasks, such as
-doing the laundry, cooking a meal, writing a program, are inherently
+This reads like we're putting the cart before the horse. Indeed, some tasks,
+such as doing the laundry, cooking a meal, writing a program, are inherently
 sequential. Functional programming languages may often be
 \explanation{syntactically}{A programming language has syntactic rules defining
 the valid positioning of symbols. In this case, the syntactic rule is that the
-name precedes the arguments in a function call.} unfit for writing programs to
-do such tasks.
+name precedes the arguments in a function call.} unfit for writing programs for
+such tasks.
 
 We will develop the notion of a \emph{well-written program} throughout these
 lecture notes. However, we begin with the following definition:
@@ -50,31 +53,8 @@ lecture notes. However, we begin with the following definition:
 A well-written program is a well-read program.
 \end{definition}
 
-That is, a well-written program is easy to comprihensible to another
-programmer.
+That is, a well-written program is comprihensible to another programmer.
 
-You might not yet be convinsed that a functional program can be hard to read.
-Consider a subroutine of doing the laundry: neatly piling it. Assume that all
-we're washing are T-shirts, and so we employ the following folding subroutine:
-
-\begin{code}
-(fold
-  (lift
-    (pinch C with right
-      (move right behind left so A is over C
-        (find C
-          (pinch B with left
-            (find B
-              (pinch A with right
-                (find A initialState)))))))))
-\end{code}
-
-Here we begin with an \var{initialState}, consisting of essentially our hands,
-eyes and a T-shirt layed out on a table. This \emph{state} is passed upwards in
-the commands, so that we go from a state where the T-shirt is layed out on a
-table, to a state where the T-shirt is folded on the table.
-
- This depends entirely on the progra
 
 We've arguably cheated a bit when we showed you the procedure first, and the
 functional implementation last. Let's try doing it the other way around:
